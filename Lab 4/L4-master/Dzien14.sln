@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P04WeatherForecastAPI.Client", "P04WeatherForecastAPI.Client\P04WeatherForecastAPI.Client.csproj", "{B06BCE76-471D-4D00-B882-351F4ACF32B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P05Shop.API", "P05Shop.API\P05Shop.API.csproj", "{4574ED8C-66F6-4EC7-AA6D-C30B9889C1EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P06Shop.Shared", "P06Shop.Shared\P06Shop.Shared.csproj", "{7C04DC43-087A-487A-ADF6-ECC2E3E7A66C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P07Shop.DataSeeder", "P07Shop.DataSeeder\P07Shop.DataSeeder.csproj", "{9276150D-0B94-48D7-AD94-716055BAADC5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CA9A4BAE-C2EE-415A-9E20-6A96CA81E2AB}"
+	ProjectSection(SolutionItems) = preProject
+		Podsumowanie.txt = Podsumowanie.txt
+		Shop.API.postman_collection.json = Shop.API.postman_collection.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P05_2Library.API", "P05_2Library.API\P05_2Library.API.csproj", "{509BC632-06B6-4460-97EE-9146E2F68E9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B06BCE76-471D-4D00-B882-351F4ACF32B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B06BCE76-471D-4D00-B882-351F4ACF32B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B06BCE76-471D-4D00-B882-351F4ACF32B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B06BCE76-471D-4D00-B882-351F4ACF32B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4574ED8C-66F6-4EC7-AA6D-C30B9889C1EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4574ED8C-66F6-4EC7-AA6D-C30B9889C1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4574ED8C-66F6-4EC7-AA6D-C30B9889C1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4574ED8C-66F6-4EC7-AA6D-C30B9889C1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C04DC43-087A-487A-ADF6-ECC2E3E7A66C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C04DC43-087A-487A-ADF6-ECC2E3E7A66C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C04DC43-087A-487A-ADF6-ECC2E3E7A66C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C04DC43-087A-487A-ADF6-ECC2E3E7A66C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9276150D-0B94-48D7-AD94-716055BAADC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9276150D-0B94-48D7-AD94-716055BAADC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9276150D-0B94-48D7-AD94-716055BAADC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9276150D-0B94-48D7-AD94-716055BAADC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509BC632-06B6-4460-97EE-9146E2F68E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509BC632-06B6-4460-97EE-9146E2F68E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509BC632-06B6-4460-97EE-9146E2F68E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509BC632-06B6-4460-97EE-9146E2F68E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90B0425A-DD52-4FEF-95DB-224B0A8D4776}
+	EndGlobalSection
+EndGlobal
