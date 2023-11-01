@@ -1,0 +1,48 @@
+﻿<Window x:Class="P04WeatherForecastAPI.Client.LibraryBooksView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:P04WeatherForecastAPI.Client"
+    mc:Ignorable="d"
+    Title="ShopProductsWindow" Height="480" Width="900">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVisConv" ></BooleanToVisibilityConverter>
+        <Style x:Key="mainButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="LightBlue"/>
+            <Setter Property="Foreground" Value="DarkBlue"/>
+        </Style>
+        <Style x:Key="mainLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="DarkRed"/>
+        </Style>
+    </Window.Resources>
+    
+    <DockPanel Grid.Column="0" Grid.Row="0" Margin="10">
+        <ListView ItemsSource="{Binding PageBooks}" Height="350" DockPanel.Dock="Top">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Label Content="{Binding Title}"></Label>
+                        <Label Content="{Binding Description}"></Label>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button DockPanel.Dock="Left" Content="Previous page"
+            Command="{Binding PreviousPageCommand}"
+            Style="{StaticResource mainButtonStyle}" Width="100" Height="50"/>
+        <Button DockPanel.Dock="Left" Content="Next page" Command="{Binding NextPageCommand}" Style="{StaticResource mainButtonStyle}" Width="100" Height="50"/>
+        <Label DockPanel.Dock="Left" Content="Aktualna strona: " Style="{StaticResource mainLabelStyle}" VerticalAlignment="Center"></Label>
+        <Label DockPanel.Dock="Left" Content="{Binding CurrentPage}" Style="{StaticResource mainLabelStyle}" VerticalAlignment="Center"></Label>
+        <Label DockPanel.Dock="Left" Content=" z " Style="{StaticResource mainLabelStyle}" VerticalAlignment="Center"></Label>
+        <Label DockPanel.Dock="Left" Content="{Binding MaxPage}" Style="{StaticResource mainLabelStyle}" VerticalAlignment="Center"></Label>
+        <Label DockPanel.Dock="Left" Content=" " Style="{StaticResource mainLabelStyle}" VerticalAlignment="Center"></Label>
+    </DockPanel>
+
+</Window>
