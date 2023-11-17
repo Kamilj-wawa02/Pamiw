@@ -1,0 +1,116 @@
+﻿@page "/books/booksList"
+
+@inject ILibraryService LibraryService
+@inject NavigationManager NavigationManager
+
+<h3>Full list of books</h3>
+
+
+<p>
+    <a href="books/createbook">Create new book</a>
+</p>
+
+@if (books == null)
+{
+    <p><em>@message</em></p>
+}
+
+else
+{
+    <div>
+        <InputText @bind-Value=searchTerm></InputText>
+        <button class="btn btn-primary" @onclick=Search>Search</button>
+    </div>
+    
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Barcode</th>
+                <th>Price</th>
+                <th>Release Date</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in books)
+            {
+                <tr>
+                    <td>@book.Id</td>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Barcode</td>
+                    <td>@book.Price</td>
+                    <td>@book.ReleaseDate.ToShortDateString()</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="()=> GoToEdit(book.Id)">Edit</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button class="btn btn-primary" disabled="@(currentPage==1)" @onclick="PreviousPage">Previous</button>
+    <span>@currentPage</span>
+    <button class="btn btn-primary" @onclick="NextPage">Next</button>
+}
+
+
+
+@code {
+    private List<Book> books;
+    private string message = "Loading books...";
+
+    private int currentPage = 1;
+    private const int pageSize = 10;
+
+    private string searchTerm = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await  LoadBooks();
+    }
+
+    private async Task LoadBooks()
+    {
+        var response = await LibraryService.SearchBooksAsync(searchTerm, currentPage, pageSize);
+        if (response.Success)
+        {
+            books = response.Data;
+        }
+        else
+        {
+            message = response.Message;
+        }
+    }
+
+
+    void GoToEdit(int id)
+    {
+        NavigationManager.NavigateTo($"/books/editbook/{id}");
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadBooks();
+        }
+    }
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadBooks();
+    }
+
+    private async Task Search()
+    {
+        currentPage = 1;
+        await LoadBooks();
+    }
+}
