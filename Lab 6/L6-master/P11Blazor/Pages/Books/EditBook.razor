@@ -1,0 +1,53 @@
+﻿@page "/books/editbook/{Id:int}"
+
+@inject ILibraryService LibraryService
+@inject NavigationManager NavigationManager
+
+<h3>Edit Book</h3>
+
+@if (book == null)
+{
+    <p><em>@message</em></p>
+}
+else
+{
+    <BookForm book="book" OnValidSubmit="HandleValidSubmit"></BookForm>
+    <button class="btn btn-danger" @onclick=HandleDelete>Delete</button>
+}
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Book book;
+    private string message = "Loading book...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await LibraryService.GetBookByIdAsync(Id);
+        if (response.Success)
+            book = response.Data;
+        else
+            message = response.Message;
+    }
+
+    async Task HandleValidSubmit()
+    {
+        var response = await LibraryService.UpdateBookAsync(book);
+        if (response.Success)
+            NavigationManager.NavigateTo("/book/booksList");
+        else
+            message = response.Message;
+    }
+
+    async Task HandleDelete()
+    {
+        var response = await LibraryService.DeleteBookAsync(Id);
+        if (response.Success)
+            NavigationManager.NavigateTo("/books/booksList");
+        else
+            message = response.Message;
+    }
+}
