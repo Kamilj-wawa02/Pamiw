@@ -5,3 +5,4 @@ Linki do nagrań prezentacji projektów na YouTube:
 - Projekt 5: https://youtu.be/DHvTvuKNKlE
 - Projekt 6: https://youtu.be/irasJP55u5g
 - Projekt 7: https://youtu.be/ws8vyJwAeLc
+- Projekt 8: https://youtu.be/8pKsd1pHoPw
