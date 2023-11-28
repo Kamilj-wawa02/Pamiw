@@ -1,0 +1,55 @@
+﻿@page "/Register"
+@using P06Shop.Shared.Auth;
+@using P06Shop.Shared.Services.AuthService;
+
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+
+<h3>Register</h3>
+
+
+<EditForm Model="userRegisterDTO" OnValidSubmit="HandleRegistration">
+ 
+    <p>Email:</p>
+    <InputText @bind-Value="userRegisterDTO.Email" id="email"></InputText>
+    <p>User name:</p>
+    <InputText @bind-Value="userRegisterDTO.Username" id="username"></InputText>
+    <p>Password:</p>
+    <InputText @bind-Value="userRegisterDTO.Password" id="password"></InputText>
+    <p>Confirm Password:</p>
+    <InputText @bind-Value="userRegisterDTO.ConfirmPassword" id="confirmPassword"></InputText>
+
+    <button type="submit">Register</button>
+</EditForm>
+
+<p style="color: red;">@message</p>
+
+
+@code {
+    UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
+    string message = string.Empty;
+
+    async Task HandleRegistration()
+    {
+        Console.WriteLine("Handling registration of " + userRegisterDTO.Email);
+        var result = await AuthService.Register(userRegisterDTO);
+        Console.WriteLine("Request result: " + result.Success + " " + result.Data.ToString());
+        if (result.Success)
+        {
+            NavigationManager.NavigateTo("Login");
+        }
+        else
+        {
+            string resMessage = result.Message;
+            if (resMessage == "Cannot invoke operation")
+            {
+                message = "Provided data don't meet the requirements! Check if the passord has min 6 characters and if the email is in correct format!";
+            }
+            else
+            {
+                message = resMessage;
+            }
+        }
+    }
+
+}
