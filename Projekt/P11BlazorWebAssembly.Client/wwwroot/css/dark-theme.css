@@ -1,0 +1,44 @@
+﻿.sidebar {
+    background-image: linear-gradient(180deg, rgb(0, 12, 12) 0%, #030407 70%);
+}
+
+.main {
+    flex: 1;
+    background-color: rgb(20, 22, 24);
+}
+
+.white-text{
+    color: white;
+}
+
+.white-horizontal-line{
+    background-color: white;
+}
+
+.dark-theme-textbox {
+    background-color: black;
+    color: white;
+}
+
+.top-row {
+    background-color: rgb(20, 22, 24);
+    border-bottom: 1px solid rgba(214, 213, 213, 0.4);
+}
+
+.contact-list-item{
+    background-color: rgb(50, 68, 71);
+    color: white;
+}
+
+.page {
+    background-color: rgb(35, 35, 35);
+    color: white;
+}
+
+table {
+    color: white;
+}
+
+td, th {
+    color: white;
+}

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -58,6 +59,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token)),
             ValidateIssuerSigningKey = true,
         };
+    });
+
+// Autentykacja poprzez Google:
+string clientId = builder.Configuration.GetSection("AppSettings:GoogleClientID").Value;
+string clientSecret = builder.Configuration.GetSection("AppSettings:GoogleClientSecret").Value;
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        options.ClientId = clientId;
+        options.ClientSecret = clientSecret;
     });
 
 

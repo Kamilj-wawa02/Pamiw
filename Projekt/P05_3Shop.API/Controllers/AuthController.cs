@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P05Shop.API.Services.AuthService;
 using P06Shop.Shared;
@@ -70,5 +73,14 @@ namespace P05Shop.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("login-with-google")]
+        public async Task<ActionResult<ServiceResponse<int>>> LoginWithGoogle(UserRegisterDTO userRegisterDTO)
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme,
+                new AuthenticationProperties { RedirectUri = "/" });
+            return Ok();
+        }
+
     }
 }

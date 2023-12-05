@@ -1,0 +1,34 @@
+﻿@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Components.Web.Extensions;
+
+@inject IJSRuntime JSRuntime
+@inject ILocalStorageService LocalStorage
+
+<NavLink class="nav-link" @onclick="ToggleTheme">
+  <span class="oi oi-contrast" aria-hidden="true"></span>  Motyw
+</NavLink>
+
+@code {
+    private bool isDarkTheme;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var storedTheme = await LocalStorage.GetItemAsync<bool?>("isDarkTheme");
+        isDarkTheme = storedTheme.GetValueOrDefault(false);
+        SetTheme();
+    }
+
+    private async void ToggleTheme()
+    {
+        isDarkTheme = !isDarkTheme;
+        await LocalStorage.SetItemAsync("isDarkTheme", isDarkTheme);
+        SetTheme();
+    }
+
+    private async void SetTheme()
+    {
+        string theme = isDarkTheme ? "dark" : "light";
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
+        await module.InvokeVoidAsync("setTheme", theme);
+    }
+}

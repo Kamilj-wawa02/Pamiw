@@ -25,6 +25,7 @@ else
     
 
 
+    <div class="table-text">
     <table class="table">
         <thead>
             <tr>
@@ -37,7 +38,7 @@ else
                 <th>Options</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-text">
             @foreach (var book in books)
             {
                 <tr>
@@ -54,6 +55,7 @@ else
             }
         </tbody>
     </table>
+    </div>
 
     <button class="btn btn-primary" disabled="@(currentPage==1)" @onclick="PreviousPage">Previous</button>
     <span>@currentPage</span>
