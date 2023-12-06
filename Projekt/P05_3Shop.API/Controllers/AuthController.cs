@@ -103,12 +103,12 @@ namespace P05Shop.API.Controllers
 
 
 
-        [HttpGet("login-by-facebook")]
+        [HttpGet("login-by-facebook")] // https://localhost:7230/api/Auth/login-by-facebook
         public async Task<ActionResult<ServiceResponse<string>>> LoginByFacebook()
         {
             var appId = "884555979610977";
             var redirectUri = "https://localhost:7230/api/Auth/login-by-facebook-redirection";
-            var facebookLoginUrl = $"https://www.facebook.com/v12.0/dialog/oauth?client_id={appId}&redirect_uri={redirectUri}&response_type=code";
+            var facebookLoginUrl = $"https://www.facebook.com/v12.0/dialog/oauth?client_id={appId}&redirect_uri={redirectUri}&scope=email&response_type=code";
 
             return Redirect(facebookLoginUrl);
         }
@@ -121,9 +121,17 @@ namespace P05Shop.API.Controllers
                 var accessToken = await GetAccessToken(code);
 
                 var data = await GetFacebookUserData(accessToken);
-                
 
-                return Ok(">>>>>>>> CODE: " + code + ">>>>>>>> access_token: " + accessToken + ">>>>>>>> date: " + data.Name);
+                /*
+                var response = await _authService.LoginByFacebookAccessToken("");
+                if (!response.Success)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+                */
+
+                return Ok(">>>>>>>> CODE: " + code + ">>>>>>>> access_token: " + accessToken + ">>>>>>>> Name: " + data.Name + ", Email: " + data.Email + ", Id: " + data.Id);
             }
             else
             {
@@ -159,7 +167,7 @@ namespace P05Shop.API.Controllers
 
         private async Task<FacebookUserData> GetFacebookUserData(string accessToken)
         {
-            var facebookGraphApiUrl = "https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=" + accessToken;
+            var facebookGraphApiUrl = "https://graph.facebook.com/v12.0/me?fields=id,email,name&access_token=" + accessToken;
 
             using (var httpClient = _httpClientFactory.CreateClient())
             {
@@ -176,8 +184,6 @@ namespace P05Shop.API.Controllers
             public string Id { get; set; }
             public string Name { get; set; }
             public string Email { get; set; }
-
-            // Dodaj inne właściwości, jeśli są potrzebne
         }
     }
 }
