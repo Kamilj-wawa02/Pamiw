@@ -1,0 +1,43 @@
+﻿@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Components.Web.Extensions;
+@using P06Shop.Shared.Auth;
+@using P06Shop.Shared.Services.AuthService;
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject IAuthService AuthService
+@inject ILocalStorageService LocalStorageService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<div class="col-xl-6 col-md-8 col-12">
+    <a class="btn btn-block btn-social btn-twitter" @onclick="LoginWithFacebook" href="">
+        <span class="fa fa-google"></span> <b>Log in with Facebook</b>
+    </a>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var facebookUri = NavigationManager.Uri.Split('#');
+        if (facebookUri.Length > 1 && QueryHelpers.ParseQuery(facebookUri[1]).TryGetValue("access_token", out var accessToken))
+        {
+            var result = await AuthService.LoginByFacebookAccessToken(accessToken);
+            if (result.Success)
+            {
+                await LocalStorageService.SetItemAsync("authToken", result.Data);
+                await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+                NavigationManager.NavigateTo("/");
+            }
+        }
+    }
+
+    private async void LoginWithFacebook()
+    {
+        var accessTokenRequest = AuthService.GetLoginWithFacebookAccessTokenRequest();
+
+        NavigationManager.NavigateTo(accessTokenRequest, true);
+    }
+
+}

@@ -14,5 +14,8 @@ namespace P06Shop.Shared.Services.AuthService
         Task<ServiceResponse<int>> Register(UserRegisterDTO userRegisterDTO);
 
         Task<ServiceResponse<bool>> ChangePassword(string newPassword);
+
+        string GetLoginWithFacebookAccessTokenRequest();
+        Task<ServiceResponse<string>> LoginByFacebookAccessToken(string accessToken);
     }
 }

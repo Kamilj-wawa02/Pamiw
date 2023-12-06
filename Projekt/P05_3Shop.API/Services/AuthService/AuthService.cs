@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using P05Shop.API.Models;
 using P06Shop.Shared;
 using P06Shop.Shared.Auth;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 
@@ -15,10 +17,12 @@ namespace P05Shop.API.Services.AuthService
     {
         private readonly DataContext _context;
         private readonly IConfiguration _config;
-        public AuthService(DataContext context, IConfiguration config)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public AuthService(DataContext context, IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _config = config;
+            this._httpClientFactory = httpClientFactory;
         }
 
         public async Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword)
@@ -26,8 +30,8 @@ namespace P05Shop.API.Services.AuthService
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
-                  return new ServiceResponse<bool>
-                  {
+                return new ServiceResponse<bool>
+                {
                     Success = false,
                     Message = "User not found."
                 };
@@ -70,7 +74,7 @@ namespace P05Shop.API.Services.AuthService
                 response.Message = "Login successful.";
             }
 
-           
+
             return response;
         }
 
@@ -157,5 +161,51 @@ namespace P05Shop.API.Services.AuthService
             }
             return false;
         }
+
+        public async Task<ServiceResponse<string>> LoginByFacebookAccessToken(string accessToken)
+        {
+            var response = new ServiceResponse<string>();
+            var httpClient = _httpClientFactory.CreateClient();
+
+            var userDataRequest = $"https://graph.facebook.com/v11.0/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={accessToken}";
+            var facebookUserData = await httpClient.GetFromJsonAsync<FacebookUserDataDTO>(userDataRequest);
+
+            if (facebookUserData == null)
+            {
+                response.Success = false;
+                response.Message = "Invalid Facebook AccessToken.";
+
+                return response;
+            }
+
+            var email = facebookUserData.Email;
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
+            if (user == null)
+            {
+                user = CreateExternalUser(email);
+            }
+
+            response.Data = CreateToken(user);
+            response.Success = true;
+            response.Message = "Login with Facebook successful.";
+
+            return response;
+        }
+
+        protected User CreateExternalUser(string email)
+        {
+            var user = new User();
+            user.Email = email;
+            user.Username = email;
+
+            CreatePasswordHash(email, out byte[] passwordHash, out byte[] passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            return user;
+        }
+
     }
 }

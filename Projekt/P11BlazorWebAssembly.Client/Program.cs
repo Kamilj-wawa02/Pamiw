@@ -28,6 +28,7 @@ builder.Services.AddHttpClient<ILibraryService, LibraryService>(client => client
 //builder.Services.Configure<AppSettings>(appSettings);
 //builder.Services.AddSingleton<IOptions<AppSettings>>(new OptionsWrapper<AppSettings>(appSettingsSection));
 
+
 builder.Services.AddSingleton(appSettingsSection);
 builder.Services.AddBlazoredLocalStorage();
 

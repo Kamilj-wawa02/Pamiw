@@ -33,6 +33,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 //addsingleton - nowa instancja klasy tworzona jest tylko 1 na caly cykl trwania naszej aplikacji 
 
 
+// IHttpClientFactory do obs³ugi ¿¹dañ do Facebooka
+builder.Services.AddHttpClient();
+
+
 // +
 builder.Services.AddCors(options =>
 {
@@ -62,10 +66,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Autentykacja poprzez Google:
-string clientId = builder.Configuration.GetSection("AppSettings:GoogleClientID").Value;
-string clientSecret = builder.Configuration.GetSection("AppSettings:GoogleClientSecret").Value;
+string clientId = builder.Configuration.GetSection("AppSettings:FacebookClientID").Value;
+string clientSecret = builder.Configuration.GetSection("AppSettings:FacebookClientSecret").Value;
 builder.Services.AddAuthentication()
-    .AddGoogle(options =>
+    .AddFacebook(options =>
     {
         options.ClientId = clientId;
         options.ClientSecret = clientSecret;

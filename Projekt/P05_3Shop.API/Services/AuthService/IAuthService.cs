@@ -12,5 +12,7 @@ namespace P05Shop.API.Services.AuthService
         Task<bool> UserExists(string email);
 
         Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword);
+        
+        Task<ServiceResponse<string>> LoginByFacebookAccessToken(string accessToken);
     }
 }
