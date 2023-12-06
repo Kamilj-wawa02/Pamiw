@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,9 @@ namespace P06Shop.Shared.Auth
 {
     public class FacebookAuthDTO
     {
+        [JsonProperty("access_token")]
         public string AccessToken { get; set; }
     }
+
+
 }

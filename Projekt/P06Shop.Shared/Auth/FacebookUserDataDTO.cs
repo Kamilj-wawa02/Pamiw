@@ -8,6 +8,8 @@ namespace P06Shop.Shared.Auth
 {
     public class FacebookUserDataDTO
     {
+        public string Id { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
     }
 }

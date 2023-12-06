@@ -17,12 +17,12 @@ namespace P05Shop.API.Services.AuthService
     {
         private readonly DataContext _context;
         private readonly IConfiguration _config;
-        private readonly IHttpClientFactory _httpClientFactory;
-        public AuthService(DataContext context, IConfiguration config, IHttpClientFactory httpClientFactory)
+        private readonly IFacebookAPIService _facebookAPIService;
+        public AuthService(DataContext context, IConfiguration config, IFacebookAPIService facebookAPIService)
         {
             _context = context;
             _config = config;
-            this._httpClientFactory = httpClientFactory;
+            _facebookAPIService = facebookAPIService;
         }
 
         public async Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword)
@@ -162,24 +162,45 @@ namespace P05Shop.API.Services.AuthService
             return false;
         }
 
-        public async Task<ServiceResponse<string>> LoginByFacebookAccessToken(string accessToken)
+        public async Task<ServiceResponse<string>> LoginByFacebook(string code)
         {
             var response = new ServiceResponse<string>();
-            var httpClient = _httpClientFactory.CreateClient();
 
-            var userDataRequest = $"https://graph.facebook.com/v11.0/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={accessToken}";
-            var facebookUserData = await httpClient.GetFromJsonAsync<FacebookUserDataDTO>(userDataRequest);
-
-            if (facebookUserData == null)
+            if (string.IsNullOrEmpty(code))
             {
                 response.Success = false;
-                response.Message = "Invalid Facebook AccessToken.";
-
+                response.Message = "Invalid code.";
                 return response;
             }
 
-            var email = facebookUserData.Email;
+            // Otrzymaliśmy kod, na jego podstawie uzyskujemy access_token wykorzystując przy tym ID i Secret aplikacji na Facebooku
+            var accessToken = await _facebookAPIService.GetAccessToken(code);
+            if (string.IsNullOrEmpty(code))
+            {
+                response.Success = false;
+                response.Message = "Couldn't obtain the AccessToken.";
+                return response;
+            }
 
+            // Pozyskujemy dane z Facebooka na podstawie wartości access_token
+            var data = await _facebookAPIService.GetFacebookUserData(accessToken);
+
+            if (data == null)
+            {
+                response.Success = false;
+                response.Message = "Couldn't obtain the account data by the AccessToken.";
+                return response;
+            }
+
+            var email = data.Email;
+            if (string.IsNullOrEmpty(email))
+            {
+                response.Success = false;
+                response.Message = "Couldn't get the account email (propable cause: No Permission).";
+                return response;
+            }
+
+            /*
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
             if (user == null)
             {
@@ -187,6 +208,7 @@ namespace P05Shop.API.Services.AuthService
             }
 
             response.Data = CreateToken(user);
+            */
             response.Success = true;
             response.Message = "Login with Facebook successful.";
 
