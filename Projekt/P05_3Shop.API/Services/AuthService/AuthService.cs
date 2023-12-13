@@ -162,7 +162,7 @@ namespace P05Shop.API.Services.AuthService
             return false;
         }
 
-        public async Task<ServiceResponse<string>> LoginByFacebook(string code)
+        public async Task<ServiceResponse<string>> LoginByFacebook(string code, string redirect_uri)
         {
             var response = new ServiceResponse<string>();
 
@@ -174,7 +174,7 @@ namespace P05Shop.API.Services.AuthService
             }
 
             // Otrzymaliśmy kod, na jego podstawie uzyskujemy access_token wykorzystując przy tym ID i Secret aplikacji na Facebooku
-            var accessToken = await _facebookAPIService.GetAccessToken(code);
+            var accessToken = await _facebookAPIService.GetAccessToken(code, redirect_uri);
             if (string.IsNullOrEmpty(code))
             {
                 response.Success = false;
@@ -192,6 +192,7 @@ namespace P05Shop.API.Services.AuthService
                 return response;
             }
 
+            var name = data.Name;
             var email = data.Email;
             if (string.IsNullOrEmpty(email))
             {
@@ -200,31 +201,29 @@ namespace P05Shop.API.Services.AuthService
                 return response;
             }
 
-            /*
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
             if (user == null)
             {
-                user = CreateExternalUser(email);
+                user = CreateExternalUser(email, name);
             }
 
             response.Data = CreateToken(user);
-            */
             response.Success = true;
             response.Message = "Login with Facebook successful.";
 
             return response;
         }
 
-        protected User CreateExternalUser(string email)
+        protected User CreateExternalUser(string email, string name)
         {
             var user = new User();
             user.Email = email;
-            user.Username = email;
+            user.Username = name.Replace(" ", "_");
 
-            CreatePasswordHash(email, out byte[] passwordHash, out byte[] passwordSalt);
+            //CreatePasswordHash(email, out byte[] passwordHash, out byte[] passwordSalt);
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            user.PasswordHash = new byte[0]; //passwordHash;
+            user.PasswordSalt = new byte[0]; //passwordSalt;
 
             return user;
         }

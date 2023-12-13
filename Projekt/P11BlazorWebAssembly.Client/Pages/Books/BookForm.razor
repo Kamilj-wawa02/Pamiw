@@ -1,33 +1,33 @@
-﻿ 
+﻿@inject ITranslationsManager TranslationsManager
 
 <EditForm Model="book" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
     <div class="form-group">
-        <label for="title">Title:</label>
-        <InputText id="title" @bind-Value="book.Title" class="form-control"></InputText>
+        <label for="title">@TranslationsManager.Get(MainLayout.Language, "Title"):</label>
+        <InputText id="title" @bind-Value="book.Title" class="form-control text-field"></InputText>
     </div>
     <div class="form-group">
-        <label for="author">Author:</label>
-        <InputText id="author" @bind-Value="book.Author" class="form-control"></InputText>
+        <label for="author">@TranslationsManager.Get(MainLayout.Language, "Author"):</label>
+        <InputText id="author" @bind-Value="book.Author" class="form-control text-field"></InputText>
     </div>
     <div class="form-group">
-        <label for="barcode">Barcode:</label>
-        <InputText id="barcode" @bind-Value="book.Barcode" class="form-control"></InputText>
+        <label for="barcode">@TranslationsManager.Get(MainLayout.Language, "Barcode"):</label>
+        <InputText id="barcode" @bind-Value="book.Barcode" class="form-control text-field"></InputText>
     </div>
     <div class="form-group">
-        <label for="price">Price:</label>
-        <InputNumber id="price" @bind-Value="book.Price" class="form-control"></InputNumber>
+        <label for="price">@TranslationsManager.Get(MainLayout.Language, "Price"):</label>
+        <InputNumber id="price" @bind-Value="book.Price" class="form-control text-field"></InputNumber>
     </div>
     <div class="form-group">
-        <label for="releaseDate">Release Date:</label>
-        <InputDate id="releaseDate" @bind-Value="book.ReleaseDate" class="form-control"></InputDate>
+        <label for="releaseDate">@TranslationsManager.Get(MainLayout.Language, "ReleaseDate"):</label>
+        <InputDate id="releaseDate" @bind-Value="book.ReleaseDate" class="form-control text-field"></InputDate>
     </div>
     <div class="form-group">
-        <label for="description">Description:</label>
-        <InputTextArea id="description" @bind-Value="book.Description" class="form-control"></InputTextArea>
+        <label for="description">@TranslationsManager.Get(MainLayout.Language, "Description"):</label>
+        <InputTextArea id="description" @bind-Value="book.Description" class="form-control text-field"></InputTextArea>
     </div>
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn button-primary bottom-button" style="margin-top: 1rem">@TranslationsManager.Get(MainLayout.Language, "Save")</button>
 </EditForm>
 
 

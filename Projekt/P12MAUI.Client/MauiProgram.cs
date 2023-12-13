@@ -61,7 +61,7 @@ namespace P12MAUI.Client
               .AddUserSecrets<MauiApp>()
               .SetBasePath(projectDir)
               .AddJsonFile("appsettings.json");
-              //.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true);
+            //.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true);
             IConfiguration _configuration = builder.Build();
 
             var appSettings = _configuration.GetSection(nameof(AppSettings));
@@ -113,15 +113,15 @@ namespace P12MAUI.Client
             // konfiguracja serwisów 
             services.AddSingleton<ILibraryService, LibraryService>();
             services.AddSingleton<IMessageDialogService, MauiMessageDialogService>();
-          
+
         }
 
         private static void ConfigureViewModels(IServiceCollection services)
         {
 
             // konfiguracja viewModeli 
-           
-        
+
+
             services.AddSingleton<BooksViewModel>();
             services.AddTransient<BookDetailsViewModel>();
             //services.AddSingleton<LoginViewModel>();
@@ -132,7 +132,7 @@ namespace P12MAUI.Client
         private static void ConfigureViews(IServiceCollection services)
         {
             // konfiguracja okienek 
-            services.AddSingleton<MainPage>();    
+            services.AddSingleton<MainPage>();
             services.AddTransient<BookDetailsView>();
             //services.AddTransient<LoginView>();
         }

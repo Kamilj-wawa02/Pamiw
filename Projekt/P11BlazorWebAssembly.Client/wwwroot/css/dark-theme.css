@@ -1,23 +1,15 @@
 ﻿.sidebar {
-    background-image: linear-gradient(180deg, rgb(0, 12, 12) 0%, #030407 70%);
+    background-image: linear-gradient(180deg, rgb(28, 25, 40), rgb(2, 2, 2));
+}
+
+.page {
+    background-color: #1C1928;
+    color: white;
 }
 
 .main {
     flex: 1;
     background-color: rgb(20, 22, 24);
-}
-
-.white-text{
-    color: white;
-}
-
-.white-horizontal-line{
-    background-color: white;
-}
-
-.dark-theme-textbox {
-    background-color: black;
-    color: white;
 }
 
 .top-row {
@@ -30,15 +22,101 @@
     color: white;
 }
 
-.page {
-    background-color: rgb(35, 35, 35);
+.book-container {
+    background-color: rgb(40, 40, 60);
+    color: white;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+    .book-container:hover {
+        background-color: rgb(50, 50, 70);
+    }
+
+
+.row {
+    display: block;
+    width: 100%;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.buttons-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.button-primary {
+    background-color: rgb(57, 77, 107);
     color: white;
 }
 
-table {
+    .button-primary:hover {
+        background-color: rgb(41, 127, 255);
+        color: white;
+    }
+
+.separator {
+    width: 100%;
+}
+
+.search-span {
+    width: 4.5rem;
+    text-align: center;
+}
+
+.loader-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+}
+
+.loader {
+    border: 0.4rem solid rgb(50, 50, 70);
+    border-top: 0.4rem solid rgb(41, 127, 255);
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.text-field {
+    background-color: transparent;
     color: white;
 }
 
-td, th {
-    color: white;
+    .text-field:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+    
+.bottom-button {
+    margin-top: 1rem;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0;
 }

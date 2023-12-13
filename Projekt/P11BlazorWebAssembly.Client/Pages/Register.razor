@@ -1,38 +1,78 @@
 ﻿@page "/Register"
+@using Blazored.LocalStorage;
 @using P06Shop.Shared.Auth;
 @using P06Shop.Shared.Services.AuthService;
 
+@inject IJSRuntime JSRuntime
+@inject ILocalStorageService LocalStorageService
+@inject ITranslationsManager TranslationsManager
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 
-<h3>Register</h3>
+@if (LoggingIn)
+{
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
+}
+else
+{
+    <h3>@TranslationsManager.Get(MainLayout.Language, "RegisterForm")</h3>
 
 
-<EditForm Model="userRegisterDTO" OnValidSubmit="HandleRegistration">
+    <EditForm Model="userRegisterDTO" OnValidSubmit="HandleRegistration">
  
-    <p>Email:</p>
-    <InputText @bind-Value="userRegisterDTO.Email" id="email"></InputText>
-    <p>User name:</p>
-    <InputText @bind-Value="userRegisterDTO.Username" id="username"></InputText>
-    <p>Password:</p>
-    <InputText @bind-Value="userRegisterDTO.Password" id="password"></InputText>
-    <p>Confirm Password:</p>
-    <InputText @bind-Value="userRegisterDTO.ConfirmPassword" id="confirmPassword"></InputText>
+        <p style="margin-top: 1rem">@TranslationsManager.Get(MainLayout.Language, "Email"):</p>
+        <InputText @bind-Value="userRegisterDTO.Email" id="email"></InputText>
+        <p style="margin-top: 1rem">@TranslationsManager.Get(MainLayout.Language, "Username"):</p>
+        <InputText @bind-Value="userRegisterDTO.Username" id="username"></InputText>
+        <p style="margin-top: 1rem">@TranslationsManager.Get(MainLayout.Language, "Password"):</p>
+        <InputText @bind-Value="userRegisterDTO.Password" id="password"></InputText>
+        <p style="margin-top: 1rem">@TranslationsManager.Get(MainLayout.Language, "ConfirmPassword"):</p>
+        <InputText @bind-Value="userRegisterDTO.ConfirmPassword" id="confirmPassword"></InputText>
 
-    <button type="submit">Register</button>
+        <br />
+        <button type="submit" class="btn button-primary" style="margin-top: 1.5rem">@TranslationsManager.Get(MainLayout.Language, "Register")</button>
 
-    <LoginByGoogle />
-</EditForm>
+    </EditForm>
 
-<p style="color: red;">@message</p>
+    <LoginByFacebook />
 
+    <p style="color: red;">@message</p>
+}
 
 @code {
+
+    public static bool LoggingIn = false;
     UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
     string message = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var storedLoggingIn = await LocalStorageService.GetItemAsync<bool?>("loggingIn");
+        LoggingIn = storedLoggingIn.GetValueOrDefault(false);
+    }
+
     async Task HandleRegistration()
     {
+        if (userRegisterDTO.Email == "" || userRegisterDTO.Username == "" || userRegisterDTO.Password == "" || userRegisterDTO.ConfirmPassword == "")
+        {
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "EmptyData"));
+            return;
+        }
+
+        if (userRegisterDTO.Password != userRegisterDTO.ConfirmPassword)
+        {
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "NotTheSamePasswords"));
+            return;
+        }
+
+        if (!userRegisterDTO.Email.Contains("@") || userRegisterDTO.Password.Length < 6)
+        {
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "WrongLoginDataMessage"));
+            return;
+        }
+
         Console.WriteLine("Handling registration of " + userRegisterDTO.Email);
         var result = await AuthService.Register(userRegisterDTO);
         Console.WriteLine("Request result: " + result.Success + " " + result.Data.ToString());
@@ -45,7 +85,8 @@
             string resMessage = result.Message;
             if (resMessage == "Cannot invoke operation")
             {
-                message = "Provided data don't meet the requirements! Check if the passord has min 6 characters and if the email is in correct format!";
+
+                message = TranslationsManager.Get(MainLayout.Language, "WrongLoginDataMessage");
             }
             else
             {

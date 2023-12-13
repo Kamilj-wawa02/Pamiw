@@ -4,6 +4,8 @@ using P06Shop.Shared;
 using P06Shop.Shared.Services.LibraryService;
 using P06Shop.Shared.Library;
 using P07Shop.DataSeeder;
+using Microsoft.IdentityModel.Tokens;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace P05Shop.API.Services.LibraryService
 {
@@ -102,12 +104,53 @@ namespace P05Shop.API.Services.LibraryService
 
         }
 
+        public async Task<ServiceResponse<int>> GetBooksCountAsync(string searchText)
+        {
+            IQueryable<Book> query = _dataContext.Books;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(searchText))
+                    query = query.Where(x => x.Title.Contains(searchText) || x.Author.Contains(searchText) || x.Description.Contains(searchText));
+
+                var response = new ServiceResponse<int>()
+                {
+                    Data = (await query.ToListAsync()).Count,
+                    Message = "Ok",
+                    Success = true
+                };
+
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ServiceResponse<int>()
+                {
+                    Data = 0,
+                    Message = "Problem with database",
+                    Success = false
+                };
+            }
+        }
+
+        public int GetMaxPage(int elementsPerPage, int elementsCount)
+        {
+            int MaxPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(elementsCount) / Convert.ToDouble(elementsPerPage)));
+
+            if (MaxPage == 0)
+            {
+                MaxPage = 1;
+            }
+
+            return MaxPage;
+        }
+
         public async Task<ServiceResponse<List<Book>>> SearchBooksAsync(string text, int page, int pageSize)
         {
             IQueryable<Book> query = _dataContext.Books;
 
             if (!string.IsNullOrEmpty(text))
-                query = query.Where(x => x.Title.Contains(text) || x.Description.Contains(text));
+                query = query.Where(x => x.Title.Contains(text) || x.Author.Contains(text) || x.Description.Contains(text));
 
             var books = await query
                 .Skip(pageSize * (page - 1))

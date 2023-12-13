@@ -23,6 +23,7 @@ namespace P06Shop.Shared.Services.LibraryService
 
         private readonly HttpClient _httpClient;
         private readonly AppSettings _appSettings;
+        private int booksCount = -1;
         public LibraryService(HttpClient httpClient, AppSettings appSettings)
         {
             _httpClient = httpClient;
@@ -35,6 +36,12 @@ namespace P06Shop.Shared.Services.LibraryService
             var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksEndpoint;
             var response = await _httpClient.PostAsJsonAsync(url, book);
             var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Book>>();
+
+            if (result.Success)
+            {
+                booksCount++;
+            }
+
             return result;
         }
 
@@ -46,6 +53,12 @@ namespace P06Shop.Shared.Services.LibraryService
             var url = _appSettings.BaseAPIUrl + "/" + String.Format(_appSettings.LibraryEndpoints.DeleteBookEndpoint, id);
             var response = await _httpClient.DeleteAsync(url);
             var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+
+            if (result.Success)
+            {
+                booksCount--;
+            }
+
             return result;
         }
 
@@ -87,6 +100,11 @@ namespace P06Shop.Shared.Services.LibraryService
 
                 result.Success = result.Success && result.Data != null;
 
+                if (result.Success)
+                {
+                    booksCount = result.Data.Count();
+                }
+
                 return result;
             }
             catch (JsonException)
@@ -114,7 +132,7 @@ namespace P06Shop.Shared.Services.LibraryService
             Debug.WriteLine("GetBooks: " + response.IsSuccessStatusCode);
 
 
-            
+
 
             //var response = await _httpClient.GetAsync(id.ToString());
             if (!response.IsSuccessStatusCode)
@@ -166,7 +184,7 @@ namespace P06Shop.Shared.Services.LibraryService
                 var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.SearchBooksEndpoint + searchUrl + $"/{page}/{pageSize}";
                 Console.WriteLine("Sending request to " + url);
                 var response = await _httpClient.GetAsync(url);
-                Console.WriteLine("Result: " + response.IsSuccessStatusCode + " -> " +  response.RequestMessage);
+                Console.WriteLine("Result: " + response.IsSuccessStatusCode + " -> " + response.RequestMessage);
                 if (!response.IsSuccessStatusCode)
                     return new ServiceResponse<List<Book>>
                     {
@@ -201,5 +219,27 @@ namespace P06Shop.Shared.Services.LibraryService
                 };
             }
         }
+
+        public async Task<ServiceResponse<int>> GetBooksCountAsync(string searchText)
+        {
+            var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksCountEndpoint + (searchText != "" ? "?searchText=" + searchText : "");
+            var response = await _httpClient.GetAsync(url);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+
+            return result;
+        }
+
+        public int GetMaxPage(int elementsPerPage, int elementsCount)
+        {
+            int MaxPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(elementsCount) / Convert.ToDouble(elementsPerPage)));
+            
+            if (MaxPage == 0)
+            {
+                MaxPage = 1;
+            }
+
+            return MaxPage;
+        }
+
     }
 }

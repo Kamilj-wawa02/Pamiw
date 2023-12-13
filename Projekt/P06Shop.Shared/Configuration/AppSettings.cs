@@ -14,7 +14,7 @@ namespace P06Shop.Shared.Configuration
         public SpeechSettings SpeechSettings { get; set; }
         public BaseProductEndpoint BaseProductEndpoint { get; set; }
         public LibraryEndpoints LibraryEndpoints { get; set; }
-
+        public string FacebookLoginEndpoint { get; set; }
 
     }
 }

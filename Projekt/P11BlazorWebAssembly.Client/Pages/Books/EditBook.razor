@@ -1,5 +1,8 @@
 ﻿@page "/books/editbook/{Id:int}"
 
+@attribute [Authorize]
+
+@inject ITranslationsManager TranslationsManager
 @inject ILibraryService LibraryService
 @inject NavigationManager NavigationManager
 
@@ -12,7 +15,7 @@
 else
 {
     <BookForm book="book" OnValidSubmit="HandleValidSubmit"></BookForm>
-    <button class="btn btn-danger" @onclick=HandleDelete>Delete</button>
+    <button class="btn btn-danger bottom-button" style="margin-top: 1rem" @onclick=HandleDelete>@TranslationsManager.Get(MainLayout.Language, "Delete")</button>
 }
 
 

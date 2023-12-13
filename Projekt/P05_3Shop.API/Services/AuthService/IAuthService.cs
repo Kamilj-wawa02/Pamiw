@@ -13,6 +13,6 @@ namespace P05Shop.API.Services.AuthService
 
         Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword);
         
-        Task<ServiceResponse<string>> LoginByFacebook(string code);
+        Task<ServiceResponse<string>> LoginByFacebook(string code, string redirect_uri);
     }
 }

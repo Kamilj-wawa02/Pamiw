@@ -1,0 +1,26 @@
+﻿@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Components.Web.Extensions;
+
+@inject IJSRuntime JSRuntime
+@inject ILocalStorageService LocalStorage
+
+<NavLink class="nav-link" @onclick="ToggleLanguage">
+  <span class="oi oi-contrast" aria-hidden="true"></span>Language: @MainLayout.Language
+</NavLink>
+
+@code {
+
+    private async void ToggleLanguage()
+    {
+        if (MainLayout.Language.Contains("english", StringComparison.OrdinalIgnoreCase))
+        {
+            MainLayout.Language = "polish";
+        }
+        else
+        {
+            MainLayout.Language = "english";
+        }
+        await LocalStorage.SetItemAsync("language", MainLayout.Language);
+    }
+
+}

@@ -5,37 +5,38 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using P06Shop.Shared.Services.ProductService;
-using P06Shop.Shared.Shop;
-
+using P06Shop.Shared.Services.LibraryService;
+using P06Shop.Shared.Library;
+using System.Diagnostics;
 
 namespace P09ShopWebAPPMVC.Client.Controllers
 {
-    public class ProductsAPIController : Controller
+    public class LibraryAPIController : Controller
     {
       
-        private readonly IProductService _productService;
+        private readonly ILibraryService _libraryService;
 
-        public ProductsAPIController(IProductService productService)
+        public LibraryAPIController(ILibraryService productService)
         {
-            _productService = productService;
+            _libraryService = productService;
           
         }
 
-        // GET: Products
+        // GET: Library
         public async Task<IActionResult> Index()
         {
-            var products = await _productService.GetProductsAsync();
-            return products != null ?
-                          View(products.Data.AsEnumerable()) :
-                          Problem("Entity set 'ShopContext.Products'  is null.");
+            var books = await _libraryService.GetBooksAsync();
+            Debug.WriteLine("books: " + books.Success);
+            return books != null ?
+                          View(books.Data.AsEnumerable()) :
+                          Problem("Entity set 'LibraryContext.Library'  is null.");
 
             //return products != null ? 
-            //              View("~/Views/Products/Index.cshtml", products.Data.AsEnumerable()) :
-            //              Problem("Entity set 'ShopContext.Products'  is null.");
+            //              View("~/Views/Library/Index.cshtml", products.Data.AsEnumerable()) :
+            //              Problem("Entity set 'ShopContext.Library'  is null.");
         }
 
-        // GET: Products/Details/5
+        // GET: Library/Details/5
         public async Task<IActionResult> Details(int? id)
         {
          
@@ -43,39 +44,39 @@ namespace P09ShopWebAPPMVC.Client.Controllers
             {
                 return NotFound();
             }
-            var product = await _productService.GetProductByIdAsync((int)id);
+            var book = await _libraryService.GetBookByIdAsync((int)id);
             
-            if (product.Data == null)
+            if (book.Data == null)
             {
                 return NotFound();
             }
 
-            return View(product.Data);
+            return View(book.Data);
         }
 
-        // GET: Products/Create
+        // GET: Library/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Library/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Barcode,Price,ReleaseDate")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Title,Author,Description,Barcode,Price,ReleaseDate")] Book book)
         {
              
             if (ModelState.IsValid)
             {
-                await _productService.CreateProductAsync(product);
+                await _libraryService.CreateBookAsync(book);
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(book);
         }
 
-        // GET: Products/Edit/5
+        // GET: Library/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             
@@ -84,23 +85,23 @@ namespace P09ShopWebAPPMVC.Client.Controllers
                 return NotFound();
             }
 
-            var product =await _productService.GetProductByIdAsync((int)id);
-            if (product.Data == null)
+            var book = await _libraryService.GetBookByIdAsync((int)id);
+            if (book.Data == null)
             {
                 return NotFound();
             }
-            return View(product.Data);
+            return View(book.Data);
         }
 
-        // POST: Products/Edit/5
+        // POST: Library/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Barcode,Price,ReleaseDate")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Description,Barcode,Price,ReleaseDate")] Book book)
         {
 
-            if (id != product.Id)
+            if (id != book.Id)
             {
                 return NotFound();
             }
@@ -109,7 +110,7 @@ namespace P09ShopWebAPPMVC.Client.Controllers
             {
                 try
                 {
-                    var productResult = await _productService.UpdateProductAsync(product);
+                    var productResult = await _libraryService.UpdateBookAsync(book);
                 }
                 catch (Exception)
                 {
@@ -117,10 +118,10 @@ namespace P09ShopWebAPPMVC.Client.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(book);
         }
 
-        // GET: Products/Delete/5
+        // GET: Library/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
 
@@ -129,22 +130,22 @@ namespace P09ShopWebAPPMVC.Client.Controllers
                 return NotFound();
             }
 
-            var product = await _productService.GetProductByIdAsync((int)id);
-            if (product == null)
+            var book = await _libraryService.GetBookByIdAsync((int)id);
+            if (book == null)
             {
                 return NotFound();
             }
 
-            return View(product.Data);
+            return View(book.Data);
         }
 
-        // POST: Products/Delete/5
+        // POST: Library/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _productService.DeleteProductAsync((int)id);
-            if (product.Success)
+            var book = await _libraryService.DeleteBookAsync((int)id);
+            if (book.Success)
                 return RedirectToAction(nameof(Index));
             else
                 return NotFound();

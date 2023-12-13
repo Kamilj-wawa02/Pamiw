@@ -1,9 +1,12 @@
 ﻿@page "/books/createbook"
 
+@attribute [Authorize]
+
+@inject ITranslationsManager TranslationsManager
 @inject ILibraryService LibraryService
 @inject NavigationManager NavigationManager
 
-<h3>Create Book</h3>
+<h3>@TranslationsManager.Get(MainLayout.Language, "CreateBook")</h3>
 
 @if (message != null)
 {

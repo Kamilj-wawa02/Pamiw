@@ -31,9 +31,19 @@ namespace P05Shop.API.Controllers
                 return  StatusCode(500, $"Internal server error {result.Message}");
         }
 
+        [HttpGet("count")]
+        public async Task<ActionResult<ServiceResponse<int>>> GetBooksCount([FromQuery] string searchText = "")
+        {
+            _logger.Log(LogLevel.Information, "Invoked GetBooksCount Method in controller");
 
-        // http:localhost/api/product/4 dla api REST
-        [HttpGet("{id}")]
+            var result = await _libraryService.GetBooksCountAsync(searchText);
+
+            return Ok(result);
+    }
+
+
+            // http:localhost/api/product/4 dla api REST
+            [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<Book>>> GetBook(int id)
         {
           

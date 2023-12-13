@@ -60,13 +60,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\P06Shop.Shared\P06Shop.Shared.csproj" />
+		<ProjectReference Include="..\P06Shop.Shared\P06Shop.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="BookDetailsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="BookDetailsView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>

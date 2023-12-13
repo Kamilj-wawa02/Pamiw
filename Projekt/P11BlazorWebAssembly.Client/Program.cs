@@ -3,12 +3,17 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
 using P06Shop.Shared.Configuration;
+using P06Shop.Shared.Languages;
 using P06Shop.Shared.Services.AuthService;
 using P06Shop.Shared.Services.LibraryService;
 using P11BlazorWebAssembly.Client;
 using P11BlazorWebAssembly.Client.Services.CustomAuthStateProvider;
+using P11BlazorWebAssembly.Client.Shared;
 using System.Diagnostics;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -31,6 +36,18 @@ builder.Services.AddHttpClient<ILibraryService, LibraryService>(client => client
 
 builder.Services.AddSingleton(appSettingsSection);
 builder.Services.AddBlazoredLocalStorage();
+
+builder.Services.AddSingleton<ITranslationsManager>(provider =>
+{
+    //var hostingEnvironment = provider.GetRequiredService<IWebHostEnvironment>();
+    //string projectDir = hostingEnvironment.WebRootPath;
+    return new TranslationsManager(); //projectDir + "\\Translations");
+});
+
+var jsRuntime = builder.Services.BuildServiceProvider().GetRequiredService<IJSRuntime>();
+MainLayout.Language = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "language");
+MainLayout.Language = MainLayout.Language.Trim().Replace("\"", "");
+
 
 // autorization
 builder.Services.AddAuthorizationCore();

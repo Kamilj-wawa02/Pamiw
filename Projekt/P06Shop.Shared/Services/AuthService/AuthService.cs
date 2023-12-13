@@ -45,39 +45,51 @@ namespace P06Shop.Shared.Services.AuthService
 
             return await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
         }
-        
-        // do uzyskania ścieżki strony do logowania do Facebooka
-        public string GetLoginWithFacebookAccessTokenRequest()
+
+        public string LoginWithFacebookFormRedirection(string redirect_uri)
         {
-            var appId = "884555979610977";
-            //var appSecret = "d9913e56675654ab2293036f5a282075";
-            var appRedirectUri = "https://localhost:7070";
+            return string.Format(_appSettings.BaseAPIUrl + "/" + "api/Auth/login-by-facebook-form-redirection?redirect_uri={0}", redirect_uri);
 
-            // Na podstawie: https://developers.facebook.com/docs/facebook-login/guides/access-tokens/
-            var accessTokenRequest2 = "https://graph.facebook.com/oauth/access_token"
-                                     + "?response_type=token"
-                                     + $"&client_id={appId}"
-                                     + $"&redirect_uri={appRedirectUri}";
-            var accessTokenRequest = $"https://www.facebook.com/v12.0/dialog/oauth?client_id={appId}&redirect_uri={appRedirectUri}&response_type=token";
+            //var result = 
+            //await _httpClient.GetAsync(address);
 
-            Debug.WriteLine("Entering page: " + accessTokenRequest);
+            //var data = await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
 
-            return accessTokenRequest;
+            //return data;
         }
 
-        // do pozyskania tokena z naszego API z wykorzystaniem AccessTokena pozyskanego od Facebooka
-        public async Task<ServiceResponse<string>> LoginByFacebookAccessToken(string accessToken)
+        public string LoginWithFacebookGetAccessToken(string redirect_uri, string code)
         {
-            Console.WriteLine($">>>>>>>>>>>>>>>>>>> {accessToken}");
+            return string.Format(_appSettings.BaseAPIUrl + "/" + "api/Auth/login-by-facebook-get-access-token?redirect_uri={0},code={1}", redirect_uri, code);
+        }
 
-            string accessToken2 = "test";
+            public async Task<ServiceResponse<string>> LoginWithFacebook(string code, string redirect_uri)
+        {
+            var address = _appSettings.BaseAPIUrl + "/" + _appSettings.FacebookLoginEndpoint + "?code=" + code + "&redirect_uri=" + redirect_uri;
+            var result = await _httpClient.GetAsync(address);
+            var data = await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
+            return data;
+        }
 
-            var result = await _httpClient.PostAsJsonAsync("api/auth/login-by-facebook-access-token/", new FacebookAuthDTO { AccessToken = accessToken2 } );
+        /*
+            public async Task<ServiceResponse<string>> LoginWithFacebook()
+        {
+            var address = _appSettings.BaseAPIUrl + "/" + _appSettings.FacebookLoginEndpoint;
+
+            var result = await _httpClient.GetAsync(address);
 
             var data = await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
 
             return data;
         }
+        */
+
+        public string GetLoginWithFacebook()
+        {
+            return _appSettings.BaseAPIUrl + "/" + _appSettings.FacebookLoginEndpoint;
+        }
+
+
 
     }
 }

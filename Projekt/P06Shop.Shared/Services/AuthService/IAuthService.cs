@@ -15,7 +15,13 @@ namespace P06Shop.Shared.Services.AuthService
 
         Task<ServiceResponse<bool>> ChangePassword(string newPassword);
 
-        string GetLoginWithFacebookAccessTokenRequest();
-        Task<ServiceResponse<string>> LoginByFacebookAccessToken(string accessToken);
+        Task<ServiceResponse<string>> LoginWithFacebook(string code, string redirect_uri);
+
+        string GetLoginWithFacebook();
+
+        string LoginWithFacebookFormRedirection(string redirect_uri);
+
+        string LoginWithFacebookGetAccessToken(string redirect_uri, string code);
+
     }
 }

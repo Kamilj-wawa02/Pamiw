@@ -15,5 +15,10 @@ namespace P06Shop.Shared.Services.LibraryService
 
         Task<ServiceResponse<Book>> GetBookByIdAsync(int id);
         Task<ServiceResponse<List<Book>>> SearchBooksAsync(string text, int page, int pageSize);
+
+        Task<ServiceResponse<int>> GetBooksCountAsync(string searchText);
+
+        int GetMaxPage(int elementsPerPage, int elementsCount);
+
     }
 }

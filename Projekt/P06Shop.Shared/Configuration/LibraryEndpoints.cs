@@ -16,5 +16,7 @@ namespace P06Shop.Shared.Configuration
         public string AddBookEndpoint { get; set; }
         public string SearchBooksEndpoint { get; set; }
 
+        public string GetBooksCountEndpoint { get; set; }
+
     }
 }

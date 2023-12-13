@@ -1,6 +1,8 @@
 ﻿@page "/"
 
+@inject ITranslationsManager TranslationsManager
+
 <PageTitle>Index</PageTitle>
 
-<h1 class="page">Welcome to the silence zone!</h1>
-<div class="page">Feel free to browse through the library!</div>
+<h1 class="page">@TranslationsManager.Get(MainLayout.Language, "WelcomeTitle")</h1>
+<div class="page">@TranslationsManager.Get(MainLayout.Language, "WelcomeSubtitle")</div>

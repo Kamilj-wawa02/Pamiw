@@ -6,6 +6,7 @@ using P04WeatherForecastAPI.Client.Services.SpeechService;
 using P04WeatherForecastAPI.Client.Services.WeatherServices;
 using P04WeatherForecastAPI.Client.ViewModels;
 using P06Shop.Shared.Configuration;
+using P06Shop.Shared.Languages;
 using P06Shop.Shared.MessageBox;
 using P06Shop.Shared.Services.AuthService;
 using P06Shop.Shared.Services.LibraryService;
@@ -27,6 +28,7 @@ namespace P04WeatherForecastAPI.Client
     {
         IServiceProvider _serviceProvider;
         IConfiguration _configuration;
+        ITranslationsManager translationsManager;
         public App()
         {
             string s = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -74,6 +76,15 @@ namespace P04WeatherForecastAPI.Client
             services.AddSingleton<IFavoriteCityService, FavoriteCityService>();
             services.AddSingleton<ILibraryService, LibraryService>();
             services.AddSingleton<IMessageDialogService, WpfMesageDialogService>();
+
+
+            services.AddSingleton<ITranslationsManager, TranslationsManager>();
+            services.AddSingleton<ITranslationsManager>(translationsManager =>
+            {
+                //string workingDirectory = AppContext.BaseDirectory;
+                //string projectDir = Directory.GetParent(workingDirectory).Parent.Parent.Parent.Parent.FullName;
+                return new TranslationsManager(); //projectDir + "\\P06Shop.Shared\\Languages\\Translations");
+            });
         }
 
         private void ConfigureViewModels(IServiceCollection services)

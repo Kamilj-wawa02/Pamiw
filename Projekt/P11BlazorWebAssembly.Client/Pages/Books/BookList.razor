@@ -1,74 +1,77 @@
 ﻿@page "/books/booksList"
 
 @attribute [Authorize]
+
+@inject ITranslationsManager TranslationsManager
 @inject ILibraryService LibraryService
 @inject NavigationManager NavigationManager
 
-<h3>Full list of books</h3>
+<h3>@TranslationsManager.Get(MainLayout.Language, "BookListTitle")</h3>
 
+<div class="buttons-row">
+    <InputText @bind-Value=searchTerm></InputText>
+    <button class="btn button-primary" @onclick=Search>@TranslationsManager.Get(MainLayout.Language, "Search")</button>
 
-<p>
-    <a href="books/createbook">Create new book</a>
-</p>
+    <div class="separator"></div>
+
+    <button class="btn button-primary" disabled="@(currentPage==1)" @onclick="PreviousPage">@TranslationsManager.Get(MainLayout.Language, "Previous")</button>
+    <span class="search-span"> @currentPage / @maxPage </span>
+    <button class="btn button-primary" disabled="@(currentPage>=maxPage)" @onclick="NextPage">@TranslationsManager.Get(MainLayout.Language, "Next")</button>
+</div>
 
 @if (books == null)
 {
-    <p><em>@message</em></p>
+    @if (message == GetLoadingMessage())
+    {
+        <div class="loader-container">
+            <div class="loader"></div>
+        </div>
+    }
+    else
+    {
+       <p><em>@message</em></p> 
+    }
 }
-
 else
 {
+    <p>
+        <button class="btn button-primary" @onclick="CreateNewBook">@TranslationsManager.Get(MainLayout.Language, "CreateBook")</button>
+    </p>
+
+
     <div>
-        <InputText @bind-Value=searchTerm></InputText>
-        <button class="btn btn-primary" @onclick=Search>Search</button>
+        @foreach (var book in books)
+        {
+            <div class="book-container" @onclick="()=> GoToEdit(book.Id)">
+                <div>
+                    <div class="row title">
+                        <span>@book.Title</span>
+                        <span> - </span>
+                        <span>@book.Author</span>
+                        <span>( #@book.Id )</span>
+                    </div>
+                    <div class="row">
+                        <span>@book.Description</span>
+                    </div>
+                    <div class="row">
+                        <span>@TranslationsManager.Get(MainLayout.Language, "Barcode"): @book.Barcode</span>
+                        <span>@TranslationsManager.Get(MainLayout.Language, "Price"): @book.Price.ToString("C")</span>
+                        <span>@TranslationsManager.Get(MainLayout.Language, "ReleaseDate"): @book.ReleaseDate.ToString("dd MM yyyy")</span>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-    
-
-
-    <div class="table-text">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Barcode</th>
-                <th>Price</th>
-                <th>Release Date</th>
-                <th>Options</th>
-            </tr>
-        </thead>
-        <tbody class="table-text">
-            @foreach (var book in books)
-            {
-                <tr>
-                    <td>@book.Id</td>
-                    <td>@book.Title</td>
-                    <td>@book.Author</td>
-                    <td>@book.Barcode</td>
-                    <td>@book.Price</td>
-                    <td>@book.ReleaseDate.ToShortDateString()</td>
-                    <td>
-                        <button class="btn btn-primary" @onclick="()=> GoToEdit(book.Id)">Edit</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    </div>
-
-    <button class="btn btn-primary" disabled="@(currentPage==1)" @onclick="PreviousPage">Previous</button>
-    <span>@currentPage</span>
-    <button class="btn btn-primary" @onclick="NextPage">Next</button>
 }
 
 
 
 @code {
     private List<Book> books;
-    private string message = "Loading books...";
+    private string message = GetLoadingMessage();
 
     private int currentPage = 1;
+    private int maxPage = 1;
     private const int pageSize = 10;
 
     private string searchTerm = "";
@@ -89,6 +92,12 @@ else
         {
             message = response.Message;
         }
+        maxPage = await GetMaxPage();
+    }
+
+    private static string GetLoadingMessage()
+    {
+        return "Loading books...";
     }
 
 
@@ -115,5 +124,15 @@ else
     {
         currentPage = 1;
         await LoadBooks();
+    }
+
+    private async Task<int> GetMaxPage()
+    {
+        return LibraryService.GetMaxPage(pageSize, (await LibraryService.GetBooksCountAsync(searchTerm)).Data);
+    }
+
+    private void CreateNewBook()
+    {
+        NavigationManager.NavigateTo("books/createbook");
     }
 }

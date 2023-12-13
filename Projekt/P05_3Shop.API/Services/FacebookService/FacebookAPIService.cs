@@ -26,15 +26,15 @@ namespace P05Shop.API.Services.AuthService
             this._httpClientFactory = httpClientFactory;
         }
 
-        public async Task<string> GetAccessToken(string code)
+        public async Task<string> GetAccessToken(string code, string redirect_uri)
         {
             var tokenEndpoint = "https://graph.facebook.com/v12.0/oauth/access_token";
             var clientId = _config.GetSection("AppSettings:FacebookClientID").Value;
             var clientSecret = _config.GetSection("AppSettings:FacebookClientSecret").Value;
-            var redirectUri = "https://localhost:7230/api/Auth/login-by-facebook-redirection";
+            //var redirect_uri = "https://localhost:7230/api/Auth/login-by-facebook-redirection";
 
             // Wykonaj żądanie do uzyskania access token
-            var requestUrl = $"{tokenEndpoint}?client_id={clientId}&client_secret={clientSecret}&code={code}&redirect_uri={redirectUri}";
+            var requestUrl = $"{tokenEndpoint}?client_id={clientId}&client_secret={clientSecret}&code={code}&redirect_uri={redirect_uri}";
             using (var httpClient = new HttpClient())
             {
                 var response = await httpClient.GetStringAsync(requestUrl);

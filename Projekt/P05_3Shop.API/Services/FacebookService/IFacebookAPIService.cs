@@ -15,7 +15,7 @@ namespace P05Shop.API.Services.AuthService
 
     public interface IFacebookAPIService
     {
-        Task<string> GetAccessToken(string code);
+        Task<string> GetAccessToken(string code, string redirect_uri);
 
         Task<FacebookUserDataDTO> GetFacebookUserData(string accessToken);
     }

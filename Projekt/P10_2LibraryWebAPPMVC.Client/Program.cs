@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using P06Shop.Shared.Configuration;
-using P06Shop.Shared.Services.ProductService;
+using P06Shop.Shared.Services.LibraryService;
 
 using System.Configuration;
 
@@ -18,12 +18,11 @@ var appSettingsSection = appSettings.Get<AppSettings>();
 
 var uriBuilder = new UriBuilder(appSettingsSection.BaseAPIUrl)
 {
-    Path = appSettingsSection.BaseProductEndpoint.Base_url,
+    Path = appSettingsSection.LibraryEndpoints.Base_url,
 };
 //Microsoft.Extensions.Http
-builder.Services.AddHttpClient<IProductService, ProductService>(client => client.BaseAddress = uriBuilder.Uri);
-//builder.Services.Configure<AppSettings>(appSettings);
-builder.Services.AddSingleton(appSettingsSection);
+builder.Services.AddHttpClient<ILibraryService, LibraryService>(client => client.BaseAddress = uriBuilder.Uri);
+builder.Services.Configure<AppSettings>(appSettings);
 
 
 var app = builder.Build();

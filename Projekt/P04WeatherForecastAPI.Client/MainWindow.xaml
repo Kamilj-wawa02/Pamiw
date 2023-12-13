@@ -22,9 +22,12 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="DarkRed"/>
         </Style>
+
+        
+
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{DynamicResource ThemeBackgroundColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -37,7 +40,9 @@
         <DockPanel Grid.Column="0" Grid.Row="0" Margin="10">
             <Button DockPanel.Dock="Top" Content="Login" Command="{Binding OpenLoginWindowCommand}" Style="{StaticResource mainButtonStyle}" ></Button>
             <Button DockPanel.Dock="Top" Content="Manage Favorite Cities" Command="{Binding OpenFavotireCitiesCommand}" Style="{StaticResource mainButtonStyle}" ></Button>
-            <Button DockPanel.Dock="Top" Content="Open library" Command="{Binding OpenLibraryWindowCommand}" Style="{StaticResource mainButtonStyle}" ></Button>
+            <Button DockPanel.Dock="Top" Content="{Binding OpenBookListText}" Command="{Binding OpenLibraryWindowCommand}" Style="{StaticResource mainButtonStyle}" ></Button>
+            <Button DockPanel.Dock="Top" Content="Switch theme" Command="{Binding SwitchThemeCommand}" Style="{StaticResource mainButtonStyle}" ></Button>
+            <Button DockPanel.Dock="Top" Content="Switch language" Command="{Binding SwitchLanguageCommand}" Style="{StaticResource mainButtonStyle}" ></Button>
             <Label DockPanel.Dock="Top" Content="City:" Style="{StaticResource mainLabelStyle}"></Label>
             <TextBox DockPanel.Dock="Top" x:Name="txtCity"></TextBox>
             <Button DockPanel.Dock="Top" x:Name="btnSearch" Content="Search" Command="{Binding LoadCitiesCommand}" CommandParameter="{Binding Text, ElementName=txtCity}" Style="{StaticResource mainButtonStyle}" ></Button>

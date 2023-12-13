@@ -5,12 +5,15 @@ using P04WeatherForecastAPI.Client.Commands;
 using P04WeatherForecastAPI.Client.DataSeeders;
 using P04WeatherForecastAPI.Client.Models;
 using P04WeatherForecastAPI.Client.Services.WeatherServices;
+using P06Shop.Shared.Languages;
 using P06Shop.Shared.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,10 +35,14 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         private readonly IServiceProvider _serviceProvider;
         private readonly IMessageDialogService _messageDialogService;
 
+        private readonly ITranslationsManager _translationsManager;
+
+        [ObservableProperty]
+        private string _language = "english";
 
         public MainViewModelV4(IAccuWeatherService accuWeatherService, 
             FavoriteCityViewModel favoriteCityViewModel, FavoriteCitiesView favoriteCitiesView,
-            IServiceProvider serviceProvider, IMessageDialogService messageDialogService)
+            IServiceProvider serviceProvider, IMessageDialogService messageDialogService, ITranslationsManager translationsManager)
         {
             _favoriteCitiesView = favoriteCitiesView;
             _favoriteCityViewModel = favoriteCityViewModel;
@@ -48,6 +55,8 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             Cities = new ObservableCollection<CityViewModel>(); // podejście nr 2 
 
             _messageDialogService = messageDialogService;
+
+            _translationsManager = translationsManager;
 
         }
 
@@ -131,6 +140,37 @@ namespace P04WeatherForecastAPI.Client.ViewModels
 
             loginView.Show();
 
+        }
+        
+        [RelayCommand]
+        public void SwitchTheme()
+        {
+            AppCurrentResources.ToggleTheme();
+        }
+
+        [RelayCommand]
+        public void SwitchLanguage()
+        {
+            if (_language == "polish")
+            {
+                _language = "english";
+            }
+            else
+            {
+                _language = "polish";
+            }
+
+            OnPropertyChanged();
+            var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
+            {
+                OnPropertyChanged(property.Name);
+            }
+        }
+
+        public string OpenBookListText
+        {
+            get { return _translationsManager.Get(_language, "OpenBookList"); }
         }
     }
 }

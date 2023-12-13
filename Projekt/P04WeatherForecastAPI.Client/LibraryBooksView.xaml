@@ -24,6 +24,7 @@
     </Window.Resources>
 
     <DockPanel Grid.Column="0" Grid.Row="0" Margin="10">
+        
         <ListView ItemsSource="{Binding PageBooks}" Height="350" DockPanel.Dock="Top">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -92,6 +93,11 @@ CommandParameter="{Binding}"  Content="Edit" >
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+
+
+
+
         <Button DockPanel.Dock="Left" Content="New book" Command="{Binding NewCommand}" Style="{StaticResource mainButtonStyle}" Width="100" Height="50"/>
         <Button DockPanel.Dock="Left" Content="Previous page" Command="{Binding PreviousPageCommand}" Style="{StaticResource mainButtonStyle}" Width="100" Height="50"/>
         <Button DockPanel.Dock="Left" Content="Next page" Command="{Binding NextPageCommand}" Style="{StaticResource mainButtonStyle}" Width="100" Height="50"/>
