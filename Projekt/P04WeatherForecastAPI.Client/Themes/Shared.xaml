@@ -1,0 +1,69 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="ControlBackground" A="255" R="57" G="77" B="107" />
+    <Color x:Key="ControlBackgroundMouseOver" A="255" R="41" G="127" B="255" />
+
+    <!-- BUTTON -->
+
+    <Style x:Key="mainButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="14"/>
+
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border BorderThickness="0">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border.Background>
+                            <SolidColorBrush x:Name="BackgroundColor" Color="{StaticResource ControlBackground}" />
+                        </Border.Background>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard x:Name="MouseOverAnimation">
+                                        <ColorAnimation Storyboard.TargetName="BackgroundColor"
+                                                     Storyboard.TargetProperty="Color"
+                                                     To="{StaticResource ControlBackgroundMouseOver}"
+                                                     Duration="0:0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard x:Name="MouseOverAnimationExit">
+                                        <ColorAnimation Storyboard.TargetName="BackgroundColor"
+                                                     Storyboard.TargetProperty="Color"
+                                                     To="{StaticResource ControlBackground}"
+                                                     Duration="0:0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="5" />
+            </Style>
+        </Style.Resources>
+
+    </Style>
+
+
+</ResourceDictionary>

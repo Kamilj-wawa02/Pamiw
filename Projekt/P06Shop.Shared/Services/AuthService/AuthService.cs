@@ -1,4 +1,5 @@
-﻿using P06Shop.Shared.Auth;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using P06Shop.Shared.Auth;
 using P06Shop.Shared.Configuration;
 using System;
 using System.Collections.Generic;
@@ -89,7 +90,25 @@ namespace P06Shop.Shared.Services.AuthService
             return _appSettings.BaseAPIUrl + "/" + _appSettings.FacebookLoginEndpoint;
         }
 
+        public async Task<string> ProcessUri(string uri, string redirectionUri)
+        {
+            var query = uri.Split("?")[1];
 
+            if (query.Contains("#"))
+            {
+                query = query.Substring(0, query.IndexOf("#"));
+            }
+
+            QueryHelpers.ParseQuery(query).TryGetValue("code", out var code);
+
+            var result = await LoginWithFacebook(code, redirectionUri);
+            if (result.Success)
+            {
+                return result.Data;
+            }
+
+            return "";
+        }
 
     }
 }

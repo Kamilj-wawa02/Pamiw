@@ -2,5 +2,18 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <SolidColorBrush Color="#ffffff" x:Key="ThemeBackgroundColor" />
-    
+    <SolidColorBrush Color="Black" x:Key="IconsColor" />
+
+    <Color x:Key="SpinnerInactiveColor" A="255" R="200" G="200" B="230" />
+    <Color x:Key="SpinnerActiveColor" A="255" R="41" G="127" B="255" />
+
+    <SolidColorBrush Color="{DynamicResource SpinnerInactiveColor}" x:Key="SpinnerInactiveBrush" />
+    <SolidColorBrush Color="{DynamicResource SpinnerActiveColor}" x:Key="SpinnerActiveBrush" />
+
+    <Style x:Key="mainLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="Black"/>
+    </Style>
+
 </ResourceDictionary>

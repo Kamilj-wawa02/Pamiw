@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace P04WeatherForecastAPI.Client.Converters
 {
-    internal class TemperatureToDisplayConverter : IValueConverter
+    public class TemperatureToDisplayConverter : IValueConverter
     {
         private const  string _tempCode = "°C";
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

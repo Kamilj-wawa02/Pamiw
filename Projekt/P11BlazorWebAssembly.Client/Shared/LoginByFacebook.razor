@@ -30,24 +30,11 @@
             return;
         }
 
-        var query = NavigationManager.Uri.ToString().Split("?")[1];
+        string token = await AuthService.ProcessUri(NavigationManager.Uri.ToString(), "https://localhost:7070/login");
 
-        if (query.Contains("#"))
+        if (token != "")
         {
-            query = query.Substring(0, query.IndexOf("#"));
-        }
-
-        Console.WriteLine("QUERY: " + query);
-
-        QueryHelpers.ParseQuery(query).TryGetValue("code", out var code);
-
-        Console.WriteLine("CODE: '" + code + "'");
-
-        var result = await AuthService.LoginWithFacebook(code, "https://localhost:7070/login");
-        if (result.Success)
-        {
-            Console.WriteLine("SUCCESS!!!!!!!!!!" );
-            await LocalStorageService.SetItemAsync("authToken", result.Data);
+            await LocalStorageService.SetItemAsync("authToken", token);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
             SetFinishedLoggingIn();
@@ -56,11 +43,9 @@
         else
         {
             SetFinishedLoggingIn();
-            Console.WriteLine("FAILURE: " + result.Message);
         }
 
     }
-
 
     private async void SetStartedLoggingIn()
     {

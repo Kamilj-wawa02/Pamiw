@@ -91,21 +91,25 @@ namespace P04WeatherForecastAPI.Client
         {
 
             // konfiguracja viewModeli 
-            services.AddSingleton<MainViewModelV4>();
+            services.AddSingleton<LibraryMainViewModel>();
+            //services.AddSingleton<MainViewModelV4>();
             services.AddSingleton<FavoriteCityViewModel>();
             services.AddSingleton<BooksViewModel>();
             services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<LoginWithFacebookViewModel>();
             // services.AddSingleton<BaseViewModel,MainViewModelV3>();
         }
 
         private void ConfigureViews(IServiceCollection services)
         {
-            // konfiguracja okienek 
-            services.AddTransient<MainWindow>();
+            // konfiguracja okienek
+            services.AddTransient<LibraryMainWindow>();
+            //services.AddTransient<MainWindow>();
             services.AddTransient<FavoriteCitiesView>();
             services.AddTransient<LibraryBooksView>();
             services.AddTransient<BookDetailsView>();
             services.AddTransient<LoginView>();
+            services.AddTransient<LoginWithFacebookView>();
         }
 
         private void ConfigureHttpClients(IServiceCollection services, AppSettings appSettingsSection)
@@ -121,7 +125,10 @@ namespace P04WeatherForecastAPI.Client
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            var mainWindow = _serviceProvider.GetService<MainWindow>();
+            AppCurrentResources.LoadSettings();
+            
+            //var mainWindow = _serviceProvider.GetService<MainWindow>();
+            var mainWindow = _serviceProvider.GetService<LibraryMainWindow>();
             mainWindow.Show();
         }
 

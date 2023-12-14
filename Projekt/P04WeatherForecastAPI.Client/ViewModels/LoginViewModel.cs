@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using P06Shop.Shared.Auth;
 using P06Shop.Shared.MessageBox;
 using P06Shop.Shared.Services.AuthService;
@@ -16,6 +17,7 @@ namespace P04WeatherForecastAPI.Client.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly IAuthService _authService;
         private readonly IMessageDialogService _wpfMesageDialogService;
         public static string Token { get; set; } = string.Empty;
@@ -24,9 +26,10 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         [ObservableProperty]
         private string password = string.Empty;
 
-        public LoginViewModel(IAuthService authService, IMessageDialogService wpfMesageDialogService)
+        public LoginViewModel(IServiceProvider serviceProvider, IAuthService authService, IMessageDialogService wpfMesageDialogService)
         {
             UserLoginDTO = new UserLoginDTO();
+            _serviceProvider = serviceProvider;
             _authService = authService;
             _wpfMesageDialogService = wpfMesageDialogService;
         }
@@ -63,8 +66,19 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         }
 
 
+        [RelayCommand]
+        public void OpenLoginWithFacebookWindow()
+        {
+            LoginWithFacebookView libraryBooksView = _serviceProvider.GetService<LoginWithFacebookView>();
+            libraryBooksView.Show();
+        }
 
-
+        public void CloseLoginWithFacebookWindow()
+        {
+            Debug.WriteLine(">>>>> CloseLoginWithFacebookWindow");
+            LoginWithFacebookView libraryBooksView = _serviceProvider.GetService<LoginWithFacebookView>();
+            libraryBooksView.Hide();
+        }
     }
 
 }

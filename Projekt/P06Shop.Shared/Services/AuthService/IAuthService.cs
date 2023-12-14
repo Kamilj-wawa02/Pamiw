@@ -23,5 +23,7 @@ namespace P06Shop.Shared.Services.AuthService
 
         string LoginWithFacebookGetAccessToken(string redirect_uri, string code);
 
+        Task<string> ProcessUri(string uri, string redirectionUri);
+
     }
 }
