@@ -4,16 +4,13 @@
     <Color x:Key="ControlBackground" A="255" R="57" G="77" B="107" />
     <Color x:Key="ControlBackgroundMouseOver" A="255" R="41" G="127" B="255" />
 
-    <!-- BUTTON -->
-
     <Style x:Key="mainButtonStyle" TargetType="Button">
         <Setter Property="Height" Value="40"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Foreground" Value="#FFFFFF"/>
-        <Setter Property="FontSize" Value="14"/>
-
+        <Setter Property="FontSize" Value="15"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -57,6 +54,12 @@
             </Setter.Value>
         </Setter>
 
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Foreground" Value="Gray"/>
+            </DataTrigger>
+        </Style.Triggers>
+
         <Style.Resources>
             <Style TargetType="Border">
                 <Setter Property="CornerRadius" Value="5" />
@@ -64,6 +67,7 @@
         </Style.Resources>
 
     </Style>
+    
 
 
 </ResourceDictionary>

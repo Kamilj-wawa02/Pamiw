@@ -17,82 +17,92 @@
     
     <Grid Background="{DynamicResource ThemeBackgroundColor}" >
 
-        <StackPanel Orientation="Vertical">
+        <DockPanel VerticalAlignment="Stretch" >
+            <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
 
-            <DockPanel VerticalAlignment="Top" Margin="10">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Label Height="40" Margin="5" Content="{Binding LibraryText}" Style="{DynamicResource mainLabelStyle}" FontSize="20" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <DockPanel VerticalAlignment="Top" Margin="10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Label Height="40" Margin="5" Content="{Binding LibraryText}" Style="{DynamicResource mainLabelStyle}" FontSize="20" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Label Visibility="{Binding IsPolishLanguage, Converter={StaticResource boolToVisibilityConv}}" Height="30" Margin="5" Content="EN | PL---" Style="{DynamicResource mainLabelStyle}">
-                            <Label.ContentTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <Run Text="PL" TextDecorations="Underline" />
-                                        <Run Text=" | " />
-                                        <Run Text="EN" />
-                                    </TextBlock>
-                                </DataTemplate>
-                            </Label.ContentTemplate>
-                        </Label>
-                        <Label Visibility="{Binding IsEnglishLanguage, Converter={StaticResource boolToVisibilityConv}}" Height="30" Margin="5" Content="---EN | PL" Style="{DynamicResource mainLabelStyle}">
-                            <Label.ContentTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <Run Text="PL" />
-                                        <Run Text=" | " />
-                                        <Run Text="EN" TextDecorations="Underline" />
-                                    </TextBlock>
-                                </DataTemplate>
-                            </Label.ContentTemplate>
-                        </Label>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Label Visibility="{Binding IsPolishLanguage, Converter={StaticResource boolToVisibilityConv}}" Height="30" Margin="5" Content="EN | PL---" Style="{DynamicResource mainLabelStyle}">
+                                <Label.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="PL" TextDecorations="Underline" />
+                                            <Run Text=" | " />
+                                            <Run Text="EN" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </Label.ContentTemplate>
+                            </Label>
+                            <Label Visibility="{Binding IsEnglishLanguage, Converter={StaticResource boolToVisibilityConv}}" Height="30" Margin="5" Content="---EN | PL" Style="{DynamicResource mainLabelStyle}">
+                                <Label.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="PL" />
+                                            <Run Text=" | " />
+                                            <Run Text="EN" TextDecorations="Underline" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </Label.ContentTemplate>
+                            </Label>
 
-                        <StackPanel.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command="{Binding SwitchLanguageCommand}" />
-                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding SwitchLanguageCommand}" />
-                        </StackPanel.InputBindings>
+                            <StackPanel.InputBindings>
+                                <MouseBinding Gesture="LeftClick" Command="{Binding SwitchLanguageCommand}" />
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding SwitchLanguageCommand}" />
+                            </StackPanel.InputBindings>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
+                            <!-- fa:ImageAwesome Width="16" Height="16" Margin="12" Icon="{Binding CurrentThemeIcon}" Foreground="{DynamicResource IconsColor}" VerticalAlignment="Center" HorizontalAlignment="Center" / -->
+
+                            <Viewbox Width="16" Height="16" Margin="12" Visibility="{Binding IsDarkTheme, Converter={StaticResource boolToVisibilityConv}}" >
+                                <Path Fill="{DynamicResource IconsColor}"
+                                        Data="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                            </Viewbox>
+
+                            <Viewbox Width="16" Height="16" Margin="12" Visibility="{Binding IsLightTheme, Converter={StaticResource boolToVisibilityConv}}" >
+                                <Path Fill="{DynamicResource IconsColor}"
+                                        Data="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278"/>
+                            </Viewbox>
+
+                            <StackPanel.InputBindings>
+                                <MouseBinding Gesture="LeftClick" Command="{Binding SwitchThemeCommand}" />
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding SwitchThemeCommand}" />
+                            </StackPanel.InputBindings>
+                        </StackPanel>
+
+                        <Button x:Name="Login" Width="70" Content="{Binding LoginText}" Command="{Binding OpenLoginWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+
                     </StackPanel>
 
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
-                        <!-- fa:ImageAwesome Width="16" Height="16" Margin="12" Icon="{Binding CurrentThemeIcon}" Foreground="{DynamicResource IconsColor}" VerticalAlignment="Center" HorizontalAlignment="Center" / -->
+                </DockPanel>
 
-                        <Viewbox Width="16" Height="16" Margin="12" Visibility="{Binding IsDarkTheme, Converter={StaticResource boolToVisibilityConv}}" >
-                            <Path Fill="{DynamicResource IconsColor}"
-                                    Data="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-                        </Viewbox>
-
-                        <Viewbox Width="16" Height="16" Margin="12" Visibility="{Binding IsLightTheme, Converter={StaticResource boolToVisibilityConv}}" >
-                            <Path Fill="{DynamicResource IconsColor}"
-                                    Data="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278"/>
-                        </Viewbox>
-
-                        <StackPanel.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command="{Binding SwitchThemeCommand}" />
-                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding SwitchThemeCommand}" />
-                        </StackPanel.InputBindings>
+                <DockPanel VerticalAlignment="Top" Margin="10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBox x:Name="SearchTextBox" VerticalContentAlignment="Center" TextWrapping="NoWrap" Margin="14" Padding="5" Width="200" Height="Auto" BorderBrush="DimGray" Text="{Binding UserLoginDTO.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Width="70" Content="{Binding SearchText}" Command="{Binding SearchCommand}" CommandParameter="{Binding Text, ElementName=SearchTextBox}" Style="{DynamicResource mainButtonStyle}" ></Button>
                     </StackPanel>
 
-                    <Button x:Name="Login" Width="70" Content="{Binding LoginText}" Command="{Binding OpenLoginWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
-
-                </StackPanel>
-
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button IsEnabled="{Binding IsPreviousButtonEnabled}" Width="90" Content="{Binding PreviousText}" Command="{Binding PreviousPageCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+                        <Label Height="30" Margin="5" Content="{Binding CurrentPageText}" Style="{DynamicResource mainLabelStyle}" />
+                        <Button IsEnabled="{Binding IsNextButtonEnabled}" Width="80" Content="{Binding NextText}" Command="{Binding NextPageCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        
+            <DockPanel VerticalAlignment="Stretch" >
+                <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch">
+                    
+                    <local:CircularSpinner Width="70" Margin="0,0,0,80" VerticalAlignment="Center" HorizontalAlignment="Center"></local:CircularSpinner>
+                </Grid>
+                
             </DockPanel>
-
-            <DockPanel VerticalAlignment="Top" Margin="10">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBox Width="100"></TextBox>
-                    <Button x:Name="Search" Width="70" Content="AAA" Command="{Binding OpenLoginWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Label Height="40" Margin="5" Content="YYY" Style="{DynamicResource mainLabelStyle}" FontSize="20" />
-                </StackPanel>
-            </DockPanel>
-
-            <local:CircularSpinner Width="70"></local:CircularSpinner>
-        </StackPanel>
+        </DockPanel>
 
     </Grid>
 </Window>

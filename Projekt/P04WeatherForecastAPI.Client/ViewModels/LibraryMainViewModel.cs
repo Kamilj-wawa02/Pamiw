@@ -6,7 +6,9 @@ using P04WeatherForecastAPI.Client.DataSeeders;
 using P04WeatherForecastAPI.Client.Models;
 using P04WeatherForecastAPI.Client.Services.WeatherServices;
 using P06Shop.Shared.Languages;
+using P06Shop.Shared.Library;
 using P06Shop.Shared.MessageBox;
+using P06Shop.Shared.Services.LibraryService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,92 +26,40 @@ namespace P04WeatherForecastAPI.Client.ViewModels
     // przekazywanie wartosci do innego formularza 
     public partial class LibraryMainViewModel : ObservableObject
     {
-        private CityViewModel _selectedCity;
-        private Weather _weather;
-        private readonly IAccuWeatherService _accuWeatherService;
+        private readonly int PageSize = 10;
 
-        //favorite city 
-        private readonly FavoriteCitiesView _favoriteCitiesView;
-        private readonly FavoriteCityViewModel _favoriteCityViewModel;
-        //public ICommand LoadCitiesCommand { get;  }
         private readonly IServiceProvider _serviceProvider;
         private readonly IMessageDialogService _messageDialogService;
-
         private readonly ITranslationsManager _translationsManager;
+        private readonly ILibraryService _libraryService;
 
-        public LibraryMainViewModel(IAccuWeatherService accuWeatherService, 
-            FavoriteCityViewModel favoriteCityViewModel, FavoriteCitiesView favoriteCitiesView,
-            IServiceProvider serviceProvider, IMessageDialogService messageDialogService, ITranslationsManager translationsManager)
-        {
-            _favoriteCitiesView = favoriteCitiesView;
-            _favoriteCityViewModel = favoriteCityViewModel;
-
-            _serviceProvider = serviceProvider;
-
-                // _serviceProvider= serviceProvider; 
-                //LoadCitiesCommand = new RelayCommand(x => LoadCities(x as string));
-                _accuWeatherService = accuWeatherService;
-            Cities = new ObservableCollection<CityViewModel>(); // podejście nr 2 
-
-            _messageDialogService = messageDialogService;
-
-            _translationsManager = translationsManager;
-
-        }
-
-        //[ObservableProperty]
-        //private WeatherViewModel weatherView;
-        //public WeatherViewModel WeatherView { 
-        //    get { return weatherView; } 
-        //    set { 
-        //        weatherView = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
         [ObservableProperty]
-        private WeatherViewModel weatherView;
+        private Book selectedBook;
+        public ObservableCollection<Book> Books { get; set; }
 
-
-        public CityViewModel SelectedCity
+        public LibraryMainViewModel(IServiceProvider serviceProvider, IMessageDialogService messageDialogService, ITranslationsManager translationsManager, ILibraryService libraryService)
         {
-            get => _selectedCity;
-            set
-            {
-                _selectedCity = value;
-                OnPropertyChanged();
-                LoadWeather();
-            }
+            _serviceProvider = serviceProvider;
+            _messageDialogService = messageDialogService;
+            _translationsManager = translationsManager;
+            _libraryService = libraryService;
+
+            Books = new ObservableCollection<Book>();
         }
 
-         
-        private async void LoadWeather()
+        public async Task GetBooks(string searchText)
         {
-            if(SelectedCity != null)
+            Books.Clear();
+            var booksResult = await _libraryService.SearchBooksAsync(searchText, currentPage, PageSize);
+            if (booksResult.Success)
             {
-                _weather = await _accuWeatherService.GetCurrentConditions(SelectedCity.Key); 
-                WeatherView = new WeatherViewModel(_weather);
+                foreach (var p in booksResult.Data)
+                {
+                    Books.Add(p);
+                }
+                OnPropertyChanged(nameof(Books));
+                OnPropertyChanged(nameof(IsBookListVisible));
             }
-        } 
-
-        // podajście nr 2 do przechowywania kolekcji obiektów:
-        public ObservableCollection<CityViewModel> Cities { get; set; }
-
-        [RelayCommand]
-        public async void LoadCities(string locationName)
-        {
-            // podejście nr 2:
-            var cities = await _accuWeatherService.GetLocations(locationName);
-            Cities.Clear();
-            foreach (var city in cities) 
-                Cities.Add(new CityViewModel(city));
-        }
-
-        [RelayCommand]
-        public void OpenFavotireCities()
-        {
-            //var favoriteCitiesView = new FavoriteCitiesView();
-            _favoriteCityViewModel.SelectedCity = new FavoriteCity() { Name = "Warsaw" };
-            _favoriteCitiesView.Show();
         }
 
         [RelayCommand]
@@ -164,6 +114,33 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             }
         }
 
+        [RelayCommand]
+        public async void Search(string searchText)
+        {
+            await GetBooks(searchText);
+        }
+
+        [RelayCommand]
+        public void PreviousPage()
+        {
+            currentPage--;
+            OnPropertyChanged(nameof(CurrentPageText));
+            OnPropertyChanged(nameof(IsNextButtonEnabled));
+            OnPropertyChanged(nameof(IsPreviousButtonEnabled));
+        }
+
+        [RelayCommand]
+        public void NextPage()
+        {
+            currentPage++;
+            OnPropertyChanged(nameof(CurrentPageText));
+            OnPropertyChanged(nameof(IsNextButtonEnabled));
+            OnPropertyChanged(nameof(IsPreviousButtonEnabled));
+        }
+
+        private int currentPage = 1;
+        private int maxPage = 2;
+
         public string LibraryText
         {
             get { return _translationsManager.Get(AppCurrentResources.Language, "Library"); }
@@ -199,5 +176,40 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             get { return AppCurrentResources.Language == "english"; }
         }
         
+        public string SearchText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Search"); }
+        }
+
+        public string PreviousText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Previous"); }
+        }
+
+        public string NextText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Next"); }
+        }
+
+        public string CurrentPageText
+        {
+            get { return currentPage + " / " + maxPage; }
+        }
+
+        public bool IsNextButtonEnabled
+        {
+            get { return currentPage < maxPage; }
+        }
+
+        public bool IsPreviousButtonEnabled
+        {
+            get { return currentPage > 1; }
+        }
+
+        public bool IsBookListVisible
+        {
+            get { return Books.Count > 0; }
+        }
+
     }
 }

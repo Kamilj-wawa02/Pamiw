@@ -32,7 +32,6 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         private Book selectedBook;
 
 
-
         public BooksViewModel(ILibraryService libraryService, BookDetailsView booksDetailsView, IMessageDialogService messageDialogService)
         {
             _libraryService = libraryService;
