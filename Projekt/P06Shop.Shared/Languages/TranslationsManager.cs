@@ -94,6 +94,12 @@ namespace P06Shop.Shared.Languages
                         { "UserNotFound", "User not found!" },
                         { "UserNotLoggedInTitle", "Whoops! You're not allowed to see this page." },
                         { "UserNotLoggedInSubtitle", "Please login or register a new account." },
+                        { "FailedCreatingBook", "Failed to create a new book! Error details: " },
+                        { "FailedUpdatingBook", "Failed to update the book! Error details: " },
+                        { "FailedDeletingBook", "Failed to delete the book! Error details: " },
+                        { "LoginFailed", "Login failed! Message: " },
+                        { "RegistrationFailed", "Registration failed! Message: " },
+                        { "RegisteredSuccessfully", "Registered successfully! Now log in to your account." },
                     }
                 },
                 { "polish", new Dictionary<string, string>
@@ -135,6 +141,12 @@ namespace P06Shop.Shared.Languages
                         { "UserNotFound", "Nie odnaleziono użytkownika!" },
                         { "UserNotLoggedInTitle", "Ups! Nie masz uprawnień do przeglądania tej strony." },
                         { "UserNotLoggedInSubtitle", "Proszę zaloguj się lub zarejestruj nowe konto." },
+                        { "FailedCreatingBook", "Nie udało się utworzyć książki! Komunikat błędu: " },
+                        { "FailedUpdatingBook", "Nie udało się zaktualizować książki! Komunikat błędu: " },
+                        { "FailedDeletingBook", "Nie udało się usunąć książki! Komunikat błędu: " },
+                        { "LoginFailed", "Nie udało się zalogować! Treść komunikatu: " },
+                        { "RegistrationFailed", "Nie udało się zarejestrować! Treść komunikatu: " },
+                        { "RegisteredSuccessfully", "Zarejestrowano pomyślnie! Teraz zaloguj się na swoje konto." },
                     }
                 }
             };

@@ -16,29 +16,22 @@ using System.Windows.Shapes;
 namespace P04WeatherForecastAPI.Client
 {
     /// <summary>
-    /// Interaction logic for LoginView.xaml
+    /// Logika interakcji dla klasy BookForm.xaml
     /// </summary>
-    public partial class LoginView : Window
+    public partial class BookFormView : Window
     {
-        private readonly LoginViewModel _loginViewModel;
-        public LoginView(LoginViewModel loginViewModel)
+        private readonly BookFormViewModel _viewModel;
+        public BookFormView(BookFormViewModel viewModel)
         {
-            _loginViewModel = loginViewModel;
-            DataContext = loginViewModel;
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            _loginViewModel.LoginRegister(PasswordBox.Password, ConfirmPasswordBox.Password);
+            _viewModel = viewModel;
+            DataContext = _viewModel;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            Hide();
+            this.Hide();
         }
-
-
     }
 }

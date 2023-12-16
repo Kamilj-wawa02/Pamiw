@@ -5,9 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P04WeatherForecastAPI.Client"
         mc:Ignorable="d"
-        Title="LoginWithFacebook" Height="450" Width="800">
-    
-    <Grid Background="{DynamicResource ThemeBackgroundColor}">
-        <WebBrowser Name="webBrowser" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Loaded="webBrowser_Loaded" Navigated="webBrowser_Navigated" />
-    </Grid>
+        Title="LoginWithFacebook" Height="650" Width="600" Closing="Window_Closing">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVisibilityConv" />
+    </Window.Resources>
+
+    <DockPanel Background="{DynamicResource ThemeBackgroundColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <local:CircularSpinner DockPanel.Dock="Top" Margin="10" Visibility="{Binding IsLoadingSpinnerVisible, Converter={StaticResource boolToVisibilityConv}}" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center"></local:CircularSpinner>
+        
+        <WebBrowser DockPanel.Dock="Bottom" Name="webBrowser" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Loaded="webBrowser_Loaded" Navigated="webBrowser_Navigated" LoadCompleted="webBrowser_LoadCompleted" />
+    </DockPanel>
 </Window>

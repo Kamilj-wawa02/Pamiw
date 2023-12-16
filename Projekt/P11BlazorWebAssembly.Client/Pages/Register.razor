@@ -61,15 +61,15 @@ else
             return;
         }
 
-        if (userRegisterDTO.Password != userRegisterDTO.ConfirmPassword)
-        {
-            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "NotTheSamePasswords"));
-            return;
-        }
-
         if (!userRegisterDTO.Email.Contains("@") || userRegisterDTO.Password.Length < 6)
         {
             JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "WrongLoginDataMessage"));
+            return;
+        }
+
+        if (userRegisterDTO.Password != userRegisterDTO.ConfirmPassword)
+        {
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "NotTheSamePasswords"));
             return;
         }
 

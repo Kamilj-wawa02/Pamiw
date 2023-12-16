@@ -7,23 +7,31 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:converters="clr-namespace:P04WeatherForecastAPI.Client.Converters"
         mc:Ignorable="d"
-        Title="LibraryMainWindow" Height="450" Width="800">
+        Title="LibraryMainWindow" Height="550" Width="850">
 
     <Window.Resources>
-        <converters:HtmlToXamlConverter x:Key="htmlToXamlConv"></converters:HtmlToXamlConverter>
-        <BooleanToVisibilityConverter x:Key="boolToVisibilityConv" ></BooleanToVisibilityConverter>
+        <converters:HtmlToXamlConverter x:Key="htmlToXamlConv" />
+        <BooleanToVisibilityConverter x:Key="boolToVisibilityConv" />
+        <converters:IntToStringConverter x:Key="intToStringConv" />
     </Window.Resources>
 
     
     <Grid Background="{DynamicResource ThemeBackgroundColor}" >
 
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Label Height="45" FontSize="26" Margin="12" Content="{Binding LibraryText}" Style="{DynamicResource mainLabelStyle}" />
+        </StackPanel>
+
         <DockPanel VerticalAlignment="Stretch" >
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
 
                 <DockPanel VerticalAlignment="Top" Margin="10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Label Height="40" Margin="5" Content="{Binding LibraryText}" Style="{DynamicResource mainLabelStyle}" FontSize="20" />
+                    <StackPanel DockPanel.Dock="Top" Visibility="{Binding IsLoggedUserVisible, Converter={StaticResource boolToVisibilityConv}}">
+                        <Label Margin="0,-4,4,-2" Content="{Binding LoggedUserText}" Style="{DynamicResource mainLabelStyle}" HorizontalAlignment="Right" />
                     </StackPanel>
+                    <!-- StackPanel Orientation="Horizontal" HorizontalAlignment="Left" -->
+                        <!-- Label Height="40" Margin="5" Content="{Binding LibraryText}" Style="{DynamicResource mainLabelStyle}" FontSize="20" /-->
+                    <!-- /StackPanel -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -75,7 +83,12 @@
                             </StackPanel.InputBindings>
                         </StackPanel>
 
-                        <Button x:Name="Login" Width="70" Content="{Binding LoginText}" Command="{Binding OpenLoginWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+                        <!-- LOGIN -->
+                        <Button Visibility="{Binding IsLoginButtonVisible, Converter={StaticResource boolToVisibilityConv}}" x:Name="Login" Width="70" Content="{Binding LoginText}" Command="{Binding OpenLoginWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+                        <Button Visibility="{Binding IsLoginButtonVisible, Converter={StaticResource boolToVisibilityConv}}" x:Name="Register" Width="70" Content="{Binding RegisterText}" Command="{Binding OpenRegisterWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+
+                        <!-- LOGOUT -->
+                        <Button Visibility="{Binding IsLoggedUserVisible, Converter={StaticResource boolToVisibilityConv}}" x:Name="Logout" Width="70" Content="{Binding LogoutText}" Command="{Binding LogoutCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
 
                     </StackPanel>
 
@@ -87,7 +100,7 @@
                         <Button Width="70" Content="{Binding SearchText}" Command="{Binding SearchCommand}" CommandParameter="{Binding Text, ElementName=SearchTextBox}" Style="{DynamicResource mainButtonStyle}" ></Button>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0">
                         <Button IsEnabled="{Binding IsPreviousButtonEnabled}" Width="90" Content="{Binding PreviousText}" Command="{Binding PreviousPageCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
                         <Label Height="30" Margin="5" Content="{Binding CurrentPageText}" Style="{DynamicResource mainLabelStyle}" />
                         <Button IsEnabled="{Binding IsNextButtonEnabled}" Width="80" Content="{Binding NextText}" Command="{Binding NextPageCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
@@ -97,8 +110,55 @@
         
             <DockPanel VerticalAlignment="Stretch" >
                 <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch">
+                    <local:CircularSpinner Visibility="{Binding IsLoadingSpinnerVisible, Converter={StaticResource boolToVisibilityConv}}" Width="70" Margin="0,0,0,80" VerticalAlignment="Center" HorizontalAlignment="Center"></local:CircularSpinner>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,0,10" Visibility="{Binding IsBookListVisible, Converter={StaticResource boolToVisibilityConv}}" >
+                        <StackPanel>
+                            <Button Margin="24,3,24,15" HorizontalAlignment="Left" Width="144" Content="{Binding CreateBookText}" Command="{Binding CreateBookCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+
+                            <ItemsControl ItemsSource="{Binding Books}" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="24,3,24,3" CornerRadius="10" BorderThickness="0">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="{DynamicResource ItemsBackgroundColor}"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="{DynamicResource ItemsBackgroundColorOnMouseHover}"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+
+                                            <Border.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick" 
+                                                      Command="{Binding DataContext.EditBookCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
+                                                      CommandParameter="{Binding Id, Converter={StaticResource intToStringConv}}"/>
+                                            </Border.InputBindings>
+
+                                            <StackPanel Margin="12,15,12,15" >
+                                                <TextBlock Foreground="{DynamicResource ItemsTextColor}" FontWeight="Bold" Style="{DynamicResource itemsTextBlockStyle}">
+                                                    <Run Text="{Binding Title}" />
+                                                    <Run Text="  -  " />
+                                                    <Run Text="{Binding Author}" />
+                                                    <Run Text="  (#" /><Run Text="{Binding Id}" /><Run Text=")" />
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Description}" Margin="0,5,0,0" Style="{DynamicResource itemsTextBlockStyle}" />
+                                                <TextBlock Style="{DynamicResource itemsTextBlockStyle}">
+                                                    <Run Text="Barcode: " Foreground="{DynamicResource ItemsTextColor}" /><Run Text="{Binding Barcode}" Foreground="{DynamicResource ItemsTextColor}" />
+                                                    <Run Text=" Price: " Foreground="{DynamicResource ItemsTextColor}" /><Run Text="{Binding Price, StringFormat='C'}" Foreground="{DynamicResource ItemsTextColor}" />
+                                                    <Run Text=" Release Date: " Foreground="{DynamicResource ItemsTextColor}" /><Run Text="{Binding ReleaseDate, StringFormat='dd MM yyyy'}" Foreground="{DynamicResource ItemsTextColor}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
                     
-                    <local:CircularSpinner Width="70" Margin="0,0,0,80" VerticalAlignment="Center" HorizontalAlignment="Center"></local:CircularSpinner>
+
                 </Grid>
                 
             </DockPanel>

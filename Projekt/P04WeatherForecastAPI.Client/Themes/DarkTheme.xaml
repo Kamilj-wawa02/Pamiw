@@ -4,6 +4,13 @@
     <SolidColorBrush Color="#1C1928" x:Key="ThemeBackgroundColor" />
     <SolidColorBrush Color="White" x:Key="IconsColor" />
 
+    <Color x:Key="ItemsBackColor" A="255" R="40" G="40" B="60" />
+    <Color x:Key="ItemsBackColorOnMouseHover" A="255" R="50" G="50" B="70" />
+
+    <SolidColorBrush Color="White" x:Key="ItemsTextColor" />
+    <SolidColorBrush Color="{DynamicResource ItemsBackColor}" x:Key="ItemsBackgroundColor" />
+    <SolidColorBrush Color="{DynamicResource ItemsBackColorOnMouseHover}" x:Key="ItemsBackgroundColorOnMouseHover" />
+
     <Color x:Key="SpinnerInactiveColor" A="255" R="50" G="50" B="70" />
     <Color x:Key="SpinnerActiveColor" A="255" R="41" G="127" B="255" />
 
@@ -16,5 +23,19 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="White"/>
     </Style>
+
+    <Style x:Key="itemsTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource ItemsTextColor}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="itemsTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource ItemsTextColor}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="6"/>
+    </Style>
+
 
 </ResourceDictionary>

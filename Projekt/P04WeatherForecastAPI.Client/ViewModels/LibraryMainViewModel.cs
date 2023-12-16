@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using P04WeatherForecastAPI.Client.Commands;
 using P04WeatherForecastAPI.Client.DataSeeders;
@@ -17,6 +18,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -32,24 +34,46 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         private readonly IMessageDialogService _messageDialogService;
         private readonly ITranslationsManager _translationsManager;
         private readonly ILibraryService _libraryService;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
+
+        public AuthenticationState AuthenticationState;
+
+        private string searchText = "";
+        private int currentPage = 1;
+        private int maxPage = 1;
 
         [ObservableProperty]
         private Book selectedBook;
         public ObservableCollection<Book> Books { get; set; }
 
-        public LibraryMainViewModel(IServiceProvider serviceProvider, IMessageDialogService messageDialogService, ITranslationsManager translationsManager, ILibraryService libraryService)
+        public LibraryMainViewModel(IServiceProvider serviceProvider, IMessageDialogService messageDialogService,
+            ITranslationsManager translationsManager, ILibraryService libraryService,
+            AuthenticationStateProvider authenticationStateProvider)
         {
             _serviceProvider = serviceProvider;
             _messageDialogService = messageDialogService;
             _translationsManager = translationsManager;
             _libraryService = libraryService;
+            _authenticationStateProvider = authenticationStateProvider;
 
+            GetAuthenticationState();
             Books = new ObservableCollection<Book>();
+            GetBooks("", 1);
         }
 
-        public async Task GetBooks(string searchText)
+        public async Task GetBooks(string searchText, int page)
         {
+            Debug.WriteLine(">>>>>>>>>>>>>>>> GetBooks");
             Books.Clear();
+            this.searchText = searchText;
+            int maxElements = (await _libraryService.GetBooksCountAsync(searchText)).Data;
+            currentPage = page;
+            maxPage = _libraryService.GetMaxPage(PageSize, maxElements);
+            if (currentPage > maxPage)
+            {
+                currentPage = maxPage;
+            }
+
             var booksResult = await _libraryService.SearchBooksAsync(searchText, currentPage, PageSize);
             if (booksResult.Success)
             {
@@ -57,26 +81,17 @@ namespace P04WeatherForecastAPI.Client.ViewModels
                 {
                     Books.Add(p);
                 }
-                OnPropertyChanged(nameof(Books));
-                OnPropertyChanged(nameof(IsBookListVisible));
-            }
-        }
-
-        [RelayCommand]
-        public void OpenLibraryWindow()
-        {
-            if (!string.IsNullOrEmpty(LoginViewModel.Token))
-            {
-                LibraryBooksView libraryBooksView = _serviceProvider.GetService<LibraryBooksView>();
-                BooksViewModel libraryBooksViewModel = _serviceProvider.GetService<BooksViewModel>();
-
-                libraryBooksView.Show();
-                libraryBooksViewModel.GetBooks();
             }
             else
             {
-                _messageDialogService.ShowMessage("Access denied! Log in first!");
+                Debug.WriteLine(">>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!! GetBooks FAILED");
             }
+            OnPropertyChanged(nameof(Books));
+            OnPropertyChanged(nameof(IsBookListVisible));
+            OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
+            OnPropertyChanged(nameof(CurrentPageText));
+            OnPropertyChanged(nameof(IsNextButtonEnabled));
+            OnPropertyChanged(nameof(IsPreviousButtonEnabled));
         }
 
         [RelayCommand]
@@ -85,10 +100,33 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             LoginView loginView = _serviceProvider.GetService<LoginView>();
             LoginViewModel loginViewModel = _serviceProvider.GetService<LoginViewModel>();
 
+            loginViewModel.SetIsLogin(true);
             loginView.Show();
-            //_messageDialogService.ShowMessage("v: " + CurrentThemeIcon);
         }
-        
+
+        [RelayCommand]
+        public async void OpenRegisterWindow()
+        {
+            LoginView loginView = _serviceProvider.GetService<LoginView>();
+            LoginViewModel loginViewModel = _serviceProvider.GetService<LoginViewModel>();
+
+            loginViewModel.SetIsLogin(false);
+            loginView.Show();
+        }
+
+        public async void GetAuthenticationState()
+        {
+            AuthenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            RefreshAllProperties();
+        }
+
+        [RelayCommand]
+        public async void Logout()
+        {
+            AppCurrentResources.SetToken("");
+            GetAuthenticationState();
+        }
+
         [RelayCommand]
         public void SwitchTheme()
         {
@@ -99,7 +137,6 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         [RelayCommand]
         public void SwitchLanguage()
         {
-            Debug.WriteLine("Switching language!!!");
             AppCurrentResources.ToggleLanguage();
             RefreshAllProperties();
         }
@@ -117,13 +154,15 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         [RelayCommand]
         public async void Search(string searchText)
         {
-            await GetBooks(searchText);
+            currentPage = 1;
+            await GetBooks(searchText, currentPage);
         }
 
         [RelayCommand]
         public void PreviousPage()
         {
             currentPage--;
+            GetBooks(searchText, currentPage);
             OnPropertyChanged(nameof(CurrentPageText));
             OnPropertyChanged(nameof(IsNextButtonEnabled));
             OnPropertyChanged(nameof(IsPreviousButtonEnabled));
@@ -133,27 +172,87 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         public void NextPage()
         {
             currentPage++;
+            GetBooks(searchText, currentPage);
             OnPropertyChanged(nameof(CurrentPageText));
             OnPropertyChanged(nameof(IsNextButtonEnabled));
             OnPropertyChanged(nameof(IsPreviousButtonEnabled));
         }
 
-        private int currentPage = 1;
-        private int maxPage = 2;
+        [RelayCommand]
+        public void CreateBook()
+        {
+            BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
+            BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
+
+            bookFormViewModel.SetEditingBook(-1);
+            bookFormView.Show();
+        }
+
+        [RelayCommand]
+        public void EditBook(string id)
+        {
+            BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
+            BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
+
+            bookFormViewModel.SetEditingBook(int.Parse(id));
+            bookFormView.Show();
+        }
+
+        public void CloseBookForm()
+        {
+            BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
+            BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
+            bookFormView.Hide();
+
+            GetBooks(searchText, currentPage);
+        }
+
+
 
         public string LibraryText
         {
             get { return _translationsManager.Get(AppCurrentResources.Language, "Library"); }
         }
 
-        public string OpenBookListText
+        public string LoggedUserText
         {
-            get { return _translationsManager.Get(AppCurrentResources.Language, "OpenBookList"); }
+            get
+            {
+                return (AuthenticationState == null ? "" : 
+                    AuthenticationState?.User?.Identity?.Name + " | " + 
+                    _translationsManager.Get(AppCurrentResources.Language, AuthenticationState?.User?.Claims?.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value) + 
+                    " " + AuthenticationState?.User?.Claims?.Where(c => c.Type == "DateCreated")?.FirstOrDefault()?.Value) ;
+            }
+        }
+
+        public bool IsLoggedUserVisible
+        {
+            get { return AppCurrentResources.Token != ""; }
+        }
+
+        public bool IsLoginButtonVisible
+        {
+            get { return AppCurrentResources.Token == ""; }
+        }
+
+        public string CreateBookText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "CreateBook"); }
         }
 
         public string LoginText
         {
             get { return _translationsManager.Get(AppCurrentResources.Language, "Login"); }
+        }
+
+        public string RegisterText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Register"); }
+        }
+
+        public string LogoutText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Logout"); }
         }
 
         public bool IsDarkTheme
@@ -209,6 +308,11 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         public bool IsBookListVisible
         {
             get { return Books.Count > 0; }
+        }
+        
+        public bool IsLoadingSpinnerVisible
+        {
+            get { return Books.Count == 0; }
         }
 
     }

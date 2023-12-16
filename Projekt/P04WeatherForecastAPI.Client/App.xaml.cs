@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using P04WeatherForecastAPI.Client.MessageBox;
-
+using P04WeatherForecastAPI.Client.Services.CustomAuthStateProvider;
 using P04WeatherForecastAPI.Client.Services.SpeechService;
 using P04WeatherForecastAPI.Client.Services.WeatherServices;
 using P04WeatherForecastAPI.Client.ViewModels;
@@ -14,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -97,6 +100,7 @@ namespace P04WeatherForecastAPI.Client
             services.AddSingleton<BooksViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<LoginWithFacebookViewModel>();
+            services.AddSingleton<BookFormViewModel>();
             // services.AddSingleton<BaseViewModel,MainViewModelV3>();
         }
 
@@ -108,8 +112,10 @@ namespace P04WeatherForecastAPI.Client
             services.AddTransient<FavoriteCitiesView>();
             services.AddTransient<LibraryBooksView>();
             services.AddTransient<BookDetailsView>();
-            services.AddTransient<LoginView>();
-            services.AddTransient<LoginWithFacebookView>();
+
+            services.AddSingleton<LoginView>();
+            services.AddSingleton<LoginWithFacebookView>();
+            services.AddSingleton<BookFormView>();
         }
 
         private void ConfigureHttpClients(IServiceCollection services, AppSettings appSettingsSection)
@@ -121,6 +127,8 @@ namespace P04WeatherForecastAPI.Client
             //Microsoft.Extensions.Http
             services.AddHttpClient<ILibraryService, LibraryService>(client => client.BaseAddress = uriBuilder.Uri);
             services.AddHttpClient<IAuthService, AuthService>(client => client.BaseAddress = uriBuilder.Uri);
+
+            services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
         }
 
         private void OnStartup(object sender, StartupEventArgs e)
@@ -130,6 +138,11 @@ namespace P04WeatherForecastAPI.Client
             //var mainWindow = _serviceProvider.GetService<MainWindow>();
             var mainWindow = _serviceProvider.GetService<LibraryMainWindow>();
             mainWindow.Show();
+
+            //int browserVer = 11;
+            //RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
+            //regKey.SetValue(Process.GetCurrentProcess().ProcessName + ".exe", browserVer, RegistryValueKind.DWord);
+            //regKey.Close();
         }
 
     }

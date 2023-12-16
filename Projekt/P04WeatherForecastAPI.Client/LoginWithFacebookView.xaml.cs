@@ -36,8 +36,21 @@ namespace P04WeatherForecastAPI.Client
 
         private void webBrowser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
+            _loginWithFacebookViewModel.SetLoading(true);
             _loginWithFacebookViewModel.BrowserUriUpdated(e.Uri);
         }
+
+        private void webBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            _loginWithFacebookViewModel.SetLoading(false);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
     }
 
 

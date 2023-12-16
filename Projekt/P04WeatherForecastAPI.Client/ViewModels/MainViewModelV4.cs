@@ -118,18 +118,18 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         [RelayCommand]
         public void OpenLibraryWindow()
         {
-            if (!string.IsNullOrEmpty(LoginViewModel.Token))
-            {
+            //if (!string.IsNullOrEmpty(LoginViewModel.Token))
+            //{
                 LibraryBooksView libraryBooksView = _serviceProvider.GetService<LibraryBooksView>();
                 BooksViewModel libraryBooksViewModel = _serviceProvider.GetService<BooksViewModel>();
 
                 libraryBooksView.Show();
                 libraryBooksViewModel.GetBooks();
-            }
-            else
-            {
-                _messageDialogService.ShowMessage("Access denied! Log in first!");
-            }
+            //}
+            //else
+            //{
+            //    _messageDialogService.ShowMessage("Access denied! Log in first!");
+            //}
         }
 
         [RelayCommand]
