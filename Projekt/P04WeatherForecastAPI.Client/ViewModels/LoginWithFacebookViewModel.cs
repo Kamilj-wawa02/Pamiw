@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -53,6 +54,7 @@ namespace P04WeatherForecastAPI.Client.ViewModels
 
             string newUrl = _authService.LoginWithFacebookFormRedirection(redirectionUrl);
             Debug.WriteLine("LOADED BROWSER, navigating to: " + newUrl);
+            webBrowser.Source = null;
             webBrowser.Navigate(newUrl);
 
             SetLoading(true);
@@ -86,6 +88,7 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             else
             {
                 Debug.WriteLine("NEW URL: " + currentUrl.ToString());
+                AcceptCookies();
             }
         }
 
@@ -100,6 +103,22 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             get { return isLoading; }
         }
 
+        public void AcceptCookies()
+        {
+            LoginWithFacebookView loginWithFacebookView = _serviceProvider.GetService<LoginWithFacebookView>();
+
+            string script = @"
+        setTimeout(function() {
+            var buttons = document.querySelectorAll('button[data-cookiebanner=""accept_button""][data-testid=""cookie-policy-manage-dialog-accept-button""]');
+            if (buttons.length > 0) {
+                buttons[0].click();
+            }
+        }, 500);
+    ";
+
+            Debug.WriteLine("Sending accept cookies...");
+            loginWithFacebookView.webBrowser.InvokeScript("execScript", new Object[] { script, "JavaScript" });
+        }
 
 
         [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]

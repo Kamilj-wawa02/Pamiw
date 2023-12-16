@@ -42,7 +42,7 @@ else
     <div>
         @foreach (var book in books)
         {
-            <div class="book-container" @onclick="()=> GoToEdit(book.Id)">
+            <div class="book-container no-select" @onclick="()=> GoToEdit(book.Id)">
                 <div>
                     <div class="row title">
                         <span>@book.Title</span>

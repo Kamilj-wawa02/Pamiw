@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P04WeatherForecastAPI.Client"
         mc:Ignorable="d"
-        Title="LoginWithFacebook" Height="650" Width="600" Closing="Window_Closing">
+        Title="LoginWithFacebook" Height="650" Width="600" Closing="Window_Closing" IsVisibleChanged="Window_IsVisibleChanged">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="boolToVisibilityConv" />

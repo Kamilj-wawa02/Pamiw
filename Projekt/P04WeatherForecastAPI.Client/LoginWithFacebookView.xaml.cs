@@ -51,6 +51,13 @@ namespace P04WeatherForecastAPI.Client
             this.Hide();
         }
 
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool) e.NewValue)
+            {
+                _loginWithFacebookViewModel.BrowserReady();
+            }
+        }
     }
 
 
