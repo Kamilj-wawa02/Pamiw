@@ -1,4 +1,5 @@
-﻿using P04WeatherForecastAPI.Client.ViewModels;
+﻿using P04WeatherForecastAPI.Client;
+using P04WeatherForecastAPI.Client.ViewModels;
 
 namespace P12MAUI.Client
 {
@@ -12,6 +13,9 @@ namespace P12MAUI.Client
             BindingContext = booksViewModel;
         }
 
-       
+        private void Loaded_Event(object sender, EventArgs e)
+        {
+            AppCurrentResources.LoadSettings();
+        }
     }
 }

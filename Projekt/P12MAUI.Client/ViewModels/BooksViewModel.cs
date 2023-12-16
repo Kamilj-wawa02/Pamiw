@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using static System.Reflection.Metadata.BlobBuilder;
-
+using System.Reflection;
 
 namespace P04WeatherForecastAPI.Client.ViewModels
 {
@@ -161,6 +161,30 @@ namespace P04WeatherForecastAPI.Client.ViewModels
                 {"Book", SelectedBook },
                 {nameof(BooksViewModel), this }
             });
+        }
+
+        [RelayCommand]
+        public void SwitchTheme()
+        {
+            AppCurrentResources.ToggleTheme();
+            RefreshAllProperties();
+        }
+
+        [RelayCommand]
+        public void SwitchLanguage()
+        {
+            AppCurrentResources.ToggleLanguage();
+            RefreshAllProperties();
+        }
+
+        public void RefreshAllProperties()
+        {
+            OnPropertyChanged();
+            var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
+            {
+                OnPropertyChanged(property.Name);
+            }
         }
 
     }

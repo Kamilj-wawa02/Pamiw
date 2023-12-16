@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
+using P04WeatherForecastAPI.Client;
 using P04WeatherForecastAPI.Client.ViewModels;
 using P06Shop.Shared.Configuration;
 using P06Shop.Shared.MessageBox;
@@ -29,7 +30,6 @@ namespace P12MAUI.Client
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
 
             ConfigureServices(builder.Services);
             return builder.Build();
