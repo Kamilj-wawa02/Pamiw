@@ -20,6 +20,7 @@ using System.Reflection;
 using P06Shop.Shared.Services.AuthService;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace P12MAUI.Client.ViewModels
 {
@@ -31,10 +32,9 @@ namespace P12MAUI.Client.ViewModels
         private readonly ITranslationsManager _translationsManager;
         private readonly IMessageDialogService _mesageDialogService;
 
+        private bool IsLoginWithFacebook;
+        private bool IsLoadingWebView;
         private bool IsLogin = false;
-
-        [ObservableProperty]
-        private string password = string.Empty;
 
         public LoginViewModel(IServiceProvider serviceProvider, IAuthService authService, ITranslationsManager translationsManager,
             IMessageDialogService wpfMesageDialogService, AuthenticationStateProvider authenticationStateProvider)
@@ -51,18 +51,15 @@ namespace P12MAUI.Client.ViewModels
 
         public void SetIsLogin(bool _isLogin)
         {
+            Debug.WriteLine("SetIsLogin: " + _isLogin);
             IsLogin = _isLogin;
             RefreshAllProperties();
-
-            LoginView loginView = _serviceProvider.GetService<LoginView>();
         }
 
-        public async Task LoginRegister(string password, string confirmPassword)
+        [RelayCommand]
+        public async Task LoginRegister()
         {
-            Debug.WriteLine("Logging in... with email: " + UserRegisterDTO.Email + " and password " + password);
-
-            UserRegisterDTO.Password = password;
-            UserRegisterDTO.ConfirmPassword = confirmPassword;
+            Debug.WriteLine("Logging in... with email: " + UserRegisterDTO.Email + " and password " + UserRegisterDTO.Password);
 
             if (string.IsNullOrEmpty(UserRegisterDTO.Email) || string.IsNullOrEmpty(UserRegisterDTO.Password))
             {
@@ -140,30 +137,122 @@ namespace P12MAUI.Client.ViewModels
             AppCurrentResources.SetToken("");
             MainViewModel mainViewModel = _serviceProvider.GetService<MainViewModel>();
             mainViewModel.GetAuthenticationState();
-
         }
 
+        private string redirectionUrl = "https://localhost:7080/login-successful";
 
         [RelayCommand]
-        public void OpenLoginWithFacebookWindow()
+        public async void OpenLoginWithFacebookWindow()
         {
-            //LoginWithFacebookView libraryBooksView = _serviceProvider.GetService<LoginWithFacebookView>();
-            //libraryBooksView.Show();
+            IsLoginWithFacebook = true;
+            RefreshAllProperties();
+
+            LoginView loginView = _serviceProvider.GetService<LoginView>();
+
+            string newUrl = _authService.LoginWithFacebookFormRedirection(redirectionUrl);
+
+            Debug.WriteLine("Starting Facebook Authentication, created URL: " + newUrl);
+            loginView.NavigateWebView(newUrl);
+            SetLoading(true);
+
+            /*
+            var authenticatorResult = await WebAuthenticator.AuthenticateAsync(new Uri(newUrl), new Uri(redirectionUrl));
+
+            if (authenticatorResult.Properties.ContainsKey("code"))
+            {
+                var code = authenticatorResult.Properties["code"];
+
+                var result = await _authService.LoginWithFacebook(code, redirectionUrl);
+                if (!result.Success)
+                {
+                    _mesageDialogService.ShowMessage("Failed!");
+                }
+
+                var token = result.Data;
+                _mesageDialogService.ShowMessage("Success: " + token);
+
+            }
+            */
+
+
+            /*
+
+            var facebookAuthUrl = new Uri($"https://www.facebook.com/v12.0/dialog/oauth?client_id=" + "884555979610977" + "&redirect_uri=" + redirectionUrl + "&response_type=token");
+
+            var authenticatorResult = await WebAuthenticator.AuthenticateAsync(facebookAuthUrl, new Uri(redirectionUrl));
+
+            // Otrzymaj dane z authenticatorResult
+            if (authenticatorResult.Properties.TryGetValue("access_token", out var accessToken))
+            {
+                // Zalogowano pomyślnie, accessToken zawiera token dostępu
+                // Możesz przekazać ten token do swojego serwera lub użyć go w inny sposób w twojej aplikacji
+            }
+            */
+
+
+
         }
 
+        public void OnPageLoaded()
+        {
+            SetLoading(false);
+        }
+
+        public async void OnNewBrowserURL(string currentUrl)
+        {
+            Debug.WriteLine($"OnNewBrowserURL= {currentUrl}");
+
+            if (currentUrl == null)
+            {
+                return;
+            }
+
+            if (currentUrl.StartsWith(redirectionUrl))
+            {                
+                Debug.WriteLine("LOGGED IN! NEW URL: " + currentUrl.ToString());
+                
+                string token = await _authService.ProcessUri(currentUrl, redirectionUrl);
+
+                Debug.WriteLine("LOGGED IN! token: " + token);
+
+                //AppCurrentResources.SetToken(token);
+                //await _authenticationStateProvider.GetAuthenticationStateAsync();
+
+                LoginView loginView = _serviceProvider.GetService<LoginView>();
+                loginView.NavigateWebView(null);
+
+                LoginViewModel loginViewModel = _serviceProvider.GetService<LoginViewModel>();
+                loginViewModel.CloseLoginWithFacebookWindow();
+                loginViewModel.LoggedIn(token);
+            }
+            else
+            {
+                Debug.WriteLine("NEW URL: " + currentUrl);
+                //AcceptCookies();
+            }
+        }
+        
+        public void SetLoading(bool loading)
+        {
+            Debug.WriteLine($"SetLoading= {loading}");
+            IsLoadingWebView = loading;
+            OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
+        }
+
+        [RelayCommand]
         public void CloseLoginWithFacebookWindow()
         {
+            IsLoginWithFacebook = false;
+            RefreshAllProperties();
+
             //LoginWithFacebookView libraryBooksView = _serviceProvider.GetService<LoginWithFacebookView>();
             //libraryBooksView.Hide();
         }
 
-        public void CloseLoginWindow()
+        public async void CloseLoginWindow()
         {
-            //LoginView loginView = _serviceProvider.GetService<LoginView>();
-            //loginView.Hide();
-
-            MainViewModel mainViewModel = _serviceProvider.GetService<MainViewModel>();
-            mainViewModel.RefreshAllProperties();
+            var navigation = Application.Current.MainPage.Navigation;
+            await navigation.PopAsync();
         }
         public void RefreshAllProperties()
         {
@@ -175,9 +264,23 @@ namespace P12MAUI.Client.ViewModels
             }
         }
 
-        public bool IsRegistrationDisplayed
+        public bool IsLoadingSpinnerVisible
         {
-            get { return !IsLogin; }
+            get { return IsLoadingWebView; }
+        }
+        public bool IsLoginWithFacebookInvisible
+        {
+            get { return !IsLoginWithFacebook; }
+        }
+
+        public bool IsNormalLoginRegisterInvisible
+        {
+            get { return IsLoginWithFacebook; }
+        }
+
+        public bool IsRegistrationHidden
+        {
+            get { return IsLogin; }
         }
 
         public string LoginText

@@ -57,6 +57,7 @@ namespace P12MAUI.Client.ViewModels
             _authenticationStateProvider = authenticationStateProvider;
             _connectivity = connectivity; // set the _connectivity field
 
+            AppCurrentResources.LoadSettings();
             GetAuthenticationState();
             Books = new ObservableCollection<Book>();
             GetBooks("", 1);
@@ -64,7 +65,7 @@ namespace P12MAUI.Client.ViewModels
 
         public async Task GetBooks(string searchText, int page)
         {
-            Debug.WriteLine(">>>>>>>>>>>>>>>> GetBooks");
+            Debug.WriteLine(">>> GetBooks");
             this.searchText = searchText;
             int maxElements = (await _libraryService.GetBooksCountAsync(searchText)).Data;
             currentPage = page;
@@ -82,12 +83,11 @@ namespace P12MAUI.Client.ViewModels
                 {
                     Books.Add(p);
                 }
-
-                Debug.WriteLine(">>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!! GetBooks SUCCEDED loaded " + Books.Count);
+                Debug.WriteLine(">>> GetBooks SUCCEDED");
             }
             else
             {
-                Debug.WriteLine(">>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!! GetBooks FAILED");
+                Debug.WriteLine(">>> GetBooks FAILED");
             }
             OnPropertyChanged(nameof(Books));
             OnPropertyChanged(nameof(IsBookListVisible));
@@ -126,8 +126,9 @@ namespace P12MAUI.Client.ViewModels
 
             await Shell.Current.GoToAsync(nameof(LoginView), true, new Dictionary<string, object>
             {
-                {nameof(LoginViewModel), loginViewModel }
+                {nameof(MainViewModel), this }
             });
+            //await Shell.Current.GoToAsync("//login", true);
         }
 
         [RelayCommand]
@@ -137,11 +138,16 @@ namespace P12MAUI.Client.ViewModels
             LoginViewModel loginViewModel = _serviceProvider.GetService<LoginViewModel>();
 
             loginViewModel.SetIsLogin(false);
-            //loginView.Show();
+
+            await Shell.Current.GoToAsync(nameof(LoginView), true, new Dictionary<string, object>
+            {
+                {nameof(MainViewModel), this }
+            });
         }
 
         public async void GetAuthenticationState()
         {
+            Debug.WriteLine("GetAuthenticationState ---------------------------------");
             AuthenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();
             RefreshAllProperties();
         }
@@ -257,14 +263,14 @@ namespace P12MAUI.Client.ViewModels
             }
         }
 
-        public bool IsLoggedUserVisible
-        {
-            get { return AppCurrentResources.Token != ""; }
-        }
-
-        public bool IsLoginButtonVisible
+        public bool IsLoggedUserInvisible
         {
             get { return AppCurrentResources.Token == ""; }
+        }
+
+        public bool IsLoginButtonInvisible
+        {
+            get { return AppCurrentResources.Token != ""; }
         }
 
         public string CreateBookText
@@ -297,14 +303,14 @@ namespace P12MAUI.Client.ViewModels
             get { return !AppCurrentResources.DarkTheme; }
         }
 
-        public bool IsPolishLanguage
+        public bool IsPolishLanguageInvinible
         {
-            get { return AppCurrentResources.Language == "polish"; }
+            get { return AppCurrentResources.Language != "polish"; }
         }
 
-        public bool IsEnglishLanguage
+        public bool IsEnglishLanguageInvinible
         {
-            get { return AppCurrentResources.Language == "english"; }
+            get { return AppCurrentResources.Language != "english"; }
         }
 
         public string SearchText

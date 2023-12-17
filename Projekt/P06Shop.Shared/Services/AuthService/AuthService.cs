@@ -64,7 +64,7 @@ namespace P06Shop.Shared.Services.AuthService
             return string.Format(_appSettings.BaseAPIUrl + "/" + "api/Auth/login-by-facebook-get-access-token?redirect_uri={0},code={1}", redirect_uri, code);
         }
 
-            public async Task<ServiceResponse<string>> LoginWithFacebook(string code, string redirect_uri)
+        public async Task<ServiceResponse<string>> LoginWithFacebook(string code, string redirect_uri)
         {
             var address = _appSettings.BaseAPIUrl + "/" + _appSettings.FacebookLoginEndpoint + "?code=" + code + "&redirect_uri=" + redirect_uri;
             var result = await _httpClient.GetAsync(address);
@@ -100,6 +100,8 @@ namespace P06Shop.Shared.Services.AuthService
             }
 
             QueryHelpers.ParseQuery(query).TryGetValue("code", out var code);
+
+            Debug.WriteLine(">>> Detected code: " + code);
 
             var result = await LoginWithFacebook(code, redirectionUri);
             if (result.Success)

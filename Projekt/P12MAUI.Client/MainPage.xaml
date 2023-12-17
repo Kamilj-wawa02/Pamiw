@@ -19,37 +19,90 @@
                 Padding="30,0"
                 VerticalOptions="Start">
 
-                <HorizontalStackLayout Spacing="5">
-                    <Button Command="{Binding CreateBookCommand}" Text="Add new Book" />
-                    <Button Command="{Binding PreviousPageCommand}" Text="Previous page" />
-                    <Button Command="{Binding NextPageCommand}" Text="Next page" />
+                <Label Text="{Binding LoggedUserText}" Margin="5" VerticalTextAlignment="Start" HorizontalTextAlignment="End"
+                       IsVisible="{Binding IsLoggedUserInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
 
-                    <Button Command="{Binding SwitchThemeCommand}" Text="Themes" />
+                <VerticalStackLayout Spacing="5">
+                    <HorizontalStackLayout HorizontalOptions="End">
+                        <!-- zawiera JĘZYK + MOTYW -->
+                        <HorizontalStackLayout>
+                            <StackLayout Background="{DynamicResource ThemeBackgroundColor}" HorizontalOptions="End">
+                                <Label IsVisible="{Binding IsEnglishLanguageInvinible, Converter={StaticResource boolToVisibilityConv}}" VerticalTextAlignment="Center" HeightRequest="30" Margin="5">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="PL" />
+                                            <Span Text=" | " />
+                                            <Span Text="EN" TextDecorations="Underline"  />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
 
-                    <Button Command="{Binding OpenLoginWindowCommand}" Text="Login" />
+                                <Label IsVisible="{Binding IsPolishLanguageInvinible, Converter={StaticResource boolToVisibilityConv}}" VerticalTextAlignment="Center" HeightRequest="30" Margin="5">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="PL" TextDecorations="Underline"  />
+                                            <Span Text=" | " />
+                                            <Span Text="EN" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
 
-                    <Label Text="{Binding CurrentPageText}" VerticalTextAlignment="Center"></Label>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SwitchLanguageCommand}" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
 
-                    <HorizontalStackLayout>
-                        <HorizontalStackLayout IsVisible="{Binding IsDarkTheme, Converter={StaticResource boolToVisibilityConv}}">
-                            <Path Style="{DynamicResource SunPath}"
-                                    Fill="{DynamicResource DarkIconsColor}" Aspect="Uniform" HorizontalOptions="Start" WidthRequest="17" HeightRequest="17" />
-                            <HorizontalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="ToggleThemeCommand" />
-                            </HorizontalStackLayout.GestureRecognizers>
+                            <HorizontalStackLayout Padding="10" Background="{DynamicResource ThemeBackgroundColor}" HorizontalOptions="End" >
+                                <HorizontalStackLayout IsVisible="{Binding IsDarkTheme, Converter={StaticResource boolToVisibilityConv}}">
+                                    <Path Style="{DynamicResource MoonPath}"
+                                        Fill="{DynamicResource DarkIconsColor}" Aspect="Uniform" HorizontalOptions="Start" WidthRequest="17" HeightRequest="17" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout IsVisible="{Binding IsLightTheme, Converter={StaticResource boolToVisibilityConv}}">
+                                    <Path Style="{DynamicResource SunPath}"
+                                        Fill="{DynamicResource LightIconsColor}" Aspect="Uniform" HorizontalOptions="Start" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ToggleThemeCommand" />
+                                </HorizontalStackLayout.GestureRecognizers>
+                            </HorizontalStackLayout>
                         </HorizontalStackLayout>
 
-                        <HorizontalStackLayout IsVisible="{Binding IsLightTheme, Converter={StaticResource boolToVisibilityConv}}">
-                            <Path Style="{DynamicResource MoonPath}"
-                                    Fill="{DynamicResource LightIconsColor}" Aspect="Uniform" HorizontalOptions="Start" />
-                            <HorizontalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="ToggleThemeCommand" />
-                            </HorizontalStackLayout.GestureRecognizers>
+                        <!-- zawiera LOGOWANIE -->
+                        <HorizontalStackLayout HorizontalOptions="End">
+                            <Button Command="{Binding OpenLoginWindowCommand}" Text="{Binding LoginText}" WidthRequest="90"
+                                IsVisible="{Binding IsLoginButtonInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
+
+                            <Button Command="{Binding OpenRegisterWindowCommand}" Text="{Binding RegisterText}" WidthRequest="105"
+                                    IsVisible="{Binding IsLoginButtonInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
+
+                            <Button Command="{Binding LogoutCommand}" Text="{Binding LogoutText}" WidthRequest="105"
+                                    IsVisible="{Binding IsLoggedUserInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
                         </HorizontalStackLayout>
                     </HorizontalStackLayout>
-                </HorizontalStackLayout>
 
+                    <Grid>
+                        <Button Command="{Binding CreateBookCommand}" Text="{Binding CreateBookText}" WidthRequest="164" HorizontalOptions="Start" />
 
+                        <HorizontalStackLayout HorizontalOptions="End">
+                            <Button Command="{Binding PreviousPageCommand}" Text="{Binding PreviousText}" IsEnabled="{Binding IsPreviousButtonEnabled}" WidthRequest="110" />
+                            <Label Text="{Binding CurrentPageText}" Margin="10" VerticalTextAlignment="Center" />
+                            <Button Command="{Binding NextPageCommand}" Text="{Binding NextText}"  IsEnabled="{Binding IsNextButtonEnabled}" WidthRequest="100" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                    
+                </VerticalStackLayout>
+
+                <VerticalStackLayout IsVisible="false">
+                    <ActivityIndicator x:Name="loadingIndicator"
+                       IsRunning="true"
+                       IsVisible="true"
+                       VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="CenterAndExpand" />
+                    
+                </VerticalStackLayout>
+                
                 <CollectionView ItemsSource="{Binding Books}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>

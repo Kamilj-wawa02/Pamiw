@@ -85,7 +85,7 @@
 
                         <!-- LOGIN -->
                         <Button Visibility="{Binding IsLoginButtonVisible, Converter={StaticResource boolToVisibilityConv}}" x:Name="Login" Width="70" Content="{Binding LoginText}" Command="{Binding OpenLoginWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
-                        <Button Visibility="{Binding IsLoginButtonVisible, Converter={StaticResource boolToVisibilityConv}}" x:Name="Register" Width="70" Content="{Binding RegisterText}" Command="{Binding OpenRegisterWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
+                        <Button Visibility="{Binding IsLoginButtonVisible, Converter={StaticResource boolToVisibilityConv}}" x:Name="Register" Width="85" Content="{Binding RegisterText}" Command="{Binding OpenRegisterWindowCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
 
                         <!-- LOGOUT -->
                         <Button Visibility="{Binding IsLoggedUserVisible, Converter={StaticResource boolToVisibilityConv}}" x:Name="Logout" Width="70" Content="{Binding LogoutText}" Command="{Binding LogoutCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>

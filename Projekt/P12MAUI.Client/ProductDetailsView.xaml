@@ -4,52 +4,29 @@
     x:Class="P12MAUI.Client.BookDetailsView"
     Title="{Binding Book.Title}">
     <VerticalStackLayout>
-        <Grid BindingContext="{Binding Book}" Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <VerticalStackLayout BindingContext="{Binding Book}" Margin="10">
+            <Label Text="{Binding TitleText}" />
+            <Entry Text="{Binding Title}" />
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+            <Label Text="{Binding AuthorText}" />
+            <Entry Text="{Binding Author}" />
 
-            <Label Text="Title:" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
-            <Entry Text="{Binding Title}" Grid.Row="0" Grid.Column="1" />
+            <Label Text="{Binding DescriptionText}" />
+            <Entry Text="{Binding Description}" />
 
-            <Label Text="Author:" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" />
-            <Entry Text="{Binding Author}" Grid.Row="1" Grid.Column="1" />
+            <Label Text="{Binding BarcodeText}" />
+            <Entry Text="{Binding Barcode}" />
 
-            <Label Text="Description:" Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" />
-            <Entry Grid.Row="2" Grid.Column="1" Text="{Binding Description}" />
+            <Label Text="{Binding PriceText}" />
+            <Entry Text="{Binding Price}" />
 
-            <Label Text="Barcode:" Grid.Row="3" Grid.Column="0" VerticalTextAlignment="Center" />
-            <Entry Text="{Binding Barcode}" Grid.Row="3" Grid.Column="1" />
-
-            <Label Text="Price:" Grid.Row="4" Grid.Column="0" VerticalTextAlignment="Center" />
-            <Entry Text="{Binding Price}" Grid.Row="4" Grid.Column="1" />
-
-            <Label Text="Release Date:" Grid.Row="5" Grid.Column="0" VerticalTextAlignment="Center" />
-            <Entry Text="{Binding ReleaseDate}" Grid.Row="5" Grid.Column="1" />
-        </Grid>
-        <HorizontalStackLayout HorizontalOptions="End">
-            <Button
-                Command="{Binding DeleteCommand}"
-                Text="Delete" TextColor="White" BackgroundColor="Red">
-
-            </Button>
-
-            <Button
-                Command="{Binding SaveCommand}"
-                Text="Save" TextColor="Black">
-
-            </Button>
+            <Label Text="{Binding ReleaseDateText}" />
+            <Entry Text="{Binding ReleaseDate}" />
+        </VerticalStackLayout>
+        
+        <HorizontalStackLayout HorizontalOptions="Start">
+            <Button Command="{Binding DeleteCommand}" Text="Delete" TextColor="White" BackgroundColor="Red" />
+            <Button Command="{Binding SaveCommand}" Text="Save" />
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

@@ -7,7 +7,8 @@
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(BookDetailsView), typeof(BookDetailsView));
-         
+            Routing.RegisterRoute(nameof(LoginView), typeof(LoginView));
+
         }
     }
 }

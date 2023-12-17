@@ -45,6 +45,10 @@ namespace P12MAUI.Client.Services.CustomAuthStateProvider
                     identity = new ClaimsIdentity();
                 }
             }
+            else
+            {
+                Debug.WriteLine("THE USER ISN'T LOGGED IN");
+            }
 
             var user = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(user);

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 using P12MAUI.Client;
 using P12MAUI.Client.ViewModels;
@@ -13,6 +11,7 @@ using System.Diagnostics;
 using P06Shop.Shared.Languages;
 using Microsoft.AspNetCore.Components.Authorization;
 using P12MAUI.Client.Services.CustomAuthStateProvider;
+using Microsoft.Maui.Handlers;
 
 namespace P12MAUI.Client
 {
@@ -33,6 +32,14 @@ namespace P12MAUI.Client
             builder.Logging.AddDebug();
 #endif
 
+
+            /*
+            builder.ConfigureMauiHandlers((handlers) =>
+            {
+                handlers.AddHandler<WebView, WebViewHandler>();
+            });
+            */
+
             ConfigureServices(builder.Services);
             return builder.Build();
         }
@@ -49,12 +56,8 @@ namespace P12MAUI.Client
 
         private static AppSettings ConfigureAppSettings(IServiceCollection services)
         {
-            // pobranie appsettings z konfiguracji i zmapowanie na klase AppSettings 
-            //Microsoft.Extensions.Options.ConfigurationExtensions
-            //var appSettings = _configuration.GetSection(nameof(AppSettings));
-            //var appSettingsSection = appSettings.Get<AppSettings>();
-            // services.Configure<AppSettings>(appSettings);
-
+            // Działa jedynie na Windowsie
+            /*
             string workingDirectory = AppContext.BaseDirectory;
             string projectDir = Directory.GetParent(workingDirectory).Parent.Parent.Parent.Parent.Parent.FullName;
 
@@ -69,6 +72,33 @@ namespace P12MAUI.Client
             var appSettings = _configuration.GetSection(nameof(AppSettings));
             var appSettingsSection = appSettings.Get<AppSettings>();
 
+            services.AddSingleton(appSettingsSection);
+            */
+
+            var appSettingsSection = new AppSettings()
+            {
+                BaseAPIUrl = "https://localhost:7230",
+                FacebookLoginEndpoint= "api/Auth/login-by-facebook",
+                LibraryEndpoints = new LibraryEndpoints()
+                {
+                    Base_url = "api/Book/",
+                    GetBooksEndpoint= "api/Book",
+                    GetBookEndpoint= "api/Book/{0}",
+                    UpdateBookEndpoint= "api/Book/{0}",
+                    DeleteBookEndpoint= "api/Book/{0}",
+                    AddBookEndpoint= "api/Book",
+                    SearchBooksEndpoint= "api/Book/search",
+                    GetBooksCountEndpoint= "api/Book/count"
+                },
+                //BaseBookEndpoint = new BaseBookEndpoint()
+                //{
+                //   Base_url = "api/Book/",
+                //    GetAllBooksEndpoint = "",
+                //},
+            };
+            services.AddSingleton(appSettingsSection);
+
+
             //Debug.WriteLine("" + appSettingsSection.LibraryEndpoints.Base_url);
             //foreach (var setting in _configuration.GetSection("AppSettings").GetChildren())
             //{
@@ -76,7 +106,6 @@ namespace P12MAUI.Client
             //}
 
 
-            services.AddSingleton(appSettingsSection);
             //services.Configure<AppSettings>(appSettings);
 
             //var appSettingsSection = new AppSettings()
@@ -142,7 +171,7 @@ namespace P12MAUI.Client
             // konfiguracja okienek 
             services.AddSingleton<MainPage>();
             services.AddTransient<BookDetailsView>();
-            services.AddTransient<LoginView>();
+            services.AddSingleton<LoginView>();
         }
 
         private static void ConfigureHttpClients(IServiceCollection services, AppSettings appSettingsSection)

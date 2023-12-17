@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P06Shop.Shared.Languages;
 
 namespace P12MAUI.Client.ViewModels
 {
@@ -18,14 +19,17 @@ namespace P12MAUI.Client.ViewModels
     public partial class BookDetailsViewModel : ObservableObject
     {
         private readonly ILibraryService _libraryService;
+        private readonly ITranslationsManager _translationsManager;
         private readonly IMessageDialogService _messageDialogService;
         private readonly IGeolocation _geolocation;
         private readonly IMap _map;
         private MainViewModel _mainViewModel;
 
-        public BookDetailsViewModel(ILibraryService libraryService, IMessageDialogService messageDialogService, IGeolocation geolocation, IMap map)
+        public BookDetailsViewModel(ILibraryService libraryService, ITranslationsManager translationsManager,
+            IMessageDialogService messageDialogService, IGeolocation geolocation, IMap map)
         {
             _map = map;
+            _translationsManager = translationsManager;
             _libraryService = libraryService;
             _messageDialogService = messageDialogService;
             _geolocation = geolocation;
@@ -113,5 +117,42 @@ namespace P12MAUI.Client.ViewModels
             DeleteBook();
             await Shell.Current.GoToAsync("../", true);
         }
+
+
+        public string TitleText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Title"); }
+        }
+
+        public string AuthorText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Author"); }
+        }
+
+        public string DescriptionText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Description"); }
+        }
+
+        public string BarcodeText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Barcode"); }
+        }
+
+        public string PriceText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Price"); }
+        }
+
+        public string ReleaseDateText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "ReleaseDate"); }
+        }
+
+        public string IdText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "Title"); }
+        }
+
     }
 }

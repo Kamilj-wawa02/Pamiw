@@ -1,17 +1,31 @@
 using P12MAUI.Client.ViewModels;
+using System.Diagnostics;
 
 namespace P12MAUI.Client;
 
-public partial class LoginView : ContentView
+public partial class LoginView : ContentPage
 {
-	public LoginView(LoginViewModel loginViewModel)
+    private LoginViewModel loginViewModel;
+    public LoginView(LoginViewModel _loginViewModel)
 	{
-		BindingContext = loginViewModel;
+		BindingContext = _loginViewModel;
+        loginViewModel = _loginViewModel;
         InitializeComponent();
-	}
-
-    private void Button_Click(object sender, EventArgs e)
-    {
-
     }
+
+    private void Navigating(object sender, WebNavigatingEventArgs e)
+    {
+        loginViewModel.OnNewBrowserURL(e.Url);
+    }
+
+    private void Navigated(object sender, WebNavigatedEventArgs e)
+    {
+        loginViewModel.OnPageLoaded();
+    }
+
+    public void NavigateWebView(string url)
+    {
+        webView.Source = (string.IsNullOrEmpty(url) ? null : new Uri(url));
+    }
+
 }
