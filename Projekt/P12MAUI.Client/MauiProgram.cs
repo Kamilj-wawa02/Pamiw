@@ -2,15 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
-using P04WeatherForecastAPI.Client;
-using P04WeatherForecastAPI.Client.ViewModels;
+using P12MAUI.Client;
+using P12MAUI.Client.ViewModels;
 using P06Shop.Shared.Configuration;
 using P06Shop.Shared.MessageBox;
 using P06Shop.Shared.Services.AuthService;
 using P06Shop.Shared.Services.LibraryService;
 using P12MAUI.Client.MessageBox;
-using P12MAUI.Client.ViewModels;
 using System.Diagnostics;
+using P06Shop.Shared.Languages;
+using Microsoft.AspNetCore.Components.Authorization;
+using P12MAUI.Client.Services.CustomAuthStateProvider;
 
 namespace P12MAUI.Client
 {
@@ -114,6 +116,14 @@ namespace P12MAUI.Client
             services.AddSingleton<ILibraryService, LibraryService>();
             services.AddSingleton<IMessageDialogService, MauiMessageDialogService>();
 
+            //services.AddSingleton<IAuthService, AuthService>();
+
+            services.AddSingleton<ITranslationsManager, TranslationsManager>();
+            services.AddSingleton<ITranslationsManager>(translationsManager =>
+            {
+                return new TranslationsManager();
+            });
+
         }
 
         private static void ConfigureViewModels(IServiceCollection services)
@@ -122,11 +132,9 @@ namespace P12MAUI.Client
             // konfiguracja viewModeli 
 
 
-            services.AddSingleton<BooksViewModel>();
+            services.AddSingleton<MainViewModel>();
             services.AddTransient<BookDetailsViewModel>();
-            //services.AddSingleton<LoginViewModel>();
-
-            // services.AddSingleton<BaseViewModel,MainViewModelV3>();
+            services.AddSingleton<LoginViewModel>();
         }
 
         private static void ConfigureViews(IServiceCollection services)
@@ -134,7 +142,7 @@ namespace P12MAUI.Client
             // konfiguracja okienek 
             services.AddSingleton<MainPage>();
             services.AddTransient<BookDetailsView>();
-            //services.AddTransient<LoginView>();
+            services.AddTransient<LoginView>();
         }
 
         private static void ConfigureHttpClients(IServiceCollection services, AppSettings appSettingsSection)
@@ -146,6 +154,7 @@ namespace P12MAUI.Client
             //Microsoft.Extensions.Http
             services.AddHttpClient<ILibraryService, LibraryService>(client => client.BaseAddress = uriBuilder.Uri);
             services.AddHttpClient<IAuthService, AuthService>(client => client.BaseAddress = uriBuilder.Uri);
+            services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
         }
     }
 }

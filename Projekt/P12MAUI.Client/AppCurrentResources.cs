@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Maui.Controls;
 
-namespace P04WeatherForecastAPI.Client
+namespace P12MAUI.Client
 {
     class AppCurrentResources
     {

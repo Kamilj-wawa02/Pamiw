@@ -1,32 +1,29 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.Extensions.DependencyInjection;
-using P04WeatherForecastAPI.Client.Commands;
-using P04WeatherForecastAPI.Client.DataSeeders;
 using P04WeatherForecastAPI.Client.Models;
-using P04WeatherForecastAPI.Client.Services.WeatherServices;
-using P06Shop.Shared.Languages;
-using P06Shop.Shared.Library;
 using P06Shop.Shared.MessageBox;
 using P06Shop.Shared.Services.LibraryService;
+using P06Shop.Shared.Library;
+using P12MAUI.Client;
+using P12MAUI.Client.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Windows;
+using System.Reflection;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
+using Microsoft.Extensions.DependencyInjection;
+using P06Shop.Shared.Languages;
+using System.Diagnostics;
 
-namespace P04WeatherForecastAPI.Client.ViewModels
+namespace P12MAUI.Client.ViewModels
 {
-    // przekazywanie wartosci do innego formularza 
-    public partial class LibraryMainViewModel : ObservableObject
+   
+ public partial class MainViewModel : ObservableObject
     {
         private readonly int PageSize = 10;
 
@@ -35,26 +32,30 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         private readonly ITranslationsManager _translationsManager;
         private readonly ILibraryService _libraryService;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
+        private readonly BookDetailsView _bookDetailsView;
+        private readonly IConnectivity _connectivity;
 
         public AuthenticationState AuthenticationState;
 
         private string searchText = "";
         private int currentPage = 1;
         private int maxPage = 1;
-
-        [ObservableProperty]
-        private Book selectedBook;
         public ObservableCollection<Book> Books { get; set; }
 
-        public LibraryMainViewModel(IServiceProvider serviceProvider, IMessageDialogService messageDialogService,
-            ITranslationsManager translationsManager, ILibraryService libraryService,
-            AuthenticationStateProvider authenticationStateProvider)
+        public MainViewModel(IServiceProvider serviceProvider, ILibraryService libraryService,
+            IMessageDialogService messageDialogService,
+            ITranslationsManager translationsManager,
+            AuthenticationStateProvider authenticationStateProvider,
+            BookDetailsView bookDetailsView, IConnectivity connectivity)
         {
+
             _serviceProvider = serviceProvider;
             _messageDialogService = messageDialogService;
-            _translationsManager = translationsManager;
+            _bookDetailsView = bookDetailsView;
             _libraryService = libraryService;
+            _translationsManager = translationsManager;
             _authenticationStateProvider = authenticationStateProvider;
+            _connectivity = connectivity; // set the _connectivity field
 
             GetAuthenticationState();
             Books = new ObservableCollection<Book>();
@@ -68,19 +69,21 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             int maxElements = (await _libraryService.GetBooksCountAsync(searchText)).Data;
             currentPage = page;
             maxPage = _libraryService.GetMaxPage(PageSize, maxElements);
-            Books.Clear();
             if (currentPage > maxPage)
             {
                 currentPage = maxPage;
             }
 
             var booksResult = await _libraryService.SearchBooksAsync(searchText, currentPage, PageSize);
+            Books.Clear();
             if (booksResult.Success)
             {
                 foreach (var p in booksResult.Data)
                 {
                     Books.Add(p);
                 }
+
+                Debug.WriteLine(">>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!! GetBooks SUCCEDED loaded " + Books.Count);
             }
             else
             {
@@ -94,14 +97,37 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             OnPropertyChanged(nameof(IsPreviousButtonEnabled));
         }
 
+        /*
         [RelayCommand]
-        public void OpenLoginWindow()
+        public async Task ShowDetails(Book book)
+        {
+            if (_connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                _messageDialogService.ShowMessage("Internet not available!");
+                return;
+            }
+
+            await Shell.Current.GoToAsync(nameof(BookDetailsView), true, new Dictionary<string, object>
+            {
+                {"Book", book },
+                {nameof(MainViewModel), this }
+            });
+            SelectedBook = book;
+        }
+        */
+
+        [RelayCommand]
+        public async void OpenLoginWindow()
         {
             LoginView loginView = _serviceProvider.GetService<LoginView>();
             LoginViewModel loginViewModel = _serviceProvider.GetService<LoginViewModel>();
 
             loginViewModel.SetIsLogin(true);
-            loginView.Show();
+
+            await Shell.Current.GoToAsync(nameof(LoginView), true, new Dictionary<string, object>
+            {
+                {nameof(LoginViewModel), loginViewModel }
+            });
         }
 
         [RelayCommand]
@@ -111,7 +137,7 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             LoginViewModel loginViewModel = _serviceProvider.GetService<LoginViewModel>();
 
             loginViewModel.SetIsLogin(false);
-            loginView.Show();
+            //loginView.Show();
         }
 
         public async void GetAuthenticationState()
@@ -165,7 +191,6 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             {
                 return;
             }
-
             currentPage--;
             GetBooks(searchText, currentPage);
             OnPropertyChanged(nameof(CurrentPageText));
@@ -184,35 +209,37 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         }
 
         [RelayCommand]
-        public void CreateBook()
+        public async void CreateBook()
         {
-            BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
-            BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
+            if (_connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                _messageDialogService.ShowMessage("Internet not available!");
+                return;
+            }
 
-            bookFormViewModel.SetEditingBook(-1);
-            bookFormView.Show();
+            Book SelectedBook = new Book();
+            await Shell.Current.GoToAsync(nameof(BookDetailsView), true, new Dictionary<string, object>
+            {
+                {"Book", SelectedBook },
+                {nameof(MainViewModel), this }
+            });
+
+            //BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
+            //BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
+
+            //bookFormViewModel.SetEditingBook(-1);
+            //bookFormView.Show();
         }
 
         [RelayCommand]
         public void EditBook(string id)
         {
-            BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
-            BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
+            //BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
+            //BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
 
-            bookFormViewModel.SetEditingBook(int.Parse(id));
-            bookFormView.Show();
+            //bookFormViewModel.SetEditingBook(int.Parse(id));
+            //bookFormView.Show();
         }
-
-        public void CloseBookForm()
-        {
-            BookFormView bookFormView = _serviceProvider.GetService<BookFormView>();
-            BookFormViewModel bookFormViewModel = _serviceProvider.GetService<BookFormViewModel>();
-            bookFormView.Hide();
-
-            GetBooks(searchText, currentPage);
-        }
-
-
 
         public string LibraryText
         {
@@ -223,10 +250,10 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         {
             get
             {
-                return (AuthenticationState == null ? "" : 
-                    AuthenticationState?.User?.Identity?.Name + " | " + 
-                    _translationsManager.Get(AppCurrentResources.Language, AuthenticationState?.User?.Claims?.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value) + 
-                    " " + AuthenticationState?.User?.Claims?.Where(c => c.Type == "DateCreated")?.FirstOrDefault()?.Value) ;
+                return (AuthenticationState == null ? "" :
+                    AuthenticationState?.User?.Identity?.Name + " | " +
+                    _translationsManager.Get(AppCurrentResources.Language, AuthenticationState?.User?.Claims?.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value) +
+                    " " + AuthenticationState?.User?.Claims?.Where(c => c.Type == "DateCreated")?.FirstOrDefault()?.Value);
             }
         }
 
@@ -264,7 +291,7 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         {
             get { return AppCurrentResources.DarkTheme; }
         }
-        
+
         public bool IsLightTheme
         {
             get { return !AppCurrentResources.DarkTheme; }
@@ -274,12 +301,12 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         {
             get { return AppCurrentResources.Language == "polish"; }
         }
-        
+
         public bool IsEnglishLanguage
         {
             get { return AppCurrentResources.Language == "english"; }
         }
-        
+
         public string SearchText
         {
             get { return _translationsManager.Get(AppCurrentResources.Language, "Search"); }
@@ -314,7 +341,7 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         {
             get { return Books.Count > 0; }
         }
-        
+
         public bool IsLoadingSpinnerVisible
         {
             get { return Books.Count == 0; }

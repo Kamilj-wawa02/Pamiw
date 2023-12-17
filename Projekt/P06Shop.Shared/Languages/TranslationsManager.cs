@@ -154,6 +154,10 @@ namespace P06Shop.Shared.Languages
 
         public string Get(string language, string key)
         {
+            if (language == null) { language = "english";}
+
+            if (key == null) { return null;  }
+
             if (loadedLanguages.TryGetValue(language, out var languageTranslations))
             {
                 if (languageTranslations.TryGetValue(key, out var translation))

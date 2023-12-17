@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel;
-using P04WeatherForecastAPI.Client.ViewModels;
+using P12MAUI.Client.ViewModels;
 using P06Shop.Shared.MessageBox;
 using P06Shop.Shared.Services.LibraryService;
 using P06Shop.Shared.Library;
@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 namespace P12MAUI.Client.ViewModels
 {
     [QueryProperty(nameof(Book), nameof(Book))]
-    [QueryProperty(nameof(BooksViewModel), nameof(BooksViewModel))]
+    [QueryProperty(nameof(MainViewModel), nameof(MainViewModel))]
     public partial class BookDetailsViewModel : ObservableObject
     {
         private readonly ILibraryService _libraryService;
         private readonly IMessageDialogService _messageDialogService;
         private readonly IGeolocation _geolocation;
         private readonly IMap _map;
-        private BooksViewModel _bookViewModel;
+        private MainViewModel _mainViewModel;
 
         public BookDetailsViewModel(ILibraryService libraryService, IMessageDialogService messageDialogService, IGeolocation geolocation, IMap map)
         {
@@ -31,15 +31,15 @@ namespace P12MAUI.Client.ViewModels
             _geolocation = geolocation;
         }
 
-        public BooksViewModel BooksViewModel
+        public MainViewModel MainViewModel
         {
             get
             {
-                return _bookViewModel;
+                return _mainViewModel;
             }
             set
             {
-                _bookViewModel = value;
+                _mainViewModel = value;
             }
         }
 
@@ -50,7 +50,7 @@ namespace P12MAUI.Client.ViewModels
         public async Task DeleteBook()
         {
             await _libraryService.DeleteBookAsync(book.Id);
-            await _bookViewModel.GetBooks();
+            //await _mainViewModel.GetBooks();
         }
 
         public async Task CreateBook()
@@ -66,9 +66,9 @@ namespace P12MAUI.Client.ViewModels
             };
 
             var result = await _libraryService.CreateBookAsync(newBook);
-            if (result.Success)
-                await _bookViewModel.GetBooks();
-            else
+            //if (result.Success)
+            //    await _mainViewModel.GetBooks();
+            //else
                 _messageDialogService.ShowMessage(result.Message);
         }
 
@@ -86,7 +86,7 @@ namespace P12MAUI.Client.ViewModels
             };
 
             await _libraryService.UpdateBookAsync(bookToUpdate);
-            await _bookViewModel.GetBooks();
+            //await _mainViewModel.GetBooks();
         }
 
 

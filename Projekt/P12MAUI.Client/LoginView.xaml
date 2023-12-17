@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:P12MAUI.Client.Resources"
+             x:Class="P12MAUI.Client.LoginView">
+
+    <ContentView.Resources>
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConv" />
+    </ContentView.Resources>
+
+    <VerticalStackLayout>
+        
+        <VerticalStackLayout Margin="10">
+            <VerticalStackLayout>
+                <Label Text="{Binding EmailText}" />
+                <Entry x:Name="EmailTextBox" Text="{Binding UserRegisterDTO.Email, Mode=TwoWay}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding IsRegistrationDisplayed, Converter={StaticResource boolToVisibilityConv}}">
+                <Label Text="{Binding UsernameText}" />
+                <Entry x:Name="UsernameTextBox" Text="{Binding UserRegisterDTO.Username, Mode=TwoWay}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="{Binding PasswordText}" />
+                <Entry x:Name="PasswordBox" Text="{Binding UserRegisterDTO.Password, Mode=TwoWay}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding IsRegistrationDisplayed, Converter={StaticResource boolToVisibilityConv}}">
+                <Label Text="{Binding ConfirmPasswordText}" />
+                <Entry x:Name="ConfirmPasswordBox" Text="{Binding UserRegisterDTO.ConfirmPassword, Mode=TwoWay}" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+        
+        <HorizontalStackLayout HorizontalOptions="End">
+            <Button Text="{Binding LoginText}" Clicked="Button_Click" />
+            <Button Text="{Binding LoginWithFacebookText}" Command="{Binding OpenLoginWithFacebookWindowCommand}" />
+        </HorizontalStackLayout>
+        
+    </VerticalStackLayout>
+
+</ContentView>
