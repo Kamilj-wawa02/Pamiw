@@ -83,7 +83,10 @@
                     </HorizontalStackLayout>
 
                     <Grid>
-                        <Button Command="{Binding CreateBookCommand}" Text="{Binding CreateBookText}" WidthRequest="164" HorizontalOptions="Start" />
+                        <HorizontalStackLayout HorizontalOptions="Start">
+                            <Entry x:Name="SearchTextBox" Text="{Binding CurrentSearchText}" />
+                            <Button Text="{Binding SearchText}" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchTextBox.Text}" WidthRequest="110" />
+                        </HorizontalStackLayout>
 
                         <HorizontalStackLayout HorizontalOptions="End">
                             <Button Command="{Binding PreviousPageCommand}" Text="{Binding PreviousText}" IsEnabled="{Binding IsPreviousButtonEnabled}" WidthRequest="110" />
@@ -91,7 +94,9 @@
                             <Button Command="{Binding NextPageCommand}" Text="{Binding NextText}"  IsEnabled="{Binding IsNextButtonEnabled}" WidthRequest="100" />
                         </HorizontalStackLayout>
                     </Grid>
-                    
+
+                    <Button Command="{Binding CreateBookCommand}" Text="{Binding CreateBookText}" WidthRequest="164" HorizontalOptions="Start" />
+
                 </VerticalStackLayout>
 
                 <VerticalStackLayout IsVisible="false">

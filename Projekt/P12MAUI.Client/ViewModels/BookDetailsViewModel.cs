@@ -70,9 +70,9 @@ namespace P12MAUI.Client.ViewModels
             };
 
             var result = await _libraryService.CreateBookAsync(newBook);
-            //if (result.Success)
-            //    await _mainViewModel.GetBooks();
-            //else
+            if (result.Success)
+                await _mainViewModel.GetBooks();
+            else
                 _messageDialogService.ShowMessage(result.Message);
         }
 

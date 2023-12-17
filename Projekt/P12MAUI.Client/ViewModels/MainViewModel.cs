@@ -42,6 +42,9 @@ namespace P12MAUI.Client.ViewModels
         private int maxPage = 1;
         public ObservableCollection<Book> Books { get; set; }
 
+        [ObservableProperty]
+        public string currentSearchText;
+
         public MainViewModel(IServiceProvider serviceProvider, ILibraryService libraryService,
             IMessageDialogService messageDialogService,
             ITranslationsManager translationsManager,
@@ -61,6 +64,11 @@ namespace P12MAUI.Client.ViewModels
             GetAuthenticationState();
             Books = new ObservableCollection<Book>();
             GetBooks("", 1);
+        }
+
+        public async Task GetBooks()
+        {
+            GetBooks(searchText, currentPage);
         }
 
         public async Task GetBooks(string searchText, int page)
@@ -89,6 +97,8 @@ namespace P12MAUI.Client.ViewModels
             {
                 Debug.WriteLine(">>> GetBooks FAILED");
             }
+
+            RefreshAllProperties();
             OnPropertyChanged(nameof(Books));
             OnPropertyChanged(nameof(IsBookListVisible));
             OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
@@ -97,7 +107,7 @@ namespace P12MAUI.Client.ViewModels
             OnPropertyChanged(nameof(IsPreviousButtonEnabled));
         }
 
-        /*
+        
         [RelayCommand]
         public async Task ShowDetails(Book book)
         {
@@ -112,9 +122,8 @@ namespace P12MAUI.Client.ViewModels
                 {"Book", book },
                 {nameof(MainViewModel), this }
             });
-            SelectedBook = book;
         }
-        */
+        
 
         [RelayCommand]
         public async void OpenLoginWindow()
@@ -184,10 +193,10 @@ namespace P12MAUI.Client.ViewModels
         }
 
         [RelayCommand]
-        public async void Search(string searchText)
+        public async void Search()
         {
             currentPage = 1;
-            await GetBooks(searchText, currentPage);
+            await GetBooks(CurrentSearchText, currentPage);
         }
 
         [RelayCommand]
@@ -246,6 +255,7 @@ namespace P12MAUI.Client.ViewModels
             //bookFormViewModel.SetEditingBook(int.Parse(id));
             //bookFormView.Show();
         }
+        
 
         public string LibraryText
         {

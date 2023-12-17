@@ -4,24 +4,24 @@
     x:Class="P12MAUI.Client.BookDetailsView"
     Title="{Binding Book.Title}">
     <VerticalStackLayout>
-        <VerticalStackLayout BindingContext="{Binding Book}" Margin="10">
+        <VerticalStackLayout Margin="10">
             <Label Text="{Binding TitleText}" />
-            <Entry Text="{Binding Title}" />
+            <Entry Text="{Binding Book.Title}" />
 
             <Label Text="{Binding AuthorText}" />
-            <Entry Text="{Binding Author}" />
+            <Entry Text="{Binding Book.Author}" />
 
             <Label Text="{Binding DescriptionText}" />
-            <Entry Text="{Binding Description}" />
+            <Entry Text="{Binding Book.Description}" />
 
             <Label Text="{Binding BarcodeText}" />
-            <Entry Text="{Binding Barcode}" />
+            <Entry Text="{Binding Book.Barcode}" />
 
             <Label Text="{Binding PriceText}" />
-            <Entry Text="{Binding Price}" />
+            <Entry Text="{Binding Book.Price}" />
 
             <Label Text="{Binding ReleaseDateText}" />
-            <Entry Text="{Binding ReleaseDate}" />
+            <Entry Text="{Binding Book.ReleaseDate}" />
         </VerticalStackLayout>
         
         <HorizontalStackLayout HorizontalOptions="Start">
