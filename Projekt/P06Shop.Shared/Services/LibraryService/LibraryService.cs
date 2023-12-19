@@ -83,11 +83,24 @@ namespace P06Shop.Shared.Services.LibraryService
         {
             // "https://localhost:7230/api/Book"
             Console.WriteLine("--> GetBooksAsync");
+
+            if (_httpClient == null)
+            {
+                Debug.WriteLine("!!! HttpClient is NULL");
+            }
+            else
+            {
+                Debug.WriteLine("!!! HttpClient is OK");
+            }
+
             var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksEndpoint;
+
             try
             {
+                Debug.WriteLine("----- httpclient null: " + (_httpClient == null) + "  url: " + url);
                 var response = await _httpClient.GetAsync(url);
-                if (!response.IsSuccessStatusCode)
+                
+                if (response != null && !response.IsSuccessStatusCode)
                     return new ServiceResponse<List<Book>>
                     {
                         Success = false,

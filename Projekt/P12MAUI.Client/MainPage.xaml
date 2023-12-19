@@ -22,10 +22,12 @@
                 <Label Text="{Binding LoggedUserText}" Margin="5" VerticalTextAlignment="Start" HorizontalTextAlignment="End"
                        IsVisible="{Binding IsLoggedUserInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
 
+
                 <VerticalStackLayout Spacing="5">
-                    <HorizontalStackLayout HorizontalOptions="End">
-                        <!-- zawiera JĘZYK + MOTYW -->
-                        <HorizontalStackLayout>
+
+                    <VerticalStackLayout HorizontalOptions="End" Spacing="5">
+                        <HorizontalStackLayout HorizontalOptions="End">
+                            <!-- zawiera JĘZYK -->
                             <StackLayout Background="{DynamicResource ThemeBackgroundColor}" HorizontalOptions="End">
                                 <Label IsVisible="{Binding IsEnglishLanguageInvinible, Converter={StaticResource boolToVisibilityConv}}" VerticalTextAlignment="Center" HeightRequest="30" Margin="5">
                                     <Label.FormattedText>
@@ -52,6 +54,7 @@
                                 </StackLayout.GestureRecognizers>
                             </StackLayout>
 
+                            <!-- zawiera MOTYW -->
                             <HorizontalStackLayout Padding="10" Background="{DynamicResource ThemeBackgroundColor}" HorizontalOptions="End" >
                                 <HorizontalStackLayout IsVisible="{Binding IsDarkTheme, Converter={StaticResource boolToVisibilityConv}}">
                                     <Path Style="{DynamicResource MoonPath}"
@@ -67,48 +70,60 @@
                                     <TapGestureRecognizer Tapped="ToggleThemeCommand" />
                                 </HorizontalStackLayout.GestureRecognizers>
                             </HorizontalStackLayout>
-                        </HorizontalStackLayout>
 
-                        <!-- zawiera LOGOWANIE -->
-                        <HorizontalStackLayout HorizontalOptions="End">
-                            <Button Command="{Binding OpenLoginWindowCommand}" Text="{Binding LoginText}" WidthRequest="90"
-                                IsVisible="{Binding IsLoginButtonInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
-
-                            <Button Command="{Binding OpenRegisterWindowCommand}" Text="{Binding RegisterText}" WidthRequest="105"
+                            <!-- zawiera LOGOWANIE -->
+                            <HorizontalStackLayout HorizontalOptions="End">
+                                <Button Command="{Binding OpenLoginWindowCommand}" Text="{Binding LoginText}" WidthRequest="90"
                                     IsVisible="{Binding IsLoginButtonInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
 
-                            <Button Command="{Binding LogoutCommand}" Text="{Binding LogoutText}" WidthRequest="105"
-                                    IsVisible="{Binding IsLoggedUserInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
-                        </HorizontalStackLayout>
-                    </HorizontalStackLayout>
+                                <Button Command="{Binding OpenRegisterWindowCommand}" Text="{Binding RegisterText}" WidthRequest="105"
+                                        IsVisible="{Binding IsLoginButtonInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
 
-                    <Grid>
-                        <HorizontalStackLayout HorizontalOptions="Start">
-                            <Entry x:Name="SearchTextBox" Text="{Binding CurrentSearchText}" />
-                            <Button Text="{Binding SearchText}" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchTextBox.Text}" WidthRequest="110" />
+                                <Button Command="{Binding LogoutCommand}" Text="{Binding LogoutText}" WidthRequest="105"
+                                        IsVisible="{Binding IsLoggedUserInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
+                            </HorizontalStackLayout>
                         </HorizontalStackLayout>
 
-                        <HorizontalStackLayout HorizontalOptions="End">
+                        <!-- zawiera PAGINACJE -->
+                        <HorizontalStackLayout HorizontalOptions="End" IsVisible="{Binding IsPaginationVisible}">
                             <Button Command="{Binding PreviousPageCommand}" Text="{Binding PreviousText}" IsEnabled="{Binding IsPreviousButtonEnabled}" WidthRequest="110" />
                             <Label Text="{Binding CurrentPageText}" Margin="10" VerticalTextAlignment="Center" />
                             <Button Command="{Binding NextPageCommand}" Text="{Binding NextText}"  IsEnabled="{Binding IsNextButtonEnabled}" WidthRequest="100" />
                         </HorizontalStackLayout>
-                    </Grid>
+                    </VerticalStackLayout>
 
-                    <Button Command="{Binding CreateBookCommand}" Text="{Binding CreateBookText}" WidthRequest="164" HorizontalOptions="Start" />
+                    <VerticalStackLayout HorizontalOptions="Start">
+                        <HorizontalStackLayout HorizontalOptions="Start">
+                            <Entry x:Name="SearchTextBox" Margin="0,0,0,10" Text="{Binding CurrentSearchText}" WidthRequest="200" />
+                            <Button Text="{Binding SearchText}" Margin="10,0,0,0" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchTextBox.Text}" WidthRequest="110" />
+                        </HorizontalStackLayout>
+
+                        <Button Command="{Binding CreateBookCommand}" Text="{Binding CreateBookText}" WidthRequest="164" HorizontalOptions="Start" />
+                    </VerticalStackLayout>
 
                 </VerticalStackLayout>
 
-                <VerticalStackLayout IsVisible="false">
-                    <ActivityIndicator x:Name="loadingIndicator"
-                       IsRunning="true"
-                       IsVisible="true"
-                       VerticalOptions="CenterAndExpand"
-                       HorizontalOptions="CenterAndExpand" />
-                    
-                </VerticalStackLayout>
                 
-                <CollectionView ItemsSource="{Binding Books}">
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+
+
+                <ActivityIndicator x:Name="loadingIndicator"
+                    IsRunning="{Binding IsLoadingSpinnerVisible}"
+                    IsVisible="{Binding IsLoadingSpinnerVisible}"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand" />
+
+                <CollectionView ItemsSource="{Binding Books}" IsVisible="{Binding IsBookListVisible}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Padding="10" Margin="5">

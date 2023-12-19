@@ -47,6 +47,7 @@ namespace P12MAUI.Client
 
         private static void ConfigureServices(IServiceCollection services)
         {
+            Debug.WriteLine(">>> Configure Services");
             var appSettingsSection = ConfigureAppSettings(services);
             ConfigureAppServices(services, appSettingsSection);
             ConfigureViewModels(services);
@@ -97,6 +98,7 @@ namespace P12MAUI.Client
                 //},
             };
             services.AddSingleton(appSettingsSection);
+            Debug.WriteLine("> Added App Settings");
 
 
             //Debug.WriteLine("" + appSettingsSection.LibraryEndpoints.Base_url);
@@ -153,6 +155,7 @@ namespace P12MAUI.Client
                 return new TranslationsManager();
             });
 
+            Debug.WriteLine("> Added App Services");
         }
 
         private static void ConfigureViewModels(IServiceCollection services)
@@ -164,6 +167,8 @@ namespace P12MAUI.Client
             services.AddSingleton<MainViewModel>();
             services.AddTransient<BookDetailsViewModel>();
             services.AddSingleton<LoginViewModel>();
+
+            Debug.WriteLine("> Added App View Models");
         }
 
         private static void ConfigureViews(IServiceCollection services)
@@ -172,6 +177,8 @@ namespace P12MAUI.Client
             services.AddSingleton<MainPage>();
             services.AddTransient<BookDetailsView>();
             services.AddSingleton<LoginView>();
+
+            Debug.WriteLine("> Added App Views");
         }
 
         private static void ConfigureHttpClients(IServiceCollection services, AppSettings appSettingsSection)
@@ -184,6 +191,9 @@ namespace P12MAUI.Client
             services.AddHttpClient<ILibraryService, LibraryService>(client => client.BaseAddress = uriBuilder.Uri);
             services.AddHttpClient<IAuthService, AuthService>(client => client.BaseAddress = uriBuilder.Uri);
             services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+
+            Debug.WriteLine("> Added App Http Clients");
         }
     }
 }

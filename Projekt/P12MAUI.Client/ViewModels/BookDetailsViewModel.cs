@@ -100,24 +100,27 @@ namespace P12MAUI.Client.ViewModels
             if (book.Id == 0)
             {
                 CreateBook();
-                await Shell.Current.GoToAsync("../", true);
-
             }
             else
             {
                 UpdateBook();
-                await Shell.Current.GoToAsync("../", true);
             }
 
+            CloseDetails();
         }
 
         [RelayCommand]
         public async Task Delete()
         {
             DeleteBook();
-            await Shell.Current.GoToAsync("../", true);
+            CloseDetails();
         }
 
+        public async void CloseDetails()
+        {
+            await Shell.Current.GoToAsync("../", true);
+            _mainViewModel.GetBooks();
+        }
 
         public string TitleText
         {

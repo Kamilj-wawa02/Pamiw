@@ -74,10 +74,14 @@ namespace P12MAUI.Client.ViewModels
         public async Task GetBooks(string searchText, int page)
         {
             Debug.WriteLine(">>> GetBooks");
+
             this.searchText = searchText;
-            int maxElements = (await _libraryService.GetBooksCountAsync(searchText)).Data;
+            var maxElementsResponse = await _libraryService.GetBooksCountAsync(searchText);
+            int maxElements = maxElementsResponse != null ? maxElementsResponse.Data : 0;
+
             currentPage = page;
             maxPage = _libraryService.GetMaxPage(PageSize, maxElements);
+
             if (currentPage > maxPage)
             {
                 currentPage = maxPage;
@@ -85,7 +89,7 @@ namespace P12MAUI.Client.ViewModels
 
             var booksResult = await _libraryService.SearchBooksAsync(searchText, currentPage, PageSize);
             Books.Clear();
-            if (booksResult.Success)
+            if (booksResult != null && booksResult.Success)
             {
                 foreach (var p in booksResult.Data)
                 {
@@ -351,6 +355,11 @@ namespace P12MAUI.Client.ViewModels
         public bool IsPreviousButtonEnabled
         {
             get { return currentPage > 1; }
+        }
+
+        public bool IsPaginationVisible
+        {
+            get { return true; }
         }
 
         public bool IsBookListVisible
