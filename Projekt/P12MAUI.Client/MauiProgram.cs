@@ -29,7 +29,7 @@ namespace P12MAUI.Client
                 });
 
 #if DEBUG
-            builder.Logging.AddDebug();
+            //builder.Logging.AddDebug();
 #endif
 
 
