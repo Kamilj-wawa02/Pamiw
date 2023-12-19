@@ -1,12 +1,13 @@
 ﻿@using Blazored.LocalStorage;
 @using Microsoft.AspNetCore.Components.Web.Extensions;
-@using P06Shop.Shared.Auth;
-@using P06Shop.Shared.Services.AuthService;
+@using P06Library.Shared.Auth;
+@using P06Library.Shared.Services.AuthService;
 @using Microsoft.AspNetCore.WebUtilities;
 @using P11BlazorWebAssembly.Client.Pages;
 
 @inject ITranslationsManager TranslationsManager
 @inject IAuthService AuthService
+@inject ILibraryService LibraryService
 @inject ILocalStorageService LocalStorageService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
@@ -35,7 +36,8 @@
         if (token != "")
         {
             await LocalStorageService.SetItemAsync("authToken", token);
-            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            await MainLayout.SetupAuthState(AuthenticationStateProvider, LibraryService, AuthService, LocalStorageService);
 
             SetFinishedLoggingIn();
             NavigationManager.NavigateTo("/");
@@ -68,22 +70,6 @@
     {
         SetStartedLoggingIn();
         NavigationManager.NavigateTo(AuthService.LoginWithFacebookFormRedirection("https://localhost:7070/login"));
-
-        /*
-        var result = await AuthService.LoginWithFacebook();
-
-        if (result.Success)
-        {
-            await LocalStorageService.SetItemAsync("authToken", result.Data);
-            await AuthenticationStateProvider.GetAuthenticationStateAsync();
-
-            NavigationManager.NavigateTo("/");
-        }
-        else
-        {
-            message = result.Message;
-        }
-        */
     }
 
 }

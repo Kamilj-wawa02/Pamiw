@@ -38,20 +38,27 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding IsLoginWithFacebookInvisible, Converter={StaticResource boolToVisibilityConv}}"
+        <Grid IsVisible="{Binding IsLoginWithFacebookInvisible, Converter={StaticResource boolToVisibilityConv}}"
                              HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <Button Text="Cancel" Command="{Binding CloseLoginWithFacebookWindowCommand}" />
-            
-            <ActivityIndicator x:Name="loadingIndicator"
+
+            <Button Grid.Row="0" Text="Cancel" Command="{Binding CloseLoginWithFacebookWindowCommand}" />
+
+            <ActivityIndicator Grid.Row="1" x:Name="loadingIndicator"
                            IsRunning="{Binding IsLoadingSpinnerVisible}"
                            IsVisible="{Binding IsLoadingSpinnerVisible}"
                            VerticalOptions="FillAndExpand"
-                           HorizontalOptions="FillAndExpand" />
+                           HorizontalOptions="FillAndExpand"
+                           WidthRequest="50" HeightRequest="50"/>
 
-            <WebView x:Name="webView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Navigated="Navigated" HeightRequest="500" Navigating="Navigating" />
+            <WebView Grid.Row="2" x:Name="webView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Navigated="Navigated" Navigating="Navigating" />
         
-        </VerticalStackLayout>
+        </Grid>
 
     </Grid>
 

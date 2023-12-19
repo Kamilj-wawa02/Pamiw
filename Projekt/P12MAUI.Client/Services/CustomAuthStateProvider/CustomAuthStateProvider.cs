@@ -28,14 +28,14 @@ namespace P12MAUI.Client.Services.CustomAuthStateProvider
             string authToken = AppCurrentResources.Token;
 
             var identity = new ClaimsIdentity();
-            _httpClient.DefaultRequestHeaders.Authorization = null;
+            //_httpClient.DefaultRequestHeaders.Authorization = null;
 
             if (!string.IsNullOrEmpty(authToken))
             {
                 try
                 {
                     identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
+                    //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
                     Debug.WriteLine("THIS TOKEN IS VALID --------------------------------------------");
                 }
                 catch (Exception e)

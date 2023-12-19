@@ -1,4 +1,4 @@
-﻿using P06Shop.Shared.MessageBox;
+﻿using P06Library.Shared.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.Linq;

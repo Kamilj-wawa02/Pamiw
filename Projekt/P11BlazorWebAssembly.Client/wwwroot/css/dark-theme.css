@@ -74,6 +74,7 @@
 .search-span {
     width: 4.5rem;
     text-align: center;
+    white-space: nowrap;
 }
 
 .loader-container {

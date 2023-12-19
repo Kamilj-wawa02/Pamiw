@@ -23,14 +23,14 @@ namespace P11BlazorWebAssembly.Client.Services.CustomAuthStateProvider
             string authToken = await _localStorageService.GetItemAsStringAsync("authToken");
 
             var identity = new ClaimsIdentity();
-            _httpClient.DefaultRequestHeaders.Authorization = null;
+            //_httpClient.DefaultRequestHeaders.Authorization = null;
 
             if (!string.IsNullOrEmpty(authToken))
             {
                 try
                 {
                     identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
+                    //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
                 }
                 catch (Exception)
                 {

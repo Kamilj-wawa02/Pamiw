@@ -4,6 +4,8 @@
 
 @inject ITranslationsManager TranslationsManager
 @inject ILocalStorageService LocalStorageService
+@inject IAuthService AuthService;
+@inject ILibraryService LibraryService;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 <div class="page">
@@ -49,8 +51,23 @@
     private async Task Logout()
     {
         await LocalStorageService.RemoveItemAsync("authToken");
-        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        await MainLayout.SetupAuthState(AuthenticationStateProvider, LibraryService, AuthService, LocalStorageService);
         NavigationManager.NavigateTo("/login");
+    }
+
+    public static async Task<bool> SetupAuthState(AuthenticationStateProvider authenticationStateProvider,
+        ILibraryService libraryService, IAuthService authService, ILocalStorageService localStorageService)
+    {
+        await authenticationStateProvider.GetAuthenticationStateAsync();
+        string token = await localStorageService.GetItemAsStringAsync("authToken");
+        if (token != null)
+        {
+            token = token.Replace("\"", "");
+        }
+        libraryService.SetAuthToken(token);
+        authService.SetAuthToken(token);
+
+        return true;
     }
 
 }

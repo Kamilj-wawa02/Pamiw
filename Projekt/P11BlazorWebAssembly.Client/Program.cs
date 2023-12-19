@@ -7,10 +7,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
-using P06Shop.Shared.Configuration;
-using P06Shop.Shared.Languages;
-using P06Shop.Shared.Services.AuthService;
-using P06Shop.Shared.Services.LibraryService;
+using P06Library.Shared.Configuration;
+using P06Library.Shared.Languages;
+using P06Library.Shared.Services.AuthService;
+using P06Library.Shared.Services.LibraryService;
 using P11BlazorWebAssembly.Client;
 using P11BlazorWebAssembly.Client.Services.CustomAuthStateProvider;
 using P11BlazorWebAssembly.Client.Shared;
@@ -29,7 +29,7 @@ var uriBuilder = new UriBuilder(appSettingsSection.BaseAPIUrl)
     //Path = appSettingsSection.LibraryEndpoints.Base_url,
 };
 //Microsoft.Extensions.Http
-builder.Services.AddHttpClient<ILibraryService, LibraryService>(client => client.BaseAddress = uriBuilder.Uri);
+
 //builder.Services.Configure<AppSettings>(appSettings);
 //builder.Services.AddSingleton<IOptions<AppSettings>>(new OptionsWrapper<AppSettings>(appSettingsSection));
 
@@ -46,7 +46,7 @@ builder.Services.AddSingleton<ITranslationsManager>(provider =>
 
 var jsRuntime = builder.Services.BuildServiceProvider().GetRequiredService<IJSRuntime>();
 MainLayout.Language = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "language");
-MainLayout.Language = MainLayout.Language.Trim().Replace("\"", "");
+MainLayout.Language = MainLayout.Language == null ? "english" : MainLayout.Language.Trim().Replace("\"", "");
 
 
 // autorization
@@ -54,5 +54,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 //builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>(client => client.BaseAddress = uriBuilder.Uri);
+builder.Services.AddHttpClient<ILibraryService, LibraryService>(client => client.BaseAddress = uriBuilder.Uri);
 
 await builder.Build().RunAsync();

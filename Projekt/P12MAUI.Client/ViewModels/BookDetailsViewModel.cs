@@ -2,15 +2,15 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel;
 using P12MAUI.Client.ViewModels;
-using P06Shop.Shared.MessageBox;
-using P06Shop.Shared.Services.LibraryService;
-using P06Shop.Shared.Library;
+using P06Library.Shared.MessageBox;
+using P06Library.Shared.Services.LibraryService;
+using P06Library.Shared.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using P06Shop.Shared.Languages;
+using P06Library.Shared.Languages;
 
 namespace P12MAUI.Client.ViewModels
 {

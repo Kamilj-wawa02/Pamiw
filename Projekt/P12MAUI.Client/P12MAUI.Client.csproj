@@ -16,7 +16,7 @@
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.p12maui.client</ApplicationId>
-		<ApplicationIdGuid>13bf43b7-1fbb-4ef9-b103-82ecaf353515</ApplicationIdGuid>
+		<!-- ApplicationIdGuid>13bf43b7-1fbb-4ef9-b103-82ecaf353515</ApplicationIdGuid -->
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -67,7 +67,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\P06Shop.Shared\P06Shop.Shared.csproj" />
+		<ProjectReference Include="..\P06Library.Shared\P06Library.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

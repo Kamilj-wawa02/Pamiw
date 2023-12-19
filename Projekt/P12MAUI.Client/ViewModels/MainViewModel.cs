@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using P04WeatherForecastAPI.Client.Models;
-using P06Shop.Shared.MessageBox;
-using P06Shop.Shared.Services.LibraryService;
-using P06Shop.Shared.Library;
+using P04Library.Client.Models;
+using P06Library.Shared.MessageBox;
+using P06Library.Shared.Services.LibraryService;
+using P06Library.Shared.Library;
 using P12MAUI.Client;
 using P12MAUI.Client.ViewModels;
 using System;
@@ -17,8 +17,9 @@ using System.Reflection;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
-using P06Shop.Shared.Languages;
+using P06Library.Shared.Languages;
 using System.Diagnostics;
+using P06Library.Shared.Services.AuthService;
 
 namespace P12MAUI.Client.ViewModels
 {
@@ -31,6 +32,7 @@ namespace P12MAUI.Client.ViewModels
         private readonly IMessageDialogService _messageDialogService;
         private readonly ITranslationsManager _translationsManager;
         private readonly ILibraryService _libraryService;
+        private readonly IAuthService _authService;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly BookDetailsView _bookDetailsView;
         private readonly IConnectivity _connectivity;
@@ -45,7 +47,7 @@ namespace P12MAUI.Client.ViewModels
         [ObservableProperty]
         public string currentSearchText;
 
-        public MainViewModel(IServiceProvider serviceProvider, ILibraryService libraryService,
+        public MainViewModel(IServiceProvider serviceProvider, ILibraryService libraryService, IAuthService authService,
             IMessageDialogService messageDialogService,
             ITranslationsManager translationsManager,
             AuthenticationStateProvider authenticationStateProvider,
@@ -56,6 +58,7 @@ namespace P12MAUI.Client.ViewModels
             _messageDialogService = messageDialogService;
             _bookDetailsView = bookDetailsView;
             _libraryService = libraryService;
+            _authService = authService;
             _translationsManager = translationsManager;
             _authenticationStateProvider = authenticationStateProvider;
             _connectivity = connectivity; // set the _connectivity field
@@ -162,6 +165,9 @@ namespace P12MAUI.Client.ViewModels
         {
             Debug.WriteLine("GetAuthenticationState ---------------------------------");
             AuthenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            _libraryService.SetAuthToken(AppCurrentResources.Token);
+            _authService.SetAuthToken(AppCurrentResources.Token);
+            GetBooks();
             RefreshAllProperties();
         }
 
@@ -369,7 +375,7 @@ namespace P12MAUI.Client.ViewModels
 
         public bool IsLoadingSpinnerVisible
         {
-            get { return Books.Count == 0; }
+            get { return Books.Count == 0 && searchText == ""; }
         }
 
     }

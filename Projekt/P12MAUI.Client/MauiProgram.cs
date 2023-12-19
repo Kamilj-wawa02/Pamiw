@@ -2,13 +2,13 @@
 using Microsoft.Maui.Controls;
 using P12MAUI.Client;
 using P12MAUI.Client.ViewModels;
-using P06Shop.Shared.Configuration;
-using P06Shop.Shared.MessageBox;
-using P06Shop.Shared.Services.AuthService;
-using P06Shop.Shared.Services.LibraryService;
+using P06Library.Shared.Configuration;
+using P06Library.Shared.MessageBox;
+using P06Library.Shared.Services.AuthService;
+using P06Library.Shared.Services.LibraryService;
 using P12MAUI.Client.MessageBox;
 using System.Diagnostics;
-using P06Shop.Shared.Languages;
+using P06Library.Shared.Languages;
 using Microsoft.AspNetCore.Components.Authorization;
 using P12MAUI.Client.Services.CustomAuthStateProvider;
 using Microsoft.Maui.Handlers;
@@ -75,6 +75,12 @@ namespace P12MAUI.Client
 
             services.AddSingleton(appSettingsSection);
             */
+
+            string baseUrl;
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "production")
+            {
+                baseUrl = "https://localhost:7230";
+            }
 
             var appSettingsSection = new AppSettings()
             {

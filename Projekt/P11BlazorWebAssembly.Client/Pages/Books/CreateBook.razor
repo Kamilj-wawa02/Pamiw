@@ -4,6 +4,9 @@
 
 @inject ITranslationsManager TranslationsManager
 @inject ILibraryService LibraryService
+@inject IAuthService AuthService
+@inject ILocalStorageService LocalStorageService;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
 <h3>@TranslationsManager.Get(MainLayout.Language, "CreateBook")</h3>
