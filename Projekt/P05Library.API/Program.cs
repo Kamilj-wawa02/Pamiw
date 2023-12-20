@@ -18,9 +18,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+string dbConnection = "Server=tcp:pw-pamiw-kj-project-db-server.database.windows.net,1433;Initial Catalog=pw-pamiw-kj-project-db;Persist Security Info=False;User ID=pw-pamiw-project-admin;Password=PWStudentAdm!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+// builder.Configuration.GetConnectionString("DefaultConnection")
+
+
 //Microsoft.EntityFrameworkCore.SqlServer
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dbConnection));
+
+Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>> DB Connection: " + dbConnection);
 
 builder.Services.AddScoped<ILibraryService, P05Library.API.Services.LibraryService.LibraryService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

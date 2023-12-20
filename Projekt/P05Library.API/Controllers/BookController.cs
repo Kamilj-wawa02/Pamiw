@@ -19,7 +19,7 @@ namespace P05Library.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<Book>>>> GetBooks()
         {
             _logger.Log(LogLevel.Information, "Invoked GetBooks Method in controller");

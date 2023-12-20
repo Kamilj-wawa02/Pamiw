@@ -247,6 +247,7 @@ namespace P06Library.Shared.Services.LibraryService
             }
         }
 
+        // 
         public async Task<ServiceResponse<int>> GetBooksCountAsync(string searchText)
         {
             var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksCountEndpoint + (searchText != "" ? "?searchText=" + searchText : "");
