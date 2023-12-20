@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using P05Library.API.Models;
 using P05Library.API.Services.AuthService;
 using P05Library.API.Services.LibraryService;
-using P06Library.Shared.Services.LibraryService;
+using P05Library.API.Services.LibraryService;
 using System.Diagnostics;
 using System.Text;
 

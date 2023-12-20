@@ -1,0 +1,7 @@
+W folderze .\P05Library.API
+
+gcloud init
+gcloud projects list
+gcloud config set project handy-freedom-408622
+gcloud app deploy app.yaml
+gcloud app browse

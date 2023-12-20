@@ -1,0 +1,5 @@
+@echo off
+set ASPNETCORE_ENVIRONMENT=Production
+
+$env:ASPNETCORE_ENVIRONMENT = "Development"
+$env:ASPNETCORE_ENVIRONMENT = "Production"

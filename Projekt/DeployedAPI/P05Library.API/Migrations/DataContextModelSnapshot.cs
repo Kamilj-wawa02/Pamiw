@@ -22,7 +22,7 @@ namespace P05_2Library.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("P06Library.Shared.Auth.User", b =>
+            modelBuilder.Entity("P05Library.API.Auth.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,7 @@ namespace P05_2Library.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("P06Library.Shared.Library.Book", b =>
+            modelBuilder.Entity("P05Library.API.Library.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using P05Library.API.Models;
 
@@ -11,9 +12,11 @@ using P05Library.API.Models;
 namespace P05_2Library.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231220160622_CurrentState")]
+    partial class CurrentState
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace P05_2Library.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("P06Library.Shared.Auth.User", b =>
+            modelBuilder.Entity("P05Library.API.Auth.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,7 +61,7 @@ namespace P05_2Library.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("P06Library.Shared.Library.Book", b =>
+            modelBuilder.Entity("P05Library.API.Library.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

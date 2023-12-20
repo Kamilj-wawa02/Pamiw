@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using P05Library.API.Models;
 
@@ -11,9 +12,11 @@ using P05Library.API.Models;
 namespace P05_2Library.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231128092533_AddUsers")]
+    partial class AddUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace P05_2Library.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("P06Library.Shared.Auth.User", b =>
+            modelBuilder.Entity("P05Library.API.Auth.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,7 +61,7 @@ namespace P05_2Library.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("P06Library.Shared.Library.Book", b =>
+            modelBuilder.Entity("P05Library.API.Library.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +106,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "8",
                             Description = "The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J",
                             Price = 679.119312429856m,
-                            ReleaseDate = new DateTime(2023, 11, 21, 7, 27, 17, 435, DateTimeKind.Local).AddTicks(4277),
+                            ReleaseDate = new DateTime(2023, 10, 30, 0, 46, 29, 266, DateTimeKind.Local).AddTicks(9622),
                             Title = "Gorgeous Wooden Chair"
                         },
                         new
@@ -113,7 +116,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "6",
                             Description = "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality",
                             Price = 419.395071499234m,
-                            ReleaseDate = new DateTime(2023, 4, 25, 21, 12, 29, 415, DateTimeKind.Local).AddTicks(1788),
+                            ReleaseDate = new DateTime(2023, 4, 3, 14, 31, 41, 246, DateTimeKind.Local).AddTicks(7658),
                             Title = "Sleek Wooden Chicken"
                         },
                         new
@@ -123,7 +126,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
                             Price = 276.019507477535m,
-                            ReleaseDate = new DateTime(2023, 6, 20, 15, 59, 12, 595, DateTimeKind.Local).AddTicks(7050),
+                            ReleaseDate = new DateTime(2023, 5, 29, 9, 18, 24, 427, DateTimeKind.Local).AddTicks(2956),
                             Title = "Rustic Soft Car"
                         },
                         new
@@ -133,7 +136,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J",
                             Price = 526.029559857226m,
-                            ReleaseDate = new DateTime(2023, 12, 15, 9, 28, 53, 560, DateTimeKind.Local).AddTicks(3418),
+                            ReleaseDate = new DateTime(2023, 11, 23, 2, 48, 5, 391, DateTimeKind.Local).AddTicks(9416),
                             Title = "Fantastic Concrete Chicken"
                         },
                         new
@@ -143,7 +146,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "0",
                             Description = "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
                             Price = 633.873313080926m,
-                            ReleaseDate = new DateTime(2023, 2, 9, 2, 29, 21, 265, DateTimeKind.Local).AddTicks(8894),
+                            ReleaseDate = new DateTime(2023, 1, 17, 19, 48, 33, 97, DateTimeKind.Local).AddTicks(4913),
                             Title = "Generic Rubber Chips"
                         },
                         new
@@ -153,7 +156,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "0",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 887.110725245024m,
-                            ReleaseDate = new DateTime(2023, 7, 22, 10, 48, 5, 81, DateTimeKind.Local).AddTicks(2307),
+                            ReleaseDate = new DateTime(2023, 6, 30, 4, 7, 16, 912, DateTimeKind.Local).AddTicks(8321),
                             Title = "Generic Concrete Bike"
                         },
                         new
@@ -163,7 +166,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "4",
                             Description = "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
                             Price = 212.662704598933m,
-                            ReleaseDate = new DateTime(2023, 2, 7, 2, 1, 6, 924, DateTimeKind.Local).AddTicks(4139),
+                            ReleaseDate = new DateTime(2023, 1, 15, 19, 20, 18, 756, DateTimeKind.Local).AddTicks(166),
                             Title = "Ergonomic Plastic Computer"
                         },
                         new
@@ -173,7 +176,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "3",
                             Description = "The beautiful range of Apple Naturalé that has an exciting mix of natural ingredients. With the Goodness of 100% Natural Ingredients",
                             Price = 476.020144769466m,
-                            ReleaseDate = new DateTime(2023, 5, 25, 4, 26, 58, 388, DateTimeKind.Local).AddTicks(9623),
+                            ReleaseDate = new DateTime(2023, 5, 2, 21, 46, 10, 220, DateTimeKind.Local).AddTicks(5666),
                             Title = "Licensed Concrete Bike"
                         },
                         new
@@ -183,7 +186,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "1",
                             Description = "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
                             Price = 905.322284099796m,
-                            ReleaseDate = new DateTime(2023, 11, 23, 13, 25, 58, 857, DateTimeKind.Local).AddTicks(1367),
+                            ReleaseDate = new DateTime(2023, 11, 1, 6, 45, 10, 688, DateTimeKind.Local).AddTicks(7426),
                             Title = "Gorgeous Fresh Shirt"
                         },
                         new
@@ -193,7 +196,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
                             Price = 60.7177984624718m,
-                            ReleaseDate = new DateTime(2023, 5, 16, 7, 59, 40, 346, DateTimeKind.Local).AddTicks(4276),
+                            ReleaseDate = new DateTime(2023, 4, 24, 1, 18, 52, 178, DateTimeKind.Local).AddTicks(400),
                             Title = "Generic Steel Ball"
                         },
                         new
@@ -203,7 +206,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
                             Price = 854.154395135192m,
-                            ReleaseDate = new DateTime(2023, 8, 26, 17, 17, 45, 903, DateTimeKind.Local).AddTicks(7445),
+                            ReleaseDate = new DateTime(2023, 8, 4, 10, 36, 57, 735, DateTimeKind.Local).AddTicks(3589),
                             Title = "Small Frozen Car"
                         },
                         new
@@ -213,7 +216,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "6",
                             Description = "The beautiful range of Apple Naturalé that has an exciting mix of natural ingredients. With the Goodness of 100% Natural Ingredients",
                             Price = 471.610621951339m,
-                            ReleaseDate = new DateTime(2023, 1, 4, 8, 28, 34, 24, DateTimeKind.Local).AddTicks(9829),
+                            ReleaseDate = new DateTime(2022, 12, 13, 1, 47, 45, 856, DateTimeKind.Local).AddTicks(5969),
                             Title = "Intelligent Steel Car"
                         },
                         new
@@ -223,7 +226,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "9",
                             Description = "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
                             Price = 415.80337236114m,
-                            ReleaseDate = new DateTime(2023, 12, 5, 22, 34, 18, 371, DateTimeKind.Local).AddTicks(9785),
+                            ReleaseDate = new DateTime(2023, 11, 13, 15, 53, 30, 203, DateTimeKind.Local).AddTicks(5941),
                             Title = "Fantastic Metal Keyboard"
                         },
                         new
@@ -233,7 +236,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "0",
                             Description = "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
                             Price = 14.48730095778m,
-                            ReleaseDate = new DateTime(2023, 10, 17, 23, 12, 38, 824, DateTimeKind.Local).AddTicks(5219),
+                            ReleaseDate = new DateTime(2023, 9, 25, 16, 31, 50, 656, DateTimeKind.Local).AddTicks(1391),
                             Title = "Generic Wooden Cheese"
                         },
                         new
@@ -243,7 +246,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "8",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 16.8119918926675m,
-                            ReleaseDate = new DateTime(2023, 7, 8, 13, 59, 39, 409, DateTimeKind.Local).AddTicks(7066),
+                            ReleaseDate = new DateTime(2023, 6, 16, 7, 18, 51, 241, DateTimeKind.Local).AddTicks(3278),
                             Title = "Tasty Fresh Cheese"
                         },
                         new
@@ -253,7 +256,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "0",
                             Description = "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
                             Price = 612.278680905364m,
-                            ReleaseDate = new DateTime(2023, 3, 22, 4, 39, 4, 681, DateTimeKind.Local).AddTicks(8907),
+                            ReleaseDate = new DateTime(2023, 2, 27, 21, 58, 16, 513, DateTimeKind.Local).AddTicks(5141),
                             Title = "Fantastic Cotton Gloves"
                         },
                         new
@@ -263,7 +266,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "5",
                             Description = "The Football Is Good For Training And Recreational Purposes",
                             Price = 878.871765064016m,
-                            ReleaseDate = new DateTime(2022, 12, 22, 4, 14, 11, 834, DateTimeKind.Local).AddTicks(8303),
+                            ReleaseDate = new DateTime(2022, 11, 29, 21, 33, 23, 666, DateTimeKind.Local).AddTicks(4557),
                             Title = "Unbranded Metal Hat"
                         },
                         new
@@ -273,7 +276,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "5",
                             Description = "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
                             Price = 940.814879371698m,
-                            ReleaseDate = new DateTime(2023, 5, 26, 19, 31, 45, 675, DateTimeKind.Local).AddTicks(4533),
+                            ReleaseDate = new DateTime(2023, 5, 4, 12, 50, 57, 507, DateTimeKind.Local).AddTicks(785),
                             Title = "Unbranded Frozen Mouse"
                         },
                         new
@@ -283,7 +286,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "4",
                             Description = "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
                             Price = 475.131881632904m,
-                            ReleaseDate = new DateTime(2023, 6, 17, 4, 59, 24, 687, DateTimeKind.Local).AddTicks(5959),
+                            ReleaseDate = new DateTime(2023, 5, 25, 22, 18, 36, 519, DateTimeKind.Local).AddTicks(2228),
                             Title = "Handcrafted Wooden Sausages"
                         },
                         new
@@ -293,7 +296,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "1",
                             Description = "The Football Is Good For Training And Recreational Purposes",
                             Price = 43.6775831215445m,
-                            ReleaseDate = new DateTime(2023, 6, 29, 17, 4, 11, 758, DateTimeKind.Local).AddTicks(9646),
+                            ReleaseDate = new DateTime(2023, 6, 7, 10, 23, 23, 590, DateTimeKind.Local).AddTicks(5932),
                             Title = "Ergonomic Metal Fish"
                         },
                         new
@@ -303,7 +306,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "9",
                             Description = "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles",
                             Price = 122.155600068698m,
-                            ReleaseDate = new DateTime(2023, 5, 29, 13, 19, 12, 208, DateTimeKind.Local).AddTicks(438),
+                            ReleaseDate = new DateTime(2023, 5, 7, 6, 38, 24, 39, DateTimeKind.Local).AddTicks(6740),
                             Title = "Incredible Fresh Soap"
                         },
                         new
@@ -313,7 +316,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "8",
                             Description = "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles",
                             Price = 810.480351352356m,
-                            ReleaseDate = new DateTime(2023, 10, 18, 7, 27, 31, 204, DateTimeKind.Local).AddTicks(2443),
+                            ReleaseDate = new DateTime(2023, 9, 26, 0, 46, 43, 35, DateTimeKind.Local).AddTicks(8788),
                             Title = "Gorgeous Soft Tuna"
                         },
                         new
@@ -323,7 +326,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "8",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 208.202475922742m,
-                            ReleaseDate = new DateTime(2023, 6, 17, 14, 6, 24, 992, DateTimeKind.Local).AddTicks(4045),
+                            ReleaseDate = new DateTime(2023, 5, 26, 7, 25, 36, 824, DateTimeKind.Local).AddTicks(405),
                             Title = "Gorgeous Wooden Table"
                         },
                         new
@@ -333,7 +336,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "4",
                             Description = "The beautiful range of Apple Naturalé that has an exciting mix of natural ingredients. With the Goodness of 100% Natural Ingredients",
                             Price = 430.155933462156m,
-                            ReleaseDate = new DateTime(2023, 6, 28, 23, 32, 25, 165, DateTimeKind.Local).AddTicks(2141),
+                            ReleaseDate = new DateTime(2023, 6, 6, 16, 51, 36, 996, DateTimeKind.Local).AddTicks(8498),
                             Title = "Small Metal Tuna"
                         },
                         new
@@ -343,7 +346,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
                             Price = 743.837137221749m,
-                            ReleaseDate = new DateTime(2023, 12, 18, 21, 57, 23, 963, DateTimeKind.Local).AddTicks(5487),
+                            ReleaseDate = new DateTime(2023, 11, 26, 15, 16, 35, 795, DateTimeKind.Local).AddTicks(1861),
                             Title = "Generic Soft Cheese"
                         },
                         new
@@ -353,7 +356,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "0",
                             Description = "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles",
                             Price = 635.754752597657m,
-                            ReleaseDate = new DateTime(2023, 1, 16, 7, 31, 33, 28, DateTimeKind.Local).AddTicks(1325),
+                            ReleaseDate = new DateTime(2022, 12, 25, 0, 50, 44, 859, DateTimeKind.Local).AddTicks(7713),
                             Title = "Ergonomic Rubber Chicken"
                         },
                         new
@@ -363,7 +366,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "4",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 663.536718269594m,
-                            ReleaseDate = new DateTime(2022, 12, 30, 9, 49, 28, 685, DateTimeKind.Local).AddTicks(2832),
+                            ReleaseDate = new DateTime(2022, 12, 8, 3, 8, 40, 516, DateTimeKind.Local).AddTicks(9238),
                             Title = "Awesome Plastic Chicken"
                         },
                         new
@@ -373,7 +376,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
                             Price = 289.121948837359m,
-                            ReleaseDate = new DateTime(2023, 10, 30, 4, 3, 6, 153, DateTimeKind.Local).AddTicks(3428),
+                            ReleaseDate = new DateTime(2023, 10, 7, 21, 22, 17, 984, DateTimeKind.Local).AddTicks(9884),
                             Title = "Handcrafted Concrete Tuna"
                         },
                         new
@@ -383,7 +386,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "8",
                             Description = "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
                             Price = 129.940595376278m,
-                            ReleaseDate = new DateTime(2023, 10, 18, 6, 32, 58, 43, DateTimeKind.Local).AddTicks(5835),
+                            ReleaseDate = new DateTime(2023, 9, 25, 23, 52, 9, 875, DateTimeKind.Local).AddTicks(2311),
                             Title = "Handmade Plastic Bike"
                         },
                         new
@@ -393,7 +396,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles",
                             Price = 185.643613699658m,
-                            ReleaseDate = new DateTime(2023, 4, 23, 1, 15, 27, 51, DateTimeKind.Local).AddTicks(8025),
+                            ReleaseDate = new DateTime(2023, 3, 31, 18, 34, 38, 883, DateTimeKind.Local).AddTicks(4486),
                             Title = "Gorgeous Wooden Pants"
                         },
                         new
@@ -403,7 +406,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "2",
                             Description = "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
                             Price = 579.21628712314m,
-                            ReleaseDate = new DateTime(2023, 3, 5, 17, 0, 39, 920, DateTimeKind.Local).AddTicks(1588),
+                            ReleaseDate = new DateTime(2023, 2, 11, 10, 19, 51, 751, DateTimeKind.Local).AddTicks(8065),
                             Title = "Awesome Granite Hat"
                         },
                         new
@@ -413,7 +416,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "3",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 383.278243241961m,
-                            ReleaseDate = new DateTime(2023, 1, 9, 4, 30, 10, 284, DateTimeKind.Local).AddTicks(8825),
+                            ReleaseDate = new DateTime(2022, 12, 17, 21, 49, 22, 116, DateTimeKind.Local).AddTicks(5321),
                             Title = "Unbranded Fresh Table"
                         },
                         new
@@ -423,7 +426,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "5",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 896.730729824272m,
-                            ReleaseDate = new DateTime(2023, 8, 4, 23, 51, 32, 818, DateTimeKind.Local).AddTicks(2816),
+                            ReleaseDate = new DateTime(2023, 7, 13, 17, 10, 44, 649, DateTimeKind.Local).AddTicks(9332),
                             Title = "Refined Wooden Computer"
                         },
                         new
@@ -433,7 +436,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "3",
                             Description = "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
                             Price = 324.517499184477m,
-                            ReleaseDate = new DateTime(2023, 6, 7, 22, 27, 54, 198, DateTimeKind.Local).AddTicks(7922),
+                            ReleaseDate = new DateTime(2023, 5, 16, 15, 47, 6, 30, DateTimeKind.Local).AddTicks(4484),
                             Title = "Incredible Cotton Gloves"
                         },
                         new
@@ -443,7 +446,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "8",
                             Description = "The Football Is Good For Training And Recreational Purposes",
                             Price = 929.139840084659m,
-                            ReleaseDate = new DateTime(2023, 2, 19, 8, 39, 37, 193, DateTimeKind.Local).AddTicks(7784),
+                            ReleaseDate = new DateTime(2023, 1, 28, 1, 58, 49, 25, DateTimeKind.Local).AddTicks(4368),
                             Title = "Rustic Fresh Bacon"
                         },
                         new
@@ -453,7 +456,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "2",
                             Description = "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
                             Price = 158.364214679396m,
-                            ReleaseDate = new DateTime(2023, 8, 8, 15, 13, 13, 336, DateTimeKind.Local).AddTicks(8723),
+                            ReleaseDate = new DateTime(2023, 7, 17, 8, 32, 25, 168, DateTimeKind.Local).AddTicks(5297),
                             Title = "Small Rubber Pants"
                         },
                         new
@@ -463,7 +466,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "2",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 218.78718086229m,
-                            ReleaseDate = new DateTime(2023, 8, 8, 21, 3, 29, 894, DateTimeKind.Local).AddTicks(9883),
+                            ReleaseDate = new DateTime(2023, 7, 17, 14, 22, 41, 726, DateTimeKind.Local).AddTicks(6473),
                             Title = "Awesome Soft Fish"
                         },
                         new
@@ -473,7 +476,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "2",
                             Description = "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
                             Price = 245.410820124396m,
-                            ReleaseDate = new DateTime(2023, 7, 19, 14, 48, 4, 822, DateTimeKind.Local).AddTicks(6294),
+                            ReleaseDate = new DateTime(2023, 6, 27, 8, 7, 16, 654, DateTimeKind.Local).AddTicks(2900),
                             Title = "Generic Wooden Sausages"
                         },
                         new
@@ -483,7 +486,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
                             Price = 628.755980696416m,
-                            ReleaseDate = new DateTime(2023, 1, 2, 8, 47, 11, 776, DateTimeKind.Local).AddTicks(3598),
+                            ReleaseDate = new DateTime(2022, 12, 11, 2, 6, 23, 608, DateTimeKind.Local).AddTicks(220),
                             Title = "Handmade Steel Salad"
                         },
                         new
@@ -493,7 +496,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles",
                             Price = 890.001594146714m,
-                            ReleaseDate = new DateTime(2023, 8, 16, 21, 18, 4, 102, DateTimeKind.Local).AddTicks(6469),
+                            ReleaseDate = new DateTime(2023, 7, 25, 14, 37, 15, 934, DateTimeKind.Local).AddTicks(3135),
                             Title = "Licensed Frozen Car"
                         },
                         new
@@ -503,7 +506,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
                             Price = 501.19964468535m,
-                            ReleaseDate = new DateTime(2023, 10, 8, 0, 15, 38, 729, DateTimeKind.Local).AddTicks(8765),
+                            ReleaseDate = new DateTime(2023, 9, 15, 17, 34, 50, 561, DateTimeKind.Local).AddTicks(5450),
                             Title = "Handcrafted Cotton Tuna"
                         },
                         new
@@ -513,7 +516,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "2",
                             Description = "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
                             Price = 474.158561197649m,
-                            ReleaseDate = new DateTime(2023, 1, 26, 16, 26, 12, 992, DateTimeKind.Local).AddTicks(5983),
+                            ReleaseDate = new DateTime(2023, 1, 4, 9, 45, 24, 824, DateTimeKind.Local).AddTicks(2665),
                             Title = "Awesome Granite Fish"
                         },
                         new
@@ -523,7 +526,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "1",
                             Description = "New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart",
                             Price = 309.665064914462m,
-                            ReleaseDate = new DateTime(2023, 10, 11, 17, 47, 24, 699, DateTimeKind.Local).AddTicks(1904),
+                            ReleaseDate = new DateTime(2023, 9, 19, 11, 6, 36, 530, DateTimeKind.Local).AddTicks(8601),
                             Title = "Handmade Rubber Gloves"
                         },
                         new
@@ -533,7 +536,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "2",
                             Description = "The Football Is Good For Training And Recreational Purposes",
                             Price = 823.62140813592m,
-                            ReleaseDate = new DateTime(2023, 11, 30, 7, 2, 16, 405, DateTimeKind.Local).AddTicks(74),
+                            ReleaseDate = new DateTime(2023, 11, 8, 0, 21, 28, 236, DateTimeKind.Local).AddTicks(6783),
                             Title = "Incredible Granite Gloves"
                         },
                         new
@@ -543,7 +546,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "6",
                             Description = "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
                             Price = 717.609017980569m,
-                            ReleaseDate = new DateTime(2023, 10, 9, 9, 27, 42, 768, DateTimeKind.Local).AddTicks(8265),
+                            ReleaseDate = new DateTime(2023, 9, 17, 2, 46, 54, 600, DateTimeKind.Local).AddTicks(4993),
                             Title = "Practical Rubber Gloves"
                         },
                         new
@@ -553,7 +556,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "3",
                             Description = "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
                             Price = 242.468765747952m,
-                            ReleaseDate = new DateTime(2023, 5, 4, 2, 52, 52, 53, DateTimeKind.Local).AddTicks(4634),
+                            ReleaseDate = new DateTime(2023, 4, 11, 20, 12, 3, 885, DateTimeKind.Local).AddTicks(1404),
                             Title = "Unbranded Soft Fish"
                         },
                         new
@@ -563,7 +566,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "7",
                             Description = "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016",
                             Price = 3.31604853054325m,
-                            ReleaseDate = new DateTime(2023, 2, 9, 7, 10, 59, 536, DateTimeKind.Local).AddTicks(2758),
+                            ReleaseDate = new DateTime(2023, 1, 18, 0, 30, 11, 367, DateTimeKind.Local).AddTicks(9547),
                             Title = "Rustic Granite Pants"
                         },
                         new
@@ -573,7 +576,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "6",
                             Description = "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality",
                             Price = 306.351716509718m,
-                            ReleaseDate = new DateTime(2023, 11, 13, 0, 2, 26, 743, DateTimeKind.Local).AddTicks(9697),
+                            ReleaseDate = new DateTime(2023, 10, 21, 17, 21, 38, 575, DateTimeKind.Local).AddTicks(6504),
                             Title = "Awesome Metal Keyboard"
                         },
                         new
@@ -583,7 +586,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "6",
                             Description = "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
                             Price = 756.842380142232m,
-                            ReleaseDate = new DateTime(2023, 9, 8, 13, 17, 16, 272, DateTimeKind.Local).AddTicks(3708),
+                            ReleaseDate = new DateTime(2023, 8, 17, 6, 36, 28, 104, DateTimeKind.Local).AddTicks(601),
                             Title = "Ergonomic Wooden Bacon"
                         },
                         new
@@ -593,7 +596,7 @@ namespace P05_2Library.API.Migrations
                             Barcode = "5",
                             Description = "The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design",
                             Price = 533.598870003875m,
-                            ReleaseDate = new DateTime(2023, 3, 28, 9, 41, 50, 304, DateTimeKind.Local).AddTicks(5786),
+                            ReleaseDate = new DateTime(2023, 3, 6, 3, 1, 2, 136, DateTimeKind.Local).AddTicks(2701),
                             Title = "Rustic Wooden Bacon"
                         });
                 });
