@@ -68,6 +68,8 @@ namespace P04Library.Client
             var appSettings = _configuration.GetSection(nameof(AppSettings));
             var appSettingsSection = appSettings.Get<AppSettings>();
 
+            appSettingsSection.BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com";
+
             // services.Configure<AppSettings>(appSettings);
             services.AddSingleton(appSettingsSection);
             return appSettingsSection;

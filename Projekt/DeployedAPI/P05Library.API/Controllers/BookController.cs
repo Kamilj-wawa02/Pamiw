@@ -4,6 +4,7 @@ using P05Library.API;
 using P05Library.API.Services.LibraryService;
 using P05Library.API.Library;
 using Microsoft.AspNetCore.Authorization;
+using System.Runtime.InteropServices;
 
 namespace P05Library.API.Controllers
 {
@@ -29,25 +30,35 @@ namespace P05Library.API.Controllers
             if (result.Success)
                 return Ok(result);
             else
-                return  StatusCode(500, $"Internal server error {result.Message}");
+                return StatusCode(500, $"Internal server error {result.Message}");
+        }
+
+        [HttpGet("count-all")]
+        public async Task<ActionResult<ServiceResponse<int>>> GetAllBooksCount()
+        {
+            _logger.Log(LogLevel.Information, "Invoked GetAllBooksCount Method in controller");
+
+            var result = await _libraryService.GetBooksCountAsync("");
+
+            return Ok(result);
         }
 
         [HttpGet("count")]
-        public async Task<ActionResult<ServiceResponse<int>>> GetBooksCount([FromQuery] string searchText = "")
+        public async Task<ActionResult<ServiceResponse<int>>> GetBooksCount([FromQuery] string searchText)
         {
             _logger.Log(LogLevel.Information, "Invoked GetBooksCount Method in controller");
 
             var result = await _libraryService.GetBooksCountAsync(searchText);
 
             return Ok(result);
-    }
+        }
 
 
-            // http:localhost/api/product/4 dla api REST
-            [HttpGet("{id}")]
+        // http:localhost/api/product/4 dla api REST
+        [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<Book>>> GetBook(int id)
         {
-          
+
             var result = await _libraryService.GetBookByIdAsync(id);
 
             if (result.Success)
@@ -60,7 +71,7 @@ namespace P05Library.API.Controllers
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<Book>>> UpdateBook([FromBody] Book product)
         {
-            
+
             var result = await _libraryService.UpdateBookAsync(product);
 
             if (result.Success)

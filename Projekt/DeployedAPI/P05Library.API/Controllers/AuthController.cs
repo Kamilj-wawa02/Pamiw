@@ -23,7 +23,7 @@ namespace P05Library.API.Controllers
         private readonly IAuthService _authService;
         private readonly IFacebookAPIService _facebookAPIService;
         private readonly IConfiguration _config;
-        
+
 
         public AuthController(IAuthService authService, IFacebookAPIService facebookAPIService, IConfiguration config)
         {
@@ -122,7 +122,7 @@ namespace P05Library.API.Controllers
 
 
 
-            [HttpGet("login-by-facebook")] // https://localhost:7230/api/Auth/login-by-facebook
+        [HttpGet("login-by-facebook")] // https://localhost:7230/api/Auth/login-by-facebook
         public async Task<ActionResult<ServiceResponse<string>>> LoginByFacebook([FromQuery] string code, [FromQuery] string redirect_uri)
         {
             /*
@@ -174,7 +174,7 @@ namespace P05Library.API.Controllers
             }
 
             */
-            
+
 
             /*
             if (!string.IsNullOrEmpty(code))
@@ -204,7 +204,7 @@ namespace P05Library.API.Controllers
             }
 
             */
-            
+
         }
 
     }

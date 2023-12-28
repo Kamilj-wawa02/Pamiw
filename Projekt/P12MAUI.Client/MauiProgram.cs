@@ -84,7 +84,7 @@ namespace P12MAUI.Client
 
             var appSettingsSection = new AppSettings()
             {
-                BaseAPIUrl = "https://localhost:7230",
+                BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com", //"https://localhost:7230",
                 FacebookLoginEndpoint= "api/Auth/login-by-facebook",
                 LibraryEndpoints = new LibraryEndpoints()
                 {
@@ -95,7 +95,8 @@ namespace P12MAUI.Client
                     DeleteBookEndpoint= "api/Book/{0}",
                     AddBookEndpoint= "api/Book",
                     SearchBooksEndpoint= "api/Book/search",
-                    GetBooksCountEndpoint= "api/Book/count"
+                    GetBooksCountEndpoint= "api/Book/count",
+                    GetAllBooksCountEndpoint = "api/Book/count-all"
                 },
                 //BaseBookEndpoint = new BaseBookEndpoint()
                 //{

@@ -53,7 +53,6 @@ namespace P12MAUI.Client.ViewModels
             AuthenticationStateProvider authenticationStateProvider,
             BookDetailsView bookDetailsView, IConnectivity connectivity)
         {
-
             _serviceProvider = serviceProvider;
             _messageDialogService = messageDialogService;
             _bookDetailsView = bookDetailsView;
@@ -63,10 +62,9 @@ namespace P12MAUI.Client.ViewModels
             _authenticationStateProvider = authenticationStateProvider;
             _connectivity = connectivity; // set the _connectivity field
 
+            Books = new ObservableCollection<Book>();
             AppCurrentResources.LoadSettings();
             GetAuthenticationState();
-            Books = new ObservableCollection<Book>();
-            GetBooks("", 1);
         }
 
         public async Task GetBooks()
@@ -76,7 +74,7 @@ namespace P12MAUI.Client.ViewModels
 
         public async Task GetBooks(string searchText, int page)
         {
-            Debug.WriteLine(">>> GetBooks");
+            Debug.WriteLine(">>> GetBooks...");
 
             this.searchText = searchText;
             var maxElementsResponse = await _libraryService.GetBooksCountAsync(searchText);
@@ -98,7 +96,7 @@ namespace P12MAUI.Client.ViewModels
                 {
                     Books.Add(p);
                 }
-                Debug.WriteLine(">>> GetBooks SUCCEDED");
+                Debug.WriteLine(">>> GetBooks SUCCEDED, added " + Books.Count + " books");
             }
             else
             {
@@ -370,12 +368,12 @@ namespace P12MAUI.Client.ViewModels
 
         public bool IsBookListVisible
         {
-            get { return Books.Count > 0; }
+            get { return Books?.Count > 0; }
         }
 
         public bool IsLoadingSpinnerVisible
         {
-            get { return Books.Count == 0 && searchText == ""; }
+            get { return Books?.Count == 0 && searchText == ""; }
         }
 
     }

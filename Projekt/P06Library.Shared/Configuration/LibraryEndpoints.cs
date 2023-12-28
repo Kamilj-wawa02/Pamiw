@@ -17,6 +17,7 @@ namespace P06Library.Shared.Configuration
         public string SearchBooksEndpoint { get; set; }
 
         public string GetBooksCountEndpoint { get; set; }
+        public string GetAllBooksCountEndpoint { get; set; }
 
     }
 }

@@ -234,34 +234,5 @@ namespace P05Library.API.Services.AuthService
             return user;
         }
 
-        public void SetAuthToken(string authToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ServiceResponse<string>> LoginWithFacebook(string code, string redirect_uri)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetLoginWithFacebook()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string LoginWithFacebookFormRedirection(string redirect_uri)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string LoginWithFacebookGetAccessToken(string redirect_uri, string code)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> ProcessUri(string uri, string redirectionUri)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

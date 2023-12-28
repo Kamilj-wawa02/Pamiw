@@ -32,6 +32,16 @@ namespace P05Library.API.Controllers
                 return  StatusCode(500, $"Internal server error {result.Message}");
         }
 
+        [HttpGet("count-all")]
+        public async Task<ActionResult<ServiceResponse<int>>> GetAllBooksCount()
+        {
+            _logger.Log(LogLevel.Information, "Invoked GetAllBooksCount Method in controller");
+
+            var result = await _libraryService.GetBooksCountAsync("");
+
+            return Ok(result);
+        }
+
         [HttpGet("count")]
         public async Task<ActionResult<ServiceResponse<int>>> GetBooksCount([FromQuery] string searchText = "")
         {

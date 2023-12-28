@@ -126,43 +126,67 @@
                 <CollectionView ItemsSource="{Binding Books}" IsVisible="{Binding IsBookListVisible}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Padding="10" Margin="5">
-                                <Frame.GestureRecognizers>
+
+                            <Border Margin="5" Padding="10" StrokeShape="RoundRectangle 10" Stroke="Transparent">
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroupList>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightItemsBackColor}, Dark={StaticResource DarkItemsBackColor}}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Disabled" />
+                                            <VisualState x:Name="PointerOver">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightItemsBackColorOnMouseHover}, Dark={StaticResource DarkItemsBackColorOnMouseHover}}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateGroupList>
+                                </VisualStateManager.VisualStateGroups>
+                                <Border.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ShowDetailsCommand }"
-                                        CommandParameter="{Binding .}"></TapGestureRecognizer>
-                                </Frame.GestureRecognizers>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"></RowDefinition>
-                                        <RowDefinition Height="Auto"></RowDefinition>
-                                        <RowDefinition Height="Auto"></RowDefinition>
-                                        <RowDefinition Height="Auto"></RowDefinition>
-                                    </Grid.RowDefinitions>
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ShowDetailsCommand }"
+                                         CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </Border.GestureRecognizers>
 
-                                    <HorizontalStackLayout Grid.Row="0">
-                                        <Label Text="{Binding Id}" Margin="0,0,10,0" FontAttributes="Bold" />
-                                        <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" />
-                                        <Label Text="  –  " FontSize="16" FontAttributes="Bold" />
-                                        <Label Text="{Binding Author}" FontSize="16" FontAttributes="Bold" />
-                                    </HorizontalStackLayout>
+                                <VerticalStackLayout>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
 
-                                    <Label Grid.Row="1" Text="{Binding Description}" ></Label>
+                                        <HorizontalStackLayout Grid.Row="0">
+                                            <Label Text="{Binding Id}" Margin="0,0,10,0" FontAttributes="Bold" />
+                                            <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" />
+                                            <Label Text="  –  " FontSize="16" FontAttributes="Bold" />
+                                            <Label Text="{Binding Author}" FontSize="16" FontAttributes="Bold" />
+                                        </HorizontalStackLayout>
 
-                                    <HorizontalStackLayout Grid.Row="2">
-                                        <Label Text="Barcode: "></Label>
-                                        <Label Text="{Binding Barcode}"></Label>
+                                        <Label Grid.Row="1" Text="{Binding Description}" ></Label>
 
-                                        <Label Text="Price: " />
-                                        <Label Text="{Binding Price, StringFormat='C'}" />
-                                        <Label Text="Release Date: " />
-                                        <Label Text="{Binding ReleaseDate, StringFormat='{0: dd MM yyyy}'}"/>
+                                        <HorizontalStackLayout Grid.Row="2">
+                                            <Label Text="Barcode: "></Label>
+                                            <Label Text="{Binding Barcode}"></Label>
+
+                                            <Label Text="Price: " />
+                                            <Label Text="{Binding Price, StringFormat='C'}" />
+                                            <Label Text="Release Date: " />
+                                            <Label Text="{Binding ReleaseDate, StringFormat='{0: dd MM yyyy}'}"/>
 
 
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </Frame>
+                                        </HorizontalStackLayout>
+                                    </Grid>
 
+                                </VerticalStackLayout>
+                             
+                            </Border>
 
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
