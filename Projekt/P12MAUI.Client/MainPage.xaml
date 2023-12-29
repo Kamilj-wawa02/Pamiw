@@ -74,14 +74,14 @@
                             </HorizontalStackLayout>
 
                             <!-- zawiera LOGOWANIE -->
-                            <HorizontalStackLayout HorizontalOptions="End">
+                            <HorizontalStackLayout HorizontalOptions="End" Spacing="5">
                                 <Button Command="{Binding OpenLoginWindowCommand}" Text="{Binding LoginText}" WidthRequest="90"
                                     IsVisible="{Binding IsLoginButtonInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
 
-                                <Button Command="{Binding OpenRegisterWindowCommand}" Text="{Binding RegisterText}" WidthRequest="105"
+                                <Button Command="{Binding OpenRegisterWindowCommand}" Text="{Binding RegisterText}" WidthRequest="100"
                                         IsVisible="{Binding IsLoginButtonInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
 
-                                <Button Command="{Binding LogoutCommand}" Text="{Binding LogoutText}" WidthRequest="105"
+                                <Button Command="{Binding LogoutCommand}" Text="{Binding LogoutText}" WidthRequest="100"
                                         IsVisible="{Binding IsLoggedUserInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
                             </HorizontalStackLayout>
                         </HorizontalStackLayout>
@@ -96,8 +96,8 @@
 
                     <VerticalStackLayout HorizontalOptions="Start">
                         <HorizontalStackLayout HorizontalOptions="Start">
-                            <Entry x:Name="SearchTextBox" Margin="0,0,0,10" Text="{Binding CurrentSearchText}" WidthRequest="222" HeightRequest="55" />
-                            <Button Text="{Binding SearchText}" Margin="10,0,0,0" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchTextBox.Text}" WidthRequest="100" HeightRequest="50" />
+                            <Entry x:Name="SearchTextBox" Margin="0,0,0,5" Text="{Binding CurrentSearchText}" WidthRequest="222" HeightRequest="55" />
+                            <Button Text="{Binding SearchText}" Margin="10,0,0,0" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchTextBox.Text}" WidthRequest="100" HeightRequest="50" VerticalOptions="Start" />
                         </HorizontalStackLayout>
 
                         <Button Command="{Binding CreateBookCommand}" Text="{Binding CreateBookText}" WidthRequest="164" HorizontalOptions="Start" />
