@@ -23,7 +23,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 var appSettings = builder.Configuration.GetSection(nameof(AppSettings));
 var appSettingsSection = appSettings.Get<AppSettings>();
 
-appSettingsSection.BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com";
+//appSettingsSection.BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com";
 
 var uriBuilder = new UriBuilder(appSettingsSection.BaseAPIUrl)
 {
