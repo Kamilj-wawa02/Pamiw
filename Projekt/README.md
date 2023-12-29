@@ -39,7 +39,7 @@ resources:
 
 Następnie posłużyłem się Google Cloud CLI, najpierw odpowiednio komendami: ***gcloud init***, ustawiłem aktualny projekt ***gcloud config set project handy-freedom-408622***. Przy skonfigurowanym środowisku uruchomiłem wdrożenie poprzez ***gcloud app deploy app.yaml***. Po wdrożeniu można otworzyć stronę w przeglądarce poprzez ***gcloud app browse*** (w naszym przypadku będzie pusta, bo jest to projekt API).
 
-## Wygląd aplikacji oraz ustawienia użytkownika
+## Wygląd interfejsów aplikacji oraz obsługa ustawień użytkownika
 
 Każda aplikacja ma wbudowaną możliwość zmiany motywu (**jasny**/**ciemny**) oraz języka (**angielski**/**polski**). Wszystkie programy mają ten sam styl wizualny:
 
@@ -58,3 +58,18 @@ Każda aplikacja ma wbudowaną możliwość zmiany motywu (**jasny**/**ciemny**)
 **P05Library.API** - interfejs Swaggera pokazujący używane endpointy interfejsu API
 
 ![P05Library.API](./Images/P05Library.API.png)
+
+**Prezentacja motywów i języków**
+
+Motywy i języki można łatwo zmienić klikając na ikony znajdujące się na stronie głównej w każdej aplikacji. Zostały użyte ikony w postaci wektorowej, co zapewnia bezstratną jakość przy dowolnym powiększeniu oraz jednakową stylistykę w aplikacji. Ikony pozyskałem z biblioteki bootstrap – użyłem zapisu SVG udostępnionego na stronie biblioteki: https://icons.getbootstrap.com/ (w projekcie Blazor WebAssembly ikony bootstrap zostały skonfigurowane i można ich użyć wykorzystując odpowiednią wartość atrybutu **class**).
+
+![ThemesAndLanguages_WPF](./Images/ThemesAndLanguages_WPF.png)
+
+**Spójność wizualna**
+
+Wszystkie interfejsy zostały zaprojektowane tak, by implementowały spójną stylistykę. W każdym projekcie wykorzystano te same style wizualne, które można zobaczyć na powyższych zdjęciach.
+
+**Oczekiwanie na dłuższe operacje**
+
+Każda długa operacja (ładowania, logowania, itp.) została zasygnalizowana animacją ładującego koła.
+
