@@ -71,5 +71,20 @@ Wszystkie interfejsy zostały zaprojektowane tak, by implementowały spójną st
 
 **Oczekiwanie na dłuższe operacje**
 
-Każda długa operacja (ładowania, logowania, itp.) została zasygnalizowana animacją ładującego koła.
+Każda długa operacja (ładowania, logowania, itp.) została zasygnalizowana animacją ładującego się koła.
 
+<img src="./Images/loading.gif" width="10%" height="10%" alt="loading">
+
+**Walidacja danych**
+
+Wprowadzane we wszystkich formularzach dane są walidowane zarówno w API (odpowiedź zawiera komunikat błędu), jak i w UI (użytkownik dostaje stosowny komunikat w formie odpowiadającej dla danej platformy).
+
+## Logowanie poprzez Facebooka
+
+We wszystkich aplikacjach został zaimplementowany własny schemat logowania z wykorzystaniem autentykacji poprzez serwis Facebook. Schemat jest następujący:
+- W aplikacjach klienckich zostaje otwarta przeglądarka z adresem URL wskazującym na endpoint w API
+- Serwer API przekierowuje nas na odpowiednio utworzony adres do API Facebooka, wraz ze zdefiniowanym adresem ***redirect_uri*** – adres, na który zostaniemy przekierowani po zakończeniu autentykacji w serwisie
+- Przeglądarka sprawdza przekierowywane adresy, gdy rozpozna utworzony adres ***redirect_uri*** wczytuje z niego uzyskany kod
+- Kod jest wysyłany do API
+- Serwer API uzyskuje token użytkownika od Facebooka, dzięki któremu możemy pozyskać dane o zalogowanym użytkowniku (dane, na które się zgodziliśmy podczas autentykacji, czyli adres e-mail oraz nazwa konta)
+- Serwer API generuje token i wysyła go w odpowiedzi żądania do aplikacji klienta
