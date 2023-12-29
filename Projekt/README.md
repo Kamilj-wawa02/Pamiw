@@ -1,0 +1,3 @@
+# Projekt na programowanie aplikacji mobilnych i webowych
+
+Projekt miał na celu ...
