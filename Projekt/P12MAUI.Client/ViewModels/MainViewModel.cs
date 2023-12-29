@@ -333,6 +333,11 @@ namespace P12MAUI.Client.ViewModels
 
                 currentLocation = await _geolocation.GetLastKnownLocationAsync();
 
+                if (currentLocation == null)
+                {
+                    return;
+                }
+
                 double distanceInKilometers = Location.CalculateDistance(currentLocation, targetLocation, DistanceUnits.Kilometers);
                 distanceInKilometers = Math.Round(distanceInKilometers, 3);
 
@@ -348,7 +353,7 @@ namespace P12MAUI.Client.ViewModels
                 OnPropertyChanged(nameof(GPSMessageText));
             }
 
-            //Console.WriteLine("> " + currentGPSMessageText);
+            Console.WriteLine("> " + currentGPSMessageText);
         }
 
 
