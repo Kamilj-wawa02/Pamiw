@@ -34,14 +34,15 @@ namespace P04Library.Client
         ITranslationsManager translationsManager;
         public App()
         {
-            string s = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            Debug.WriteLine(">>> Current configuration: '" + s + "'");
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? "Production" : "Development";
+            env = "Development";//"Production";
+            Debug.WriteLine(">>> Current configuration: '" + env + "'");
             //wczytanie appsettings.json do konfiguracji 
             var builder = new ConfigurationBuilder()
               .AddUserSecrets<App>()
               .SetBasePath(Directory.GetCurrentDirectory())
               .AddJsonFile("appsettings.json")
-              .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true);
+              .AddJsonFile($"appsettings.{env}.json");
             _configuration = builder.Build();
 
 
@@ -68,7 +69,9 @@ namespace P04Library.Client
             var appSettings = _configuration.GetSection(nameof(AppSettings));
             var appSettingsSection = appSettings.Get<AppSettings>();
 
-            appSettingsSection.BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com";
+            //appSettingsSection.BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com";
+
+            Debug.WriteLine($">>>>>> API BaseURL: {appSettingsSection.BaseAPIUrl}");
 
             // services.Configure<AppSettings>(appSettings);
             services.AddSingleton(appSettingsSection);
