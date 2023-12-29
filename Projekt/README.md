@@ -79,7 +79,7 @@ Każda długa operacja (ładowania, logowania, itp.) została zasygnalizowana an
 
 Wprowadzane we wszystkich formularzach dane są walidowane zarówno w API (odpowiedź zawiera komunikat błędu), jak i w UI (użytkownik dostaje stosowny komunikat w formie odpowiadającej dla danej platformy).
 
-## Logowanie poprzez Facebooka
+## Logowanie/Rejestracja poprzez Facebooka
 
 We wszystkich aplikacjach został zaimplementowany własny schemat logowania z wykorzystaniem autentykacji poprzez serwis Facebook. Schemat jest następujący:
 - W aplikacjach klienckich zostaje otwarta przeglądarka z adresem URL wskazującym na endpoint w API
@@ -88,3 +88,18 @@ We wszystkich aplikacjach został zaimplementowany własny schemat logowania z w
 - Kod jest wysyłany do API
 - Serwer API uzyskuje token użytkownika od Facebooka, dzięki któremu możemy pozyskać dane o zalogowanym użytkowniku (dane, na które się zgodziliśmy podczas autentykacji, czyli adres e-mail oraz nazwa konta)
 - Serwer API generuje token i wysyła go w odpowiedzi żądania do aplikacji klienta
+
+## Kompatybilność aplikacji mobilnej
+
+Aplikacja mobilna korzysta z wdrożonego w Google Cloud Platform serwisu API. Aplikację MAUI można uruchomić na platformie Windows oraz Android. W ramach testowania działania na Androidzie podłączyłem telefon do komputera z włączoną opcją debugowania poprzez USB (opcję należy wcześniej włączyć w ukrytych opcjach programistycznych w systemie), co pozwoliło na instalację wszystkich niezbędnych składników w oprogramowaniu telefonu.
+
+<img src="./Images/AppOnAndroidPhysicalDevice.jpg" width="20%" height="20%" alt="AppOnAndroidPhysicalDevice">
+
+## Serwis GPS w aplikacji mobilnej
+
+W aplikacji mobilnej wykorzystałem serwis geolokalizacji do wyznaczenia odległości do Biblioteki Głównej PW.
+
+Co 3 sekundy zostaje ponownie wczytana aktualna lokalizacja, po czym aplikacja dokonuje obliczenia odległości do zapisanych koordynatów biblioteki. Następnie odświeża informację wyświetloną w postaci przyszarzonego tekstu u góry ekranu. Odległość została podana w km. Cały rezultat możemy zobaczyć na poniższym zdjęciu:  
+
+<img src="./Images/GPS_Showcase.png" width="50%" height="50%" alt="GPS_Showcase">
+
