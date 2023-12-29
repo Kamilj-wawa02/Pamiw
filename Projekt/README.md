@@ -54,3 +54,7 @@ Każda aplikacja ma wbudowaną możliwość zmiany motywu (**jasny**/**ciemny**)
 **P12MAUI.Client**
 
 ![P12MAUI.Client](./Images/P12MAUI.Client.png)
+
+**P05Library.API** - interfejs Swaggera pokazujący używane endpointy interfejsu API
+
+![P05Library.API](./Images/P05Library.API.png)
