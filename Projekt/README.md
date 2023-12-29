@@ -38,3 +38,19 @@ resources:
 ```
 
 Następnie posłużyłem się Google Cloud CLI, najpierw odpowiednio komendami: ***gcloud init***, ustawiłem aktualny projekt ***gcloud config set project handy-freedom-408622***. Przy skonfigurowanym środowisku uruchomiłem wdrożenie poprzez ***gcloud app deploy app.yaml***. Po wdrożeniu można otworzyć stronę w przeglądarce poprzez ***gcloud app browse*** (w naszym przypadku będzie pusta, bo jest to projekt API).
+
+## Wygląd aplikacji oraz ustawienia użytkownika
+
+Każda aplikacja ma wbudowaną możliwość zmiany motywu (**jasny**/**ciemny**) oraz języka (**angielski**/**polski**). Wszystkie programy mają ten sam styl wizualny:
+
+**Aplikacja desktop (WPF)**
+
+![Aplikacja desktop (WPF)](./Images/P04Library.Client.png)
+
+**P11BlazorWebAssembly.Client**
+
+![P11BlazorWebAssembly.Client](./Images/P11BlazorWebAssembly.Client.png)
+
+**P12MAUI.Client**
+
+![P12MAUI.Client](./Images/P12MAUI.Client.png)
