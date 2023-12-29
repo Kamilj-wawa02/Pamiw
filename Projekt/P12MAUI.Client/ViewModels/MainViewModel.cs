@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using P06Library.Shared.Languages;
 using System.Diagnostics;
 using P06Library.Shared.Services.AuthService;
+using Location = Microsoft.Maui.Devices.Sensors.Location;
 
 namespace P12MAUI.Client.ViewModels
 {
@@ -37,21 +38,28 @@ namespace P12MAUI.Client.ViewModels
         private readonly BookDetailsView _bookDetailsView;
         private readonly IConnectivity _connectivity;
 
+        private readonly IGeolocation _geolocation;
+        private readonly IMap _map;
+
         public AuthenticationState AuthenticationState;
 
         private string searchText = "";
         private int currentPage = 1;
         private int maxPage = 1;
+        private string currentGPSMessageText = "";
+        private bool currentIsLoadingBooks = false;
         public ObservableCollection<Book> Books { get; set; }
 
         [ObservableProperty]
         public string currentSearchText;
 
+        private bool temporarilyAllowNextPreviousButton = false;
+
         public MainViewModel(IServiceProvider serviceProvider, ILibraryService libraryService, IAuthService authService,
             IMessageDialogService messageDialogService,
             ITranslationsManager translationsManager,
             AuthenticationStateProvider authenticationStateProvider,
-            BookDetailsView bookDetailsView, IConnectivity connectivity)
+            BookDetailsView bookDetailsView, IConnectivity connectivity, IGeolocation geolocation, IMap map)
         {
             _serviceProvider = serviceProvider;
             _messageDialogService = messageDialogService;
@@ -61,10 +69,16 @@ namespace P12MAUI.Client.ViewModels
             _translationsManager = translationsManager;
             _authenticationStateProvider = authenticationStateProvider;
             _connectivity = connectivity; // set the _connectivity field
+            _geolocation = geolocation;
+            _map = map;
 
             Books = new ObservableCollection<Book>();
             AppCurrentResources.LoadSettings();
             GetAuthenticationState();
+            
+            currentGPSMessageText = _translationsManager.Get(AppCurrentResources.Language, "LoadingGPSData");
+
+            StartGpsService();
         }
 
         public async Task GetBooks()
@@ -72,9 +86,16 @@ namespace P12MAUI.Client.ViewModels
             GetBooks(searchText, currentPage);
         }
 
+        [Obsolete]
         public async Task GetBooks(string searchText, int page)
         {
             Debug.WriteLine(">>> GetBooks...");
+
+            currentIsLoadingBooks = true;
+            OnPropertyChanged(nameof(IsLoadingBooks));
+
+            Books.Clear();
+            OnPropertyChanged(nameof(Books));
 
             this.searchText = searchText;
             var maxElementsResponse = await _libraryService.GetBooksCountAsync(searchText);
@@ -89,7 +110,7 @@ namespace P12MAUI.Client.ViewModels
             }
 
             var booksResult = await _libraryService.SearchBooksAsync(searchText, currentPage, PageSize);
-            Books.Clear();
+
             if (booksResult != null && booksResult.Success)
             {
                 foreach (var p in booksResult.Data)
@@ -103,6 +124,9 @@ namespace P12MAUI.Client.ViewModels
                 Debug.WriteLine(">>> GetBooks FAILED");
             }
 
+            currentIsLoadingBooks = false;
+            OnPropertyChanged(nameof(IsLoadingBooks));
+
             RefreshAllProperties();
             OnPropertyChanged(nameof(Books));
             OnPropertyChanged(nameof(IsBookListVisible));
@@ -110,6 +134,13 @@ namespace P12MAUI.Client.ViewModels
             OnPropertyChanged(nameof(CurrentPageText));
             OnPropertyChanged(nameof(IsNextButtonEnabled));
             OnPropertyChanged(nameof(IsPreviousButtonEnabled));
+
+            temporarilyAllowNextPreviousButton = true;
+            OnPropertyChanged(nameof(IsPreviousButtonEnabled));
+            OnPropertyChanged(nameof(IsNextButtonEnabled));
+            temporarilyAllowNextPreviousButton = false;
+            OnPropertyChanged(nameof(IsPreviousButtonEnabled));
+            OnPropertyChanged(nameof(IsNextButtonEnabled));
         }
 
         
@@ -188,6 +219,8 @@ namespace P12MAUI.Client.ViewModels
         {
             AppCurrentResources.ToggleLanguage();
             RefreshAllProperties();
+
+            CheckGpsLocation();
         }
 
         public void RefreshAllProperties()
@@ -210,7 +243,7 @@ namespace P12MAUI.Client.ViewModels
         [RelayCommand]
         public void PreviousPage()
         {
-            if (currentPage <= 1)
+            if (currentIsLoadingBooks || currentPage <= 1)
             {
                 return;
             }
@@ -224,6 +257,10 @@ namespace P12MAUI.Client.ViewModels
         [RelayCommand]
         public void NextPage()
         {
+            if (currentIsLoadingBooks)
+            {
+                return;
+            }
             currentPage++;
             GetBooks(searchText, currentPage);
             OnPropertyChanged(nameof(CurrentPageText));
@@ -263,7 +300,57 @@ namespace P12MAUI.Client.ViewModels
             //bookFormViewModel.SetEditingBook(int.Parse(id));
             //bookFormView.Show();
         }
-        
+
+        private Location currentLocation;
+        private Location targetLocation;
+
+        [Obsolete]
+        private void StartGpsService()
+        {
+            Device.StartTimer(TimeSpan.FromSeconds(3), () =>
+            {
+                CheckGpsLocation();
+                return true;
+            });
+        }
+
+        private async void CheckGpsLocation()
+        {
+            string _currentGPSMessageText = currentGPSMessageText;
+
+            try
+            {
+                var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                if (status != PermissionStatus.Granted)
+                {
+                    currentGPSMessageText = _translationsManager.Get(AppCurrentResources.Language, "NoGPSPermission");
+                    return;
+                }
+
+                //targetLocation = new Location(37.7749, -122.4194 + new Random().Next(1, 101)); // San Francisco
+
+                targetLocation = new Location(52.22074189866894, 21.009735798216674); // Biblioteka Główna PW
+
+                currentLocation = await _geolocation.GetLastKnownLocationAsync();
+
+                double distanceInKilometers = Location.CalculateDistance(currentLocation, targetLocation, DistanceUnits.Kilometers);
+                distanceInKilometers = Math.Round(distanceInKilometers, 3);
+
+                currentGPSMessageText = _translationsManager.Get(AppCurrentResources.Language, "CurrentGPSDistance") + distanceInKilometers + " km";
+            }
+            catch (Exception ex)
+            {
+                currentGPSMessageText = _translationsManager.Get(AppCurrentResources.Language, "GPSServiceError") + ex.Message;
+            }
+
+            if (!string.Equals(currentGPSMessageText, _currentGPSMessageText))
+            {
+                OnPropertyChanged(nameof(GPSMessageText));
+            }
+
+            //Console.WriteLine("> " + currentGPSMessageText);
+        }
+
 
         public string LibraryText
         {
@@ -274,10 +361,19 @@ namespace P12MAUI.Client.ViewModels
         {
             get
             {
-                return (AuthenticationState == null ? "" :
-                    AuthenticationState?.User?.Identity?.Name + " | " +
-                    _translationsManager.Get(AppCurrentResources.Language, AuthenticationState?.User?.Claims?.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value) +
-                    " " + AuthenticationState?.User?.Claims?.Where(c => c.Type == "DateCreated")?.FirstOrDefault()?.Value);
+                string msg = AuthenticationState?.User?.Identity?.Name + " | " +
+                       _translationsManager.Get(AppCurrentResources.Language, AuthenticationState?.User?.Claims?
+                       .Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value) + " ";
+
+                string dateCreated = AuthenticationState?.User?.Claims?.Where(c => c.Type == "DateCreated")?.FirstOrDefault()?.Value;
+
+                if (DateTime.TryParse(dateCreated, out DateTime parsedDate))
+                {
+                    string formattedDate = parsedDate.ToString("yyyy-MM-dd HH:mm:ss");
+                    return (AuthenticationState == null ? "" : msg + formattedDate);
+                }
+
+                return (AuthenticationState == null ? "" : msg + AuthenticationState?.User?.Claims?.Where(c => c.Type == "DateCreated")?.FirstOrDefault()?.Value);
             }
         }
 
@@ -353,12 +449,12 @@ namespace P12MAUI.Client.ViewModels
 
         public bool IsNextButtonEnabled
         {
-            get { return currentPage < maxPage; }
+            get { return currentPage < maxPage || temporarilyAllowNextPreviousButton; }
         }
 
         public bool IsPreviousButtonEnabled
         {
-            get { return currentPage > 1; }
+            get { return currentPage > 1 || temporarilyAllowNextPreviousButton; }
         }
 
         public bool IsPaginationVisible
@@ -374,6 +470,16 @@ namespace P12MAUI.Client.ViewModels
         public bool IsLoadingSpinnerVisible
         {
             get { return Books?.Count == 0 && searchText == ""; }
+        }
+
+        public bool IsLoadingBooks
+        {
+            get { return currentIsLoadingBooks && !IsLoadingSpinnerVisible; }
+        }
+
+        public string GPSMessageText
+        {
+            get { return currentGPSMessageText; }
         }
 
     }

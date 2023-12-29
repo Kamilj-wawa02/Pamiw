@@ -19,7 +19,9 @@
                 Padding="30,0"
                 VerticalOptions="Start">
 
-                <Label Text="{Binding LoggedUserText}" Margin="5" VerticalTextAlignment="Start" HorizontalTextAlignment="End"
+                <Label Text="{Binding GPSMessageText}" Margin="5,0,5,-5"  TextColor="{DynamicResource Gray500}" VerticalTextAlignment="Start" HorizontalTextAlignment="End" />
+                
+                <Label Text="{Binding LoggedUserText}" Margin="5,0,5,0" VerticalTextAlignment="Start" HorizontalTextAlignment="End"
                        IsVisible="{Binding IsLoggedUserInvisible, Converter={StaticResource boolToVisibilityConv}}"/>
 
 
@@ -32,9 +34,9 @@
                                 <Label IsVisible="{Binding IsEnglishLanguageInvinible, Converter={StaticResource boolToVisibilityConv}}" VerticalTextAlignment="Center" HeightRequest="30" Margin="5">
                                     <Label.FormattedText>
                                         <FormattedString>
-                                            <Span Text="PL" />
-                                            <Span Text=" | " />
-                                            <Span Text="EN" TextDecorations="Underline"  />
+                                            <Span Text="PL" TextColor="{AppThemeBinding Light={StaticResource LightTextColor}, Dark={StaticResource DarkTextColor}}" />
+                                            <Span Text=" | " TextColor="{AppThemeBinding Light={StaticResource LightTextColor}, Dark={StaticResource DarkTextColor}}" />
+                                            <Span Text="EN" TextDecorations="Underline" TextColor="{AppThemeBinding Light={StaticResource LightTextColor}, Dark={StaticResource DarkTextColor}}"  />
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
@@ -42,9 +44,9 @@
                                 <Label IsVisible="{Binding IsPolishLanguageInvinible, Converter={StaticResource boolToVisibilityConv}}" VerticalTextAlignment="Center" HeightRequest="30" Margin="5">
                                     <Label.FormattedText>
                                         <FormattedString>
-                                            <Span Text="PL" TextDecorations="Underline"  />
-                                            <Span Text=" | " />
-                                            <Span Text="EN" />
+                                            <Span Text="PL" TextDecorations="Underline" TextColor="{AppThemeBinding Light={StaticResource LightTextColor}, Dark={StaticResource DarkTextColor}}"  />
+                                            <Span Text=" | " TextColor="{AppThemeBinding Light={StaticResource LightTextColor}, Dark={StaticResource DarkTextColor}}" />
+                                            <Span Text="EN" TextColor="{AppThemeBinding Light={StaticResource LightTextColor}, Dark={StaticResource DarkTextColor}}" />
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
@@ -94,8 +96,8 @@
 
                     <VerticalStackLayout HorizontalOptions="Start">
                         <HorizontalStackLayout HorizontalOptions="Start">
-                            <Entry x:Name="SearchTextBox" Margin="0,0,0,10" Text="{Binding CurrentSearchText}" WidthRequest="200" />
-                            <Button Text="{Binding SearchText}" Margin="10,0,0,0" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchTextBox.Text}" WidthRequest="110" />
+                            <Entry x:Name="SearchTextBox" Margin="0,0,0,10" Text="{Binding CurrentSearchText}" WidthRequest="222" HeightRequest="55" />
+                            <Button Text="{Binding SearchText}" Margin="10,0,0,0" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchTextBox.Text}" WidthRequest="100" HeightRequest="50" />
                         </HorizontalStackLayout>
 
                         <Button Command="{Binding CreateBookCommand}" Text="{Binding CreateBookText}" WidthRequest="164" HorizontalOptions="Start" />
@@ -123,74 +125,82 @@
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="CenterAndExpand" />
 
-                <CollectionView ItemsSource="{Binding Books}" IsVisible="{Binding IsBookListVisible}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                <VerticalStackLayout>
+                    <ActivityIndicator
+                        IsRunning="{Binding IsLoadingBooks}"
+                        IsVisible="{Binding IsLoadingBooks}"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand" />
 
-                            <Border Margin="5" Padding="10" StrokeShape="RoundRectangle 10" Stroke="Transparent">
+                    <CollectionView ItemsSource="{Binding Books}" IsVisible="{Binding IsBookListVisible}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
 
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroupList>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightItemsBackColor}, Dark={StaticResource DarkItemsBackColor}}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Disabled" />
-                                            <VisualState x:Name="PointerOver">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightItemsBackColorOnMouseHover}, Dark={StaticResource DarkItemsBackColorOnMouseHover}}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateGroupList>
-                                </VisualStateManager.VisualStateGroups>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ShowDetailsCommand }"
-                                         CommandParameter="{Binding .}">
-                                    </TapGestureRecognizer>
-                                </Border.GestureRecognizers>
+                                <Border Margin="5" Padding="10" StrokeShape="RoundRectangle 10" Stroke="Transparent">
 
-                                <VerticalStackLayout>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                        </Grid.RowDefinitions>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroupList>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightItemsBackColor}, Dark={StaticResource DarkItemsBackColor}}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Disabled" />
+                                                <VisualState x:Name="PointerOver">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightItemsBackColorOnMouseHover}, Dark={StaticResource DarkItemsBackColorOnMouseHover}}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateGroupList>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ShowDetailsCommand }"
+                                             CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </Border.GestureRecognizers>
 
-                                        <HorizontalStackLayout Grid.Row="0">
-                                            <Label Text="{Binding Id}" Margin="0,0,10,0" FontAttributes="Bold" />
-                                            <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" />
-                                            <Label Text="  –  " FontSize="16" FontAttributes="Bold" />
-                                            <Label Text="{Binding Author}" FontSize="16" FontAttributes="Bold" />
-                                        </HorizontalStackLayout>
+                                    <VerticalStackLayout>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
 
-                                        <Label Grid.Row="1" Text="{Binding Description}" ></Label>
+                                            <HorizontalStackLayout Grid.Row="0">
+                                                <Label Text="{Binding Id}" Margin="0,0,10,0" FontAttributes="Bold" />
+                                                <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" />
+                                                <Label Text="  –  " FontSize="16" FontAttributes="Bold" />
+                                                <Label Text="{Binding Author}" FontSize="16" FontAttributes="Bold" />
+                                            </HorizontalStackLayout>
 
-                                        <HorizontalStackLayout Grid.Row="2">
-                                            <Label Text="Barcode: "></Label>
-                                            <Label Text="{Binding Barcode}"></Label>
+                                            <Label Grid.Row="1" Text="{Binding Description}" ></Label>
 
-                                            <Label Text="Price: " />
-                                            <Label Text="{Binding Price, StringFormat='C'}" />
-                                            <Label Text="Release Date: " />
-                                            <Label Text="{Binding ReleaseDate, StringFormat='{0: dd MM yyyy}'}"/>
+                                            <HorizontalStackLayout Grid.Row="2">
+                                                <Label Text="Barcode: "></Label>
+                                                <Label Text="{Binding Barcode}"></Label>
+
+                                                <Label Text="Price: " />
+                                                <Label Text="{Binding Price, StringFormat='C'}" />
+                                                <Label Text="Release Date: " />
+                                                <Label Text="{Binding ReleaseDate, StringFormat='{0: dd MM yyyy}'}"/>
 
 
-                                        </HorizontalStackLayout>
-                                    </Grid>
+                                            </HorizontalStackLayout>
+                                        </Grid>
 
-                                </VerticalStackLayout>
+                                    </VerticalStackLayout>
                              
-                            </Border>
+                                </Border>
 
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
 
 
             </VerticalStackLayout>
