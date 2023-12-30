@@ -104,6 +104,7 @@ namespace P06Library.Shared.Languages
                         { "GPSServiceError", "Error while turning on GPS service! Message: " },
                         { "LoadingGPSData", "Loading GPS data..." },
                         { "CurrentGPSDistance", "Current distance to the library: " },
+                        { "YouMustBeLoggedInToSeeBooks", "You must be logged in to see the list of books!" },
                     }
                 },
                 { "polish", new Dictionary<string, string>
@@ -151,11 +152,11 @@ namespace P06Library.Shared.Languages
                         { "LoginFailed", "Nie udało się zalogować! Treść komunikatu: " },
                         { "RegistrationFailed", "Nie udało się zarejestrować! Treść komunikatu: " },
                         { "RegisteredSuccessfully", "Zarejestrowano pomyślnie! Teraz zaloguj się na swoje konto." },
-                        
                         { "NoGPSPermission", "Brak uprawnień do używania danych GPS!" },
                         { "GPSServiceError", "Wystąpił błąd przy uruchamianiu serwisu GPS! Komunikat: " },
                         { "LoadingGPSData", "Ładuję dane GPS..." },
                         { "CurrentGPSDistance", "Aktualny dystans do biblioteki: " },
+                        { "YouMustBeLoggedInToSeeBooks", "Musisz być zalogowany, aby móc wyświetlić listę książek!" },
                     }
                 }
             };

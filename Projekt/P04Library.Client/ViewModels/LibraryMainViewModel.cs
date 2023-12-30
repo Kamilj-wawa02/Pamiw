@@ -44,6 +44,8 @@ namespace P04Library.Client.ViewModels
         private int currentPage = 1;
         private int maxPage = 1;
 
+        private bool currentIsLoadingBooks = false;
+
         [ObservableProperty]
         private Book selectedBook;
         public ObservableCollection<Book> Books { get; set; }
@@ -60,9 +62,9 @@ namespace P04Library.Client.ViewModels
             _authenticationStateProvider = authenticationStateProvider;
 
             Debug.WriteLine("============== Getting AuthState");
-            GetAuthenticationState();
+            
             Books = new ObservableCollection<Book>();
-            GetBooks("", 1);
+            GetAuthenticationState();
         }
 
         public async Task GetBooks()
@@ -70,14 +72,21 @@ namespace P04Library.Client.ViewModels
             GetBooks(this.searchText, this.currentPage);
         }
 
-            public async Task GetBooks(string searchText, int page)
+        public async Task GetBooks(string searchText, int page)
         {
             Debug.WriteLine(">>>>>>>>>>>>>>>> GetBooks");
+
+            currentIsLoadingBooks = true;
+            OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
+
+            Books.Clear();
+            OnPropertyChanged(nameof(Books));
+
             this.searchText = searchText;
             int maxElements = (await _libraryService.GetBooksCountAsync(searchText)).Data;
             currentPage = page;
             maxPage = _libraryService.GetMaxPage(PageSize, maxElements);
-            Books.Clear();
+            
             if (currentPage > maxPage)
             {
                 currentPage = maxPage;
@@ -95,6 +104,10 @@ namespace P04Library.Client.ViewModels
             {
                 Debug.WriteLine(">>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!! GetBooks FAILED");
             }
+
+            currentIsLoadingBooks = false;
+            OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
+
             OnPropertyChanged(nameof(Books));
             OnPropertyChanged(nameof(IsBookListVisible));
             OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
@@ -173,7 +186,7 @@ namespace P04Library.Client.ViewModels
         [RelayCommand]
         public void PreviousPage()
         {
-            if (currentPage <= 1)
+            if (currentIsLoadingBooks || currentPage <= 1)
             {
                 return;
             }
@@ -188,6 +201,10 @@ namespace P04Library.Client.ViewModels
         [RelayCommand]
         public void NextPage()
         {
+            if (currentIsLoadingBooks)
+            {
+                return;
+            }
             currentPage++;
             GetBooks(searchText, currentPage);
             OnPropertyChanged(nameof(CurrentPageText));
@@ -314,12 +331,12 @@ namespace P04Library.Client.ViewModels
 
         public bool IsNextButtonEnabled
         {
-            get { return currentPage < maxPage; }
+            get { return currentPage < maxPage && IsLoggedUserVisible; }
         }
 
         public bool IsPreviousButtonEnabled
         {
-            get { return currentPage > 1; }
+            get { return currentPage > 1 && IsLoggedUserVisible; }
         }
 
         public bool IsBookListVisible
@@ -329,7 +346,12 @@ namespace P04Library.Client.ViewModels
         
         public bool IsLoadingSpinnerVisible
         {
-            get { return Books.Count == 0 && searchText == ""; }
+            get { return currentIsLoadingBooks && IsLoggedUserVisible; }
+        }
+
+        public string YouMustBeLoggedInToSeeBooksMessageText
+        {
+            get { return _translationsManager.Get(AppCurrentResources.Language, "YouMustBeLoggedInToSeeBooks"); }
         }
 
     }

@@ -112,8 +112,13 @@
                 <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch">
                     <local:CircularSpinner Visibility="{Binding IsLoadingSpinnerVisible, Converter={StaticResource boolToVisibilityConv}}" Width="70" Margin="0,0,0,80" VerticalAlignment="Center" HorizontalAlignment="Center"></local:CircularSpinner>
 
+                    <Label Margin="0,-30,0,0" Content="{Binding YouMustBeLoggedInToSeeBooksMessageText}" Style="{DynamicResource mainLabelStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Visibility="{Binding IsLoginButtonVisible, Converter={StaticResource boolToVisibilityConv}}" />
+                    
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,0,10" Visibility="{Binding IsBookListVisible, Converter={StaticResource boolToVisibilityConv}}" >
                         <StackPanel>
+
+
                             <Button Margin="24,3,24,15" HorizontalAlignment="Left" Width="144" Content="{Binding CreateBookText}" Command="{Binding CreateBookCommand}" Style="{DynamicResource mainButtonStyle}" ></Button>
 
                             <ItemsControl ItemsSource="{Binding Books}" >

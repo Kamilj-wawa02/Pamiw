@@ -92,7 +92,7 @@ namespace P12MAUI.Client.ViewModels
             Debug.WriteLine(">>> GetBooks...");
 
             currentIsLoadingBooks = true;
-            OnPropertyChanged(nameof(IsLoadingBooks));
+            OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
 
             Books.Clear();
             OnPropertyChanged(nameof(Books));
@@ -125,7 +125,7 @@ namespace P12MAUI.Client.ViewModels
             }
 
             currentIsLoadingBooks = false;
-            OnPropertyChanged(nameof(IsLoadingBooks));
+            OnPropertyChanged(nameof(IsLoadingSpinnerVisible));
 
             RefreshAllProperties();
             OnPropertyChanged(nameof(Books));
@@ -454,12 +454,12 @@ namespace P12MAUI.Client.ViewModels
 
         public bool IsNextButtonEnabled
         {
-            get { return currentPage < maxPage || temporarilyAllowNextPreviousButton; }
+            get { return currentPage < maxPage && !IsLoggedUserInvisible || temporarilyAllowNextPreviousButton; }
         }
 
         public bool IsPreviousButtonEnabled
         {
-            get { return currentPage > 1 || temporarilyAllowNextPreviousButton; }
+            get { return currentPage > 1 && !IsLoggedUserInvisible || temporarilyAllowNextPreviousButton; }
         }
 
         public bool IsPaginationVisible
@@ -474,12 +474,12 @@ namespace P12MAUI.Client.ViewModels
 
         public bool IsLoadingSpinnerVisible
         {
-            get { return Books?.Count == 0 && searchText == ""; }
+            get { return currentIsLoadingBooks && !IsLoggedUserInvisible; }
         }
 
-        public bool IsLoadingBooks
+        public string YouMustBeLoggedInToSeeBooksMessageText
         {
-            get { return currentIsLoadingBooks && !IsLoadingSpinnerVisible; }
+            get { return _translationsManager.Get(AppCurrentResources.Language, "YouMustBeLoggedInToSeeBooks"); }
         }
 
         public string GPSMessageText

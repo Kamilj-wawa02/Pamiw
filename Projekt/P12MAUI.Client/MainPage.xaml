@@ -125,13 +125,9 @@
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="CenterAndExpand" />
 
-                <VerticalStackLayout>
-                    <ActivityIndicator
-                        IsRunning="{Binding IsLoadingBooks}"
-                        IsVisible="{Binding IsLoadingBooks}"
-                        VerticalOptions="CenterAndExpand"
-                        HorizontalOptions="CenterAndExpand" />
+                <Label Text="{Binding YouMustBeLoggedInToSeeBooksMessageText}" IsVisible="{Binding IsLoggedUserInvisible}" Margin="10" VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
 
+                <VerticalStackLayout>
                     <CollectionView ItemsSource="{Binding Books}" IsVisible="{Binding IsBookListVisible}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>

@@ -22,9 +22,9 @@
     <button class="btn button-primary" disabled="@(currentPage>=maxPage)" @onclick="NextPage">@TranslationsManager.Get(MainLayout.Language, "Next")</button>
 </div>
 
-@if (books == null)
+@if (books == null || isLoading)
 {
-    @if (message == GetLoadingMessage())
+    @if (isLoading)
     {
         <div class="loader-container">
             <div class="loader"></div>
@@ -70,8 +70,10 @@ else
 
 
 @code {
-    private List<Book> books;
-    private string message = GetLoadingMessage();
+    private List<Book> books = new List<Book>();
+    private string message = "Loading books...";
+
+    private bool isLoading = true;
 
     private int currentPage = 1;
     private int maxPage = 1;
@@ -88,6 +90,9 @@ else
 
     private async Task LoadBooks()
     {
+        books.Clear();
+        isLoading = true;
+
         var response = await LibraryService.SearchBooksAsync(searchTerm, currentPage, pageSize);
         if (response.Success)
         {
@@ -97,12 +102,8 @@ else
         {
             message = response.Message;
         }
+        isLoading = false;
         maxPage = await GetMaxPage();
-    }
-
-    private static string GetLoadingMessage()
-    {
-        return "Loading books...";
     }
 
 
@@ -113,6 +114,11 @@ else
 
     private async Task PreviousPage()
     {
+        if (isLoading)
+        {
+            return;
+        }
+
         if (currentPage > 1)
         {
             currentPage--;
@@ -121,6 +127,10 @@ else
     }
     private async Task NextPage()
     {
+        if (isLoading)
+        {
+            return;
+        }
         currentPage++;
         await LoadBooks();
     }
