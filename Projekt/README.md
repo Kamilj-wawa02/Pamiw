@@ -115,7 +115,9 @@ We wszystkich aplikacjach został zaimplementowany własny schemat logowania z w
 
 ## Kompatybilność aplikacji mobilnej
 
-Aplikacja mobilna korzysta z wdrożonego w Google Cloud Platform serwisu API. Program można uruchomić na wielu platformach, które są wspierane przez MAUI. Aplikacja została przeznaczona do pracy na systemach: Windows i Android. W celu sprawdzania poprawności działania na systemie Android podłączyłem telefon do komputera z włączoną opcją debugowania poprzez USB (opcję należy wcześniej włączyć w ukrytych opcjach programistycznych w systemie), co pozwoliło na instalację wszystkich niezbędnych składników w oprogramowaniu telefonu.
+Aplikacja mobilna korzysta z wdrożonego w Google Cloud Platform serwisu API. Program można uruchomić na wielu platformach – wszystkich, które są wspierane przez MAUI. Aplikacja została wytestowana w pracy na systemach: Windows i Android.
+
+W celu sprawdzania poprawności działania na systemie Android podłączyłem telefon do komputera z włączoną opcją debugowania poprzez USB (opcję należy wcześniej włączyć w ukrytych opcjach programistycznych w systemie), co pozwoliło na instalację wszystkich niezbędnych składników w oprogramowaniu telefonu oraz uruchomienie aplikacji.
 
 <img src="./Images/AppOnAndroidPhysicalDevice.jpg" width="20%" height="20%" alt="AppOnAndroidPhysicalDevice">
 
