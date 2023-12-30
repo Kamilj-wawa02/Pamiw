@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "P04Library.Client": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    }
+  }
+}

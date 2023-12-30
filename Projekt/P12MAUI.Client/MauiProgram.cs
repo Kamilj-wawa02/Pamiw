@@ -76,16 +76,20 @@ namespace P12MAUI.Client
             services.AddSingleton(appSettingsSection);
             */
 
-            string baseUrl;
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "production")
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            string baseUrl = "https://handy-freedom-408622.nw.r.appspot.com";
+            if (env == "Development" && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
                 baseUrl = "https://localhost:7230";
             }
 
+            Debug.WriteLine(">>> Current configuration: '" + env + "'");
+            Debug.WriteLine($">>>>>> API BaseURL: {baseUrl}");
+
             var appSettingsSection = new AppSettings()
             {
-                BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com", //"https://localhost:7230",
-                FacebookLoginEndpoint= "api/Auth/login-by-facebook",
+                BaseAPIUrl = baseUrl,
+                FacebookLoginEndpoint = "api/Auth/login-by-facebook",
                 LibraryEndpoints = new LibraryEndpoints()
                 {
                     Base_url = "api/Book/",
@@ -98,11 +102,6 @@ namespace P12MAUI.Client
                     GetBooksCountEndpoint= "api/Book/count",
                     GetAllBooksCountEndpoint = "api/Book/count-all"
                 },
-                //BaseBookEndpoint = new BaseBookEndpoint()
-                //{
-                //   Base_url = "api/Book/",
-                //    GetAllBooksEndpoint = "",
-                //},
             };
             services.AddSingleton(appSettingsSection);
             Debug.WriteLine("> Added App Settings");

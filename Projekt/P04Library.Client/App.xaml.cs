@@ -35,7 +35,7 @@ namespace P04Library.Client
         public App()
         {
             string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? "Production" : "Development";
-            env = "Development";//"Production";
+            //env = "Development";//"Production";
             Debug.WriteLine(">>> Current configuration: '" + env + "'");
             //wczytanie appsettings.json do konfiguracji 
             var builder = new ConfigurationBuilder()
