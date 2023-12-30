@@ -131,9 +131,16 @@ Co 3 sekundy zostaje ponownie wczytana aktualna lokalizacja, po czym aplikacja d
 
 ## Napotkane problemy
 
-W aplikacji mobilnej uruchomionej na systemie Android, chcąc dokonać autentykacji poprzez Facebooka, dostaniemy komunikat o błędzie – logowanie w Androidzie do Facebooka we wbudowanej przeglądarce zostało wyłączone i nie można tego obejść. Oznacza to, że nie możemy w na tej platformie wykorzystać serwera API do przeprowadzenia logowania poprzez Facebooka.
+W aplikacji mobilnej uruchomionej na systemie Android, chcąc dokonać autentykacji poprzez Facebooka, możemy dostać komunikat o błędzie od samego serwisu Facebook – logowanie na Androidzie do Facebooka we wbudowanej przeglądarce zostało wyłączone przez ten serwis.
 
-**Problem nie występuje w przypadku uruchomienia projektu MAUI na platformie Windows, jak i wszystkie pozostałe aplikacje w pełni obsługują logowanie i rejestrację poprzez Facebooka.**
+Zgodnie z dostępnymi rozwiązaniami, na systemie Android możemy to obejść poprzez przejście do ustawień aplikacji Facebook, następnie po wejściu w kategorię *Multimedia* i po zaznaczeniu opcji *Otwórz linki w zewnętrznej przeglądarce* problem powinien zostać rozwiązany. Robiąc parę testów niestety nie zawsze to działa i serwis potrwafi się zbugować.
+
+Warto zaznaczyć, że problem nie będzie nigdy występował w przypadku uruchomienia projektu MAUI na platformie Windows, gdzie serwis toleruje używaną przeglądarkę, co oznacza, że logowanie poprzez Facebooka w projekcie MAUI działa.
+
+## Zadania niewykonane
+
+**Wszystkie postawione zadania zostały zrealizowane.**
+
 
 
 
