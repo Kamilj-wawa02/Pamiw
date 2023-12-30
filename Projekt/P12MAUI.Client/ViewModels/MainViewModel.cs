@@ -122,6 +122,10 @@ namespace P12MAUI.Client.ViewModels
             else
             {
                 Debug.WriteLine(">>> GetBooks FAILED");
+                if (!IsLoggedUserInvisible)
+                {
+                    _messageDialogService.ShowMessage(_translationsManager.Get(AppCurrentResources.Language, "RequestFailed") + booksResult.Message);
+                }
             }
 
             currentIsLoadingBooks = false;

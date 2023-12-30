@@ -44,6 +44,7 @@ namespace P12MAUI.Client.ViewModels
             set
             {
                 _mainViewModel = value;
+                OnPropertyChanged(nameof(DeleteButtonInvisible));
             }
         }
 
@@ -53,7 +54,11 @@ namespace P12MAUI.Client.ViewModels
 
         public async Task DeleteBook()
         {
-            await _libraryService.DeleteBookAsync(book.Id);
+            var result = await _libraryService.DeleteBookAsync(book.Id);
+            if (!result.Success)
+            {
+                _messageDialogService.ShowMessage(_translationsManager.Get(AppCurrentResources.Language, "RequestFailed") + result.Message);
+            }
             //await _mainViewModel.GetBooks();
         }
 
@@ -70,10 +75,12 @@ namespace P12MAUI.Client.ViewModels
             };
 
             var result = await _libraryService.CreateBookAsync(newBook);
-            if (result.Success)
-                await _mainViewModel.GetBooks();
-            else
-                _messageDialogService.ShowMessage(result.Message);
+            if (!result.Success)
+            {
+                //_messageDialogService.ShowMessage(result.Message);
+                _messageDialogService.ShowMessage(_translationsManager.Get(AppCurrentResources.Language, "RequestFailed") + result.Message);
+            }
+                
         }
 
         public async Task UpdateBook()
@@ -89,7 +96,11 @@ namespace P12MAUI.Client.ViewModels
                 ReleaseDate = book.ReleaseDate,
             };
 
-            await _libraryService.UpdateBookAsync(bookToUpdate);
+            var result =  await _libraryService.UpdateBookAsync(bookToUpdate);
+            if (!result.Success)
+            {
+                _messageDialogService.ShowMessage(_translationsManager.Get(AppCurrentResources.Language, "RequestFailed") + result.Message);
+            }
             //await _mainViewModel.GetBooks();
         }
 
@@ -99,11 +110,11 @@ namespace P12MAUI.Client.ViewModels
         {
             if (book.Id == 0)
             {
-                CreateBook();
+                await CreateBook();
             }
             else
             {
-                UpdateBook();
+                await UpdateBook();
             }
 
             CloseDetails();
@@ -112,7 +123,7 @@ namespace P12MAUI.Client.ViewModels
         [RelayCommand]
         public async Task Delete()
         {
-            DeleteBook();
+            await DeleteBook();
             CloseDetails();
         }
 
@@ -120,6 +131,11 @@ namespace P12MAUI.Client.ViewModels
         {
             await Shell.Current.GoToAsync("../", true);
             _mainViewModel.GetBooks();
+        }
+
+        public bool DeleteButtonInvisible
+        {
+            get { return Book == null ? false : (Book.Id != 0); }
         }
 
         public string TitleText

@@ -29,11 +29,14 @@ var uriBuilder = new UriBuilder(appSettingsSection.BaseAPIUrl)
 };
 //Microsoft.Extensions.Http
 
+
+//appSettingsSection.BaseAPIUrl = "https://localhost:7230";
+//appSettingsSection.BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com";
+
+
 string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 Console.WriteLine(">>> Current configuration: '" + env + "'");
 Console.WriteLine($">>>>>> API BaseURL: {appSettingsSection.BaseAPIUrl}");
-
-//appSettingsSection.BaseAPIUrl = "https://handy-freedom-408622.nw.r.appspot.com";
 
 
 //builder.Services.Configure<AppSettings>(appSettings);

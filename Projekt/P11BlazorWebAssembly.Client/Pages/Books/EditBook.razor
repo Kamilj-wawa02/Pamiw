@@ -2,6 +2,7 @@
 
 @attribute [Authorize]
 
+@inject IJSRuntime JSRuntime
 @inject ITranslationsManager TranslationsManager
 @inject ILibraryService LibraryService
 @inject IAuthService AuthService
@@ -11,23 +12,27 @@
 
 <h3>Edit Book</h3>
 
-@if (book == null)
-{
-    <p><em>@message</em></p>
-}
-else
-{
-    <BookForm book="book" OnValidSubmit="HandleValidSubmit"></BookForm>
-    <button class="btn btn-danger bottom-button" style="margin-top: 1rem" @onclick=HandleDelete>@TranslationsManager.Get(MainLayout.Language, "Delete")</button>
-}
+
+<BookForm book="book" OnValidSubmit="HandleValidSubmit"></BookForm>
+<button class="btn btn-danger bottom-button" style="margin-top: 1rem" @onclick=HandleDelete>@TranslationsManager.Get(MainLayout.Language, "Delete")</button>
 
 
 
 @code {
+
+    /* Wyciete z wyzej
+    if (book == null)
+    {
+    <p><em>@message</em></p>
+    }
+    else
+    {
+     */
+
     [Parameter]
     public int Id { get; set; }
 
-    private Book book;
+    private Book book = new Book();
     private string message = "Loading books...";
 
     protected override async Task OnInitializedAsync()
@@ -36,7 +41,10 @@ else
         if (response.Success)
             book = response.Data;
         else
+        {
             message = response.Message;
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "RequestFailed") + response.Message);
+        }
     }
 
     async Task HandleValidSubmit()
@@ -45,7 +53,11 @@ else
         if (response.Success)
             NavigationManager.NavigateTo("/books/booksList");
         else
+        {
             message = response.Message;
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "RequestFailed") + response.Message);
+        }
+        
     }
 
     async Task HandleDelete()
@@ -54,6 +66,9 @@ else
         if (response.Success)
             NavigationManager.NavigateTo("/books/booksList");
         else
+        {
             message = response.Message;
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "RequestFailed") + response.Message);
+        }
     }
 }

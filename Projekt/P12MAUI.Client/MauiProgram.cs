@@ -78,6 +78,9 @@ namespace P12MAUI.Client
 
             string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             string baseUrl = "https://handy-freedom-408622.nw.r.appspot.com";
+
+            //env = "Development";
+
             if (env == "Development" && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
                 baseUrl = "https://localhost:7230";

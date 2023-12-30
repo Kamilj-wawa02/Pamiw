@@ -19,6 +19,7 @@ namespace P05Library.API.Controllers
             _logger = logger;
         }
 
+        [Authorize] // +
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<Book>>>> GetBooks()
         {
@@ -53,8 +54,9 @@ namespace P05Library.API.Controllers
     }
 
 
-            // http:localhost/api/product/4 dla api REST
-            [HttpGet("{id}")]
+        // http:localhost/api/product/4 dla api REST
+        [Authorize] // +
+        [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<Book>>> GetBook(int id)
         {
           
@@ -66,7 +68,7 @@ namespace P05Library.API.Controllers
                 return StatusCode(500, $"Internal server error {result.Message}");
         }
 
-
+        [Authorize] // +
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<Book>>> UpdateBook([FromBody] Book product)
         {
@@ -79,6 +81,7 @@ namespace P05Library.API.Controllers
                 return StatusCode(500, $"Internal server error {result.Message}");
         }
 
+        [Authorize] // +
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<Book>>> CreateBook([FromBody] Book product)
         {
@@ -92,6 +95,7 @@ namespace P05Library.API.Controllers
 
         // http:localhost/api/product/delete?id=4
         // http:localhost/api/product/4 dla api REST
+        [Authorize] // +
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<bool>>> DeleteBook([FromRoute] int id)
         {

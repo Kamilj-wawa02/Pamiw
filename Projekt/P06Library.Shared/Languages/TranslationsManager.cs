@@ -105,6 +105,7 @@ namespace P06Library.Shared.Languages
                         { "LoadingGPSData", "Loading GPS data..." },
                         { "CurrentGPSDistance", "Current distance to the library: " },
                         { "YouMustBeLoggedInToSeeBooks", "You must be logged in to see the list of books!" },
+                        { "RequestFailed", "The request has failed! Try logging in again. Error details: " },
                     }
                 },
                 { "polish", new Dictionary<string, string>
@@ -157,6 +158,7 @@ namespace P06Library.Shared.Languages
                         { "LoadingGPSData", "Ładuję dane GPS..." },
                         { "CurrentGPSDistance", "Aktualny dystans do biblioteki: " },
                         { "YouMustBeLoggedInToSeeBooks", "Musisz być zalogowany, aby móc wyświetlić listę książek!" },
+                        { "RequestFailed", "Żądanie się nie powiodło! Spróbuj ponownie się zalogować. Komunikat błędu: " },
                     }
                 }
             };

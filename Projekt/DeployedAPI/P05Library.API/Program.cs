@@ -59,7 +59,7 @@ builder.Services.AddCors(options =>
 
 // Dodanie autentykacji za pomoc¹ JWT
 string token = builder.Configuration.GetSection("AppSettings:Token").Value;
-Debug.WriteLine("============================ SECRET TOKEN: '" + token + "' ============================");
+//Debug.WriteLine("============================ SECRET TOKEN: '" + token + "' ============================");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
@@ -71,8 +71,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token)),
             ValidateAudience = false,
             ValidateIssuer = false,
-            ValidateLifetime = false,
+            ValidateLifetime = true, //false,
             ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
         };
     });
 

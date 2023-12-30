@@ -2,6 +2,7 @@
 
 @attribute [Authorize]
 
+@inject IJSRuntime JSRuntime
 @inject ITranslationsManager TranslationsManager
 @inject ILibraryService LibraryService
 @inject IAuthService AuthService
@@ -11,16 +12,20 @@
 
 <h3>@TranslationsManager.Get(MainLayout.Language, "CreateBook")</h3>
 
-@if (message != null)
-{
-    <p><em>@message</em></p>
-}
-else
-{
-    <BookForm book="book" OnValidSubmit="HandleValidSubmit"></BookForm>
-}
+ <BookForm book="book" OnValidSubmit="HandleValidSubmit"></BookForm>
+
 
 @code {
+
+    /* Wyciete z wyzej
+    @if (message != null)
+    {
+        <p><em>@message</em></p>
+    }
+    else
+    {
+    */
+
     private Book book = new Book();
     private string? message = null;
 
@@ -30,7 +35,10 @@ else
         if (response.Success)
             NavigationManager.NavigateTo("/books/booksList");
         else
+        {
             message = response.Message;
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "RequestFailed") + response.Message);
+        }
     }
 
 

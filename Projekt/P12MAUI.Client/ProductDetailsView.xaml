@@ -25,7 +25,8 @@
         </VerticalStackLayout>
         
         <HorizontalStackLayout HorizontalOptions="Start" Spacing="5" Margin="5,0,0,0">
-            <Button Command="{Binding DeleteCommand}" Text="Delete" TextColor="White" BackgroundColor="Red" />
+            <Button Command="{Binding DeleteCommand}" Text="Delete" TextColor="White" BackgroundColor="Red"
+                    IsVisible="{Binding DeleteButtonInvisible}" />
             <Button Command="{Binding SaveCommand}" Text="Save" />
         </HorizontalStackLayout>
     </VerticalStackLayout>

@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using P04Library.Client.ViewModels;
 using Newtonsoft.Json.Linq;
 using P06Library.Shared.Services.AuthService;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace P04Library.Client.Services.CustomAuthStateProvider
 {
@@ -37,6 +38,26 @@ namespace P04Library.Client.Services.CustomAuthStateProvider
                 {
                     identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
                     Debug.WriteLine("Checking token: '" + authToken + "'");
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var jsonToken = handler.ReadToken(authToken) as JwtSecurityToken;
+
+                    if (jsonToken != null)
+                    {
+                        var expirationDate = jsonToken.ValidTo;
+                        Debug.WriteLine($">>> Token is valid until: {expirationDate}, current date: {DateTime.Now.ToUniversalTime()}");
+
+                        if (DateTime.Now.ToUniversalTime() > expirationDate)
+                        {
+                            Debug.WriteLine($">>> THE TOKEN HAS EXPIRED!!!");
+                            throw new Exception("Expired");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("IncorrectToken");
+                    }
+
                     //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
                     Debug.WriteLine("THIS TOKEN IS VALID --------------------------------------------");
                 }

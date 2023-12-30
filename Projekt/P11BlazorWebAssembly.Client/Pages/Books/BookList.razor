@@ -2,6 +2,7 @@
 
 @attribute [Authorize]
 
+@inject IJSRuntime JSRuntime
 @inject ITranslationsManager TranslationsManager
 @inject ILibraryService LibraryService
 @inject IAuthService AuthService
@@ -101,6 +102,7 @@ else
         else
         {
             message = response.Message;
+            JSRuntime.InvokeVoidAsync("alert", TranslationsManager.Get(MainLayout.Language, "RequestFailed") + response.Message);
         }
         isLoading = false;
         maxPage = await GetMaxPage();

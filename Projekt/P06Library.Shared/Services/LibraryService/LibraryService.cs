@@ -25,6 +25,7 @@ namespace P06Library.Shared.Services.LibraryService
         private readonly HttpClient _httpClient;
         private readonly AppSettings _appSettings;
         private int booksCount = -1;
+        private static string authToken = null;
         public LibraryService(HttpClient httpClient, AppSettings appSettings)
         {
             _httpClient = httpClient;
@@ -36,42 +37,88 @@ namespace P06Library.Shared.Services.LibraryService
             Debug.WriteLine("Setting auth token...");
             if (authToken == null || authToken == "")
             {
-                _httpClient.DefaultRequestHeaders.Authorization = null;
+                LibraryService.authToken = null;
+                //_httpClient.DefaultRequestHeaders.Authorization = null;
                 return;
             }
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            LibraryService.authToken = authToken;
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+            CheckAuthToken();
+        }
+
+        public void CheckAuthToken()
+        {
+            if (LibraryService.authToken != null)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            }
+            else
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = null;
+            }
         }
 
         public async Task<ServiceResponse<Book>> CreateBookAsync(Book book)
         {
             //var response = await _httpClient.PostAsJsonAsync(_appSettings.LibraryEndpoints.GetBooksEndpoint, book);
-            var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksEndpoint;
-            var response = await _httpClient.PostAsJsonAsync(url, book);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Book>>();
 
-            if (result.Success)
+            try
             {
-                booksCount++;
-            }
+                CheckAuthToken();
 
-            return result;
+                Debug.WriteLine(">>>> AUTH: " + _httpClient.DefaultRequestHeaders.Authorization?.Parameter);
+
+                var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksEndpoint;
+                var response = await _httpClient.PostAsJsonAsync(url, book);
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Book>>();
+
+                if (result.Success)
+                {
+                    booksCount++;
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<Book>
+                {
+                    Success = false,
+                    Message = "Request failure",
+                };
+            }
         }
 
         public async Task<ServiceResponse<bool>> DeleteBookAsync(int id)
         {
-            // jesli uzyjemy / na poczatku to wtedy sciezka trakktowana jest od root czyli pomija czesc środkową adresu 
-            // zazwyczaj unikamy stosowania / na poczatku 
-            //var response = await _httpClient.DeleteAsync($"{id}");
-            var url = _appSettings.BaseAPIUrl + "/" + String.Format(_appSettings.LibraryEndpoints.DeleteBookEndpoint, id);
-            var response = await _httpClient.DeleteAsync(url);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            try
+            { 
+                // jesli uzyjemy / na poczatku to wtedy sciezka trakktowana jest od root czyli pomija czesc środkową adresu 
+                // zazwyczaj unikamy stosowania / na poczatku 
+                //var response = await _httpClient.DeleteAsync($"{id}");
+                CheckAuthToken();
 
-            if (result.Success)
-            {
-                booksCount--;
+                var url = _appSettings.BaseAPIUrl + "/" + String.Format(_appSettings.LibraryEndpoints.DeleteBookEndpoint, id);
+                var response = await _httpClient.DeleteAsync(url);
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+
+                if (result.Success)
+                {
+                    booksCount--;
+                }
+
+                return result;
+
             }
-
-            return result;
+            catch (Exception e)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "Request failure",
+                };
+            }
         }
 
 
@@ -95,6 +142,8 @@ namespace P06Library.Shared.Services.LibraryService
         {
             // "https://localhost:7230/api/Book"
             Console.WriteLine("--> GetBooksAsync");
+
+            CheckAuthToken();
 
             if (_httpClient == null)
             {
@@ -152,28 +201,41 @@ namespace P06Library.Shared.Services.LibraryService
 
         public async Task<ServiceResponse<Book>> GetBookByIdAsync(int id)
         {
-            var url = _appSettings.BaseAPIUrl + "/" + String.Format(_appSettings.LibraryEndpoints.GetBookEndpoint, id);
-            var response = await _httpClient.GetAsync(url);
-            Debug.WriteLine("GetBooks: " + response.IsSuccessStatusCode);
+            try
+            {
+                CheckAuthToken();
+
+                var url = _appSettings.BaseAPIUrl + "/" + String.Format(_appSettings.LibraryEndpoints.GetBookEndpoint, id);
+                var response = await _httpClient.GetAsync(url);
+                Debug.WriteLine("GetBooks: " + response.IsSuccessStatusCode);
 
 
 
 
-            //var response = await _httpClient.GetAsync(id.ToString());
-            if (!response.IsSuccessStatusCode)
+                //var response = await _httpClient.GetAsync(id.ToString());
+                if (!response.IsSuccessStatusCode)
+                    return new ServiceResponse<Book>
+                    {
+                        Success = false,
+                        Message = "HTTP request failed"
+                    };
+
+                var json = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ServiceResponse<Book>>(json)
+                    ?? new ServiceResponse<Book> { Success = false, Message = "Deserialization failed" };
+
+                result.Success = result.Success && result.Data != null;
+
+                return result;
+            }
+            catch (Exception e)
+            {
                 return new ServiceResponse<Book>
                 {
                     Success = false,
-                    Message = "HTTP request failed"
+                    Message = "Request failure",
                 };
-
-            var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ServiceResponse<Book>>(json)
-                ?? new ServiceResponse<Book> { Success = false, Message = "Deserialization failed" };
-
-            result.Success = result.Success && result.Data != null;
-
-            return result;
+            }
         }
 
 
@@ -189,17 +251,44 @@ namespace P06Library.Shared.Services.LibraryService
         // wersja 2 
         public async Task<ServiceResponse<Book>> UpdateBookAsync(Book book)
         {
-            //var response = await _httpClient.PutAsJsonAsync(_appSettings.LibraryEndpoints.GetBooksEndpoint, book);
-            var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksEndpoint;
-            var content = new StringContent(JsonConvert.SerializeObject(book), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(url, content);
+            try
+            {
+                CheckAuthToken();
 
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Book>>();
-            return result;
+                //var response = await _httpClient.PutAsJsonAsync(_appSettings.LibraryEndpoints.GetBooksEndpoint, book);
+                var url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksEndpoint;
+                var content = new StringContent(JsonConvert.SerializeObject(book), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync(url, content);
+
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Book>>();
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<Book>
+                {
+                    Success = false,
+                    Message = "Request failure",
+                };
+            }
         }
 
         public async Task<ServiceResponse<List<Book>>> SearchBooksAsync(string text, int page, int pageSize)
         {
+            try
+            {
+                CheckAuthToken();
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<List<Book>>
+                {
+                    Success = false,
+                    Message = "Request failure",
+                };
+            }
+           
+
             Debug.WriteLine("Service -> sending request");
             Console.WriteLine("Service -> sending request");
             try
@@ -250,19 +339,31 @@ namespace P06Library.Shared.Services.LibraryService
         // 
         public async Task<ServiceResponse<int>> GetBooksCountAsync(string searchText)
         {
-            string url;
-            if (searchText == "")
+            //CheckAuthToken();
+            try
             {
-                url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetAllBooksCountEndpoint;
-            }
-            else
-            {
-                url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksCountEndpoint + (searchText != "" ? "?searchText=" + searchText : "");
-            }
-            var response = await _httpClient.GetAsync(url);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+                string url;
+                if (searchText == "")
+                {
+                    url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetAllBooksCountEndpoint;
+                }
+                else
+                {
+                    url = _appSettings.BaseAPIUrl + "/" + _appSettings.LibraryEndpoints.GetBooksCountEndpoint + (searchText != "" ? "?searchText=" + searchText : "");
+                }
+                var response = await _httpClient.GetAsync(url);
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
 
-            return result;
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<int>
+                {
+                    Success = false,
+                    Message = "Request failure",
+                };
+}
         }
 
         public int GetMaxPage(int elementsPerPage, int elementsCount)

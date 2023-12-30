@@ -1,5 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
@@ -29,11 +31,39 @@ namespace P11BlazorWebAssembly.Client.Services.CustomAuthStateProvider
             {
                 try
                 {
+                    authToken = authToken.Replace("\"", "");
                     identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
                     //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+
+                    Console.WriteLine($">>> Reading token... " + authToken);
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var jsonToken = handler.ReadToken(authToken) as JwtSecurityToken;
+
+                    Console.WriteLine($">>> Next...");
+
+                    if (jsonToken != null)
+                    {
+                        var expirationDate = jsonToken.ValidTo;
+                        Console.WriteLine($">>> Token is valid until: {expirationDate}, current date: {DateTime.Now.ToUniversalTime()}");
+
+                        if (DateTime.Now.ToUniversalTime() > expirationDate)
+                        {
+                            Console.WriteLine($">>> THE TOKEN HAS EXPIRED!!!");
+                            throw new Exception("Expired");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("IncorrectToken");
+                    }
+
+                    Console.WriteLine("THIS TOKEN IS VALID --------------------------------------------");
                 }
                 catch (Exception)
                 {
+                    Console.WriteLine("THIS TOKEN IS INVALID ===========================================");
                     await _localStorageService.RemoveItemAsync("authToken");
                     identity = new ClaimsIdentity();
                 }

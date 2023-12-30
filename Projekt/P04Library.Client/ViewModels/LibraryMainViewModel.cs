@@ -102,7 +102,11 @@ namespace P04Library.Client.ViewModels
             }
             else
             {
-                Debug.WriteLine(">>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!! GetBooks FAILED");
+                Debug.WriteLine(">>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!! GetBooks FAILED: " + booksResult.Message);
+                if (IsLoggedUserVisible)
+                {
+                    _messageDialogService.ShowMessage(_translationsManager.Get(AppCurrentResources.Language, "RequestFailed") + booksResult.Message);
+                }
             }
 
             currentIsLoadingBooks = false;
