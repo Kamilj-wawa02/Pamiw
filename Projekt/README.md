@@ -56,7 +56,7 @@ W części żądaniach do serwisu API jest wymagane podanie tokenu upoważniają
 
 **Aplikacja WebAssembly**
 
-W aplikacji WebAssembly strona z listą książek, jak i wszystkie strony z formularzami do edycji danych zostały zabezpieczone poprzez autoryzację wbudowaną w Blazor WebAssembly – wymagane jest bycie zalogowanym użytkownikiem w celu uzyskania dostępu do wymienionych stron.
+W aplikacji WebAssembly strona z listą książek, jak i wszystkie strony z formularzami do edycji danych, zostały zabezpieczone poprzez autoryzację wbudowaną w Blazor WebAssembly – wymagane jest bycie zalogowanym użytkownikiem w celu uzyskania dostępu do wymienionych stron.
 
 ## Wygląd interfejsów aplikacji oraz obsługa ustawień użytkownika
 
@@ -98,7 +98,7 @@ Każda długa operacja (ładowania, logowania, itp.) została zasygnalizowana an
 
 Wprowadzane we wszystkich formularzach dane są walidowane zarówno w API (odpowiedź zawiera komunikat błędu), jak i w UI (użytkownik dostaje stosowny komunikat w formie odpowiadającej dla danej platformy).
 
-## Logowanie/Rejestracja poprzez Facebooka
+## Logowanie i rejestracja poprzez Facebooka
 
 We wszystkich aplikacjach został zaimplementowany własny schemat logowania z wykorzystaniem autentykacji poprzez serwis Facebook. Schemat jest następujący:
 - W aplikacjach klienckich zostaje otwarta przeglądarka z adresem URL wskazującym na endpoint w API
@@ -121,4 +121,12 @@ W aplikacji mobilnej wykorzystałem serwis geolokalizacji do wyznaczenia odległ
 Co 3 sekundy zostaje ponownie wczytana aktualna lokalizacja, po czym aplikacja dokonuje obliczenia odległości do zapisanych koordynatów biblioteki. Następnie odświeża informację wyświetloną w postaci przyszarzonego tekstu u góry ekranu. Odległość została podana w km. Cały rezultat możemy zobaczyć na poniższym zdjęciu:  
 
 <img src="./Images/GPS_Showcase.png" width="50%" height="50%" alt="GPS_Showcase">
+
+## Napotkane problemy
+
+W aplikacji mobilnej uruchomionej na systemie Android, chcąc dokonać autentykacji poprzez Facebooka, dostaniemy komunikat o błędzie – logowanie w Androidzie do Facebooka we wbudowanej przeglądarce zostało wyłączone i nie można tego obejść. Oznacza to, że nie możemy w na tej platformie wykorzystać serwera API do przeprowadzenia logowania poprzez Facebooka.
+
+**Problem nie występuje w przypadku uruchomienia projektu MAUI na platformie Windows, jak i wszystkie pozostałe aplikacje w pełni obsługują logowanie i rejestrację poprzez Facebooka.**
+
+
 
