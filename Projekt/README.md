@@ -18,6 +18,11 @@ Aplikacje desktop oraz WebAssembly można uruchomić w dwóch środowiskach: **D
 
 W środowisku **Development** do prawidłowego funkcjonowania wymagany jest uruchomiony projekt **P05Library.API**, natomiast w przypadku **Production** posługujemy się publicznym adresem do API działającego na serwerze w Google Cloud Platform.
 
+Metody zmiany środowiska uruchomieniowego w konkretnych projektach:
+- **P04Library.Client** – zmiana zmiennej środowiskoej *ASPNETCORE_ENVIRONMENT* ustawianej podczas startu w: *Właściwości projektu* -> *Debuguj* -> *Interfejs użytkownika otwartych profilów uruchamiania debugowania*
+- **P11BlazorWebAssembly.Client** – przez ograniczenia związane z typem projektu należy zmienić używaną ścieżkę *BaseAPIUrl* w plilu *appsettings.json* wybierając jedną z dwóch podanych
+- **P12MAUI.Client** – środowisko można zmienić jedynie w przypadku uruchomienia na platformie Windows (na Androidzie nie mamy postawionego serwera API na adresie *localhost*), w celu zmiany należy ustawić wartość zmiennej środowiskowej *ASPNETCORE_ENVIRONMENT* w systemie
+
 
 ## Wdrożenie API do usługi chmurowej
 
