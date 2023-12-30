@@ -1,19 +1,22 @@
 # Projekt na programowanie aplikacji mobilnych i webowych
 
-## Omówienie
+## Wstęp
 
-Projekt miał na celu stworzenie zestawu aplikacji: interfejsu API, aplikacji typu desktop, aplikacji WebAssembly oraz aplikacji mobilnej. W realizacji zadania posłużyłem się projektami wykonywanymi na laboratoriach. Wykorzystałem rozwiązania od Microsoftu w języku C#:
+Projekt miał na celu stworzenie zestawu aplikacji: interfejsu API, aplikacji typu desktop, aplikacji WebAssembly oraz aplikacji mobilnej. Do realizacji zadania posłużyłem się projektami wykonywanymi na laboratoriach. Wykorzystałem rozwiązania od Microsoftu w języku C#:
 - internetowy interfejs API platformy ASP.NET Core
 - aplikacja WPF
 - aplikacja Blazor WebAssembly
 - aplikacja MAUI
 
-API oraz baza danych SQL zostały przeniesione do **Google Cloud Platform**, dzięki temu mamy do nich publiczny dostęp. Api znajduje się pod adresem: https://handy-freedom-408622.nw.r.appspot.com. Możemy przetestować jego działanie w przeglądarce wykorzystując endpoint pobierania listy książek (żądanie GET): https://handy-freedom-408622.nw.r.appspot.com/api/Book.
+API oraz baza danych SQL zostały przeniesione do **Google Cloud Platform**, dzięki temu mamy do nich publiczny dostęp.
+
+API znajduje się pod adresem: https://handy-freedom-408622.nw.r.appspot.com. Możemy przetestować jego działanie w przeglądarce wykorzystując endpoint pobierania listy książek (żądanie typu GET): https://handy-freedom-408622.nw.r.appspot.com/api/Book.
 
 ## Internetowy interfejs API
 
-Projekt można uruchomić w dwóch środowiskach: **Development** i **Production**. Aby je zmienić należy odpowiednio ustawić zmienną środowiskową **ASPNETCORE_ENVIRONMENT** wykorzystując komendy **$env:ASPNETCORE_ENVIRONMENT = "Development"** oraz **$env:ASPNETCORE_ENVIRONMENT = "Production"**.
-W środowisku **Development** do prawidłowego funkcjonowania wymagany jest uruchomiony w tle projekt **P05Library.API**, natomiast w przypadku **Production** posługujemy się publicznym adresem do API działającego na serwerze w Google Cloud Platform.
+Aplikacje desktop oraz WebAssembly można uruchomić w dwóch środowiskach: **Development** i **Production**. Aby je zmienić należy odpowiednio ustawić zmienną środowiskową **ASPNETCORE_ENVIRONMENT** na **Development** lub **Production**.
+
+W środowisku **Development** do prawidłowego funkcjonowania wymagany jest uruchomiony projekt **P05Library.API**, natomiast w przypadku **Production** posługujemy się publicznym adresem do API działającego na serwerze w Google Cloud Platform.
 
 
 ## Wdrożenie API do usługi chmurowej
@@ -39,6 +42,22 @@ resources:
 
 Następnie posłużyłem się Google Cloud CLI, najpierw odpowiednio komendami: ***gcloud init***, ustawiłem aktualny projekt ***gcloud config set project handy-freedom-408622***. Przy skonfigurowanym środowisku uruchomiłem wdrożenie poprzez ***gcloud app deploy app.yaml***. Po wdrożeniu można otworzyć stronę w przeglądarce poprzez ***gcloud app browse*** (w naszym przypadku będzie pusta, bo jest to projekt API).
 
+## Wspólna warstwa serwisów
+
+Serwisy wspólne dla aplikacji desktop, WebAssembly oraz mobilnej wydzieliłem do osobnego projektu **P06Library.Shared**. Są to między innymi serwisy służące do autentykacji, zarządzania biblioteką oraz serwis tłumaczeń. W omawianym projekcie znajdują się również modele obiektów transferu danych oraz ustawień (*AppSettings*).
+
+W każdej aplikacji klienta zostaje utworzona pojedyncza instancja (*singleton*) obiektu *AppSettings*, którą następnie wstrzykujemy do serwisów zapisanych w projekcie *P06Library.Shared*.
+
+## Bezpieczeństwo
+
+Wszystkie aplikacje do komunikacji wykorzystują tokeny JWT, które są wydawane przez serwer API na 1 dzień.
+
+W części żądaniach do serwisu API jest wymagane podanie tokenu upoważniającego nas do uzyskania dostępu do żądanych treści (dokładna lista książek, itp.), przy czym niektóre żądania mogą zostać obsłużone bez tokenu (liczba wszystkich książek). Pozwala to na ograniczenie dostępu do wrażliwych dla biblioteki danych jedynie dla zalogowanych użytkowników.
+
+**Aplikacja WebAssembly**
+
+W aplikacji WebAssembly strona z listą książek, jak i wszystkie strony z formularzami do edycji danych zostały zabezpieczone poprzez autoryzację wbudowaną w Blazor WebAssembly – wymagane jest bycie zalogowanym użytkownikiem w celu uzyskania dostępu do wymienionych stron.
+
 ## Wygląd interfejsów aplikacji oraz obsługa ustawień użytkownika
 
 Każda aplikacja ma wbudowaną możliwość zmiany motywu (**jasny**/**ciemny**) oraz języka (**angielski**/**polski**). Wszystkie programy mają ten sam styl wizualny:
@@ -55,7 +74,7 @@ Każda aplikacja ma wbudowaną możliwość zmiany motywu (**jasny**/**ciemny**)
 
 <img src="./Images/P12MAUI.Client.png" width="30%" height="30%" alt="P12MAUI.Client">
 
-**P05Library.API** - interfejs Swaggera pokazujący używane endpointy interfejsu API
+**P05Library.API** - interfejs Swaggera pokazujący zdefiniowane endpointy interfejsu API
 
 ![P05Library.API](./Images/P05Library.API.png)
 
