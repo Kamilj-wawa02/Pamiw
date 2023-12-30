@@ -10,7 +10,7 @@ Projekt miał na celu stworzenie zestawu aplikacji: interfejsu API, aplikacji ty
 
 API oraz baza danych SQL zostały przeniesione do **Google Cloud Platform**, dzięki temu mamy do nich publiczny dostęp.
 
-API znajduje się pod adresem: https://handy-freedom-408622.nw.r.appspot.com. Możemy przetestować jego działanie w przeglądarce wykorzystując endpoint pobierania ilości wszystkich książek w bibliotece (żądanie typu GET): https://handy-freedom-408622.nw.r.appspot.com/api/book/count-all.
+API znajduje się pod adresem: https://handy-freedom-408622.nw.r.appspot.com. Możemy przetestować jego działanie w przeglądarce wykorzystując dostępny (bez wymaganej autentykacji) endpoint pobierania ilości wszystkich książek w bibliotece (żądanie typu GET): https://handy-freedom-408622.nw.r.appspot.com/api/book/count-all.
 
 ## Internetowy interfejs API
 
