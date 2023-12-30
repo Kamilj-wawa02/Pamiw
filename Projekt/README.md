@@ -113,6 +113,14 @@ We wszystkich aplikacjach został zaimplementowany własny schemat logowania z w
 - Serwer API uzyskuje token użytkownika od Facebooka, dzięki któremu możemy pozyskać dane o zalogowanym użytkowniku (dane, na które się zgodziliśmy podczas autentykacji, czyli adres e-mail oraz nazwa konta)
 - Serwer API generuje token i wysyła go w odpowiedzi żądania do aplikacji klienta
 
+## Napotkane problemy z logowaniem przez Facebooka
+
+W aplikacji mobilnej uruchomionej na systemie Android, chcąc dokonać autentykacji poprzez Facebooka, możemy dostać komunikat o błędzie od samego serwisu Facebook – logowanie na Androidzie do Facebooka we wbudowanej przeglądarce zostało wyłączone przez ten serwis.
+
+Zgodnie z dostępnymi rozwiązaniami, na systemie Android możemy to obejść poprzez przejście do ustawień aplikacji Facebook, następnie po wejściu w kategorię *Multimedia* i po zaznaczeniu opcji *Otwórz linki w zewnętrznej przeglądarce* problem powinien zostać rozwiązany. Robiąc parę testów niestety nie zawsze to działa i serwis potrwafi się zbugować.
+
+Warto zaznaczyć, że problem nie będzie nigdy występował w przypadku uruchomienia projektu MAUI na platformie Windows, gdzie serwis toleruje używaną przeglądarkę, co oznacza, że logowanie poprzez Facebooka w projekcie MAUI działa.
+
 ## Kompatybilność aplikacji mobilnej
 
 Aplikacja mobilna korzysta z wdrożonego w Google Cloud Platform serwisu API. Program można uruchomić na wielu platformach – wszystkich, które są wspierane przez MAUI. Aplikacja została wytestowana w pracy na systemach: Windows i Android.
@@ -128,14 +136,6 @@ W aplikacji mobilnej wykorzystałem serwis geolokalizacji do wyznaczenia odległ
 Co 3 sekundy zostaje ponownie wczytana aktualna lokalizacja, po czym aplikacja dokonuje obliczenia odległości do zapisanych koordynatów biblioteki. Następnie odświeża informację wyświetloną w postaci przyszarzonego tekstu u góry ekranu. Odległość została podana w km. Cały rezultat możemy zobaczyć na poniższym zdjęciu:  
 
 <img src="./Images/GPS_Showcase.png" width="50%" height="50%" alt="GPS_Showcase">
-
-## Napotkane problemy
-
-W aplikacji mobilnej uruchomionej na systemie Android, chcąc dokonać autentykacji poprzez Facebooka, możemy dostać komunikat o błędzie od samego serwisu Facebook – logowanie na Androidzie do Facebooka we wbudowanej przeglądarce zostało wyłączone przez ten serwis.
-
-Zgodnie z dostępnymi rozwiązaniami, na systemie Android możemy to obejść poprzez przejście do ustawień aplikacji Facebook, następnie po wejściu w kategorię *Multimedia* i po zaznaczeniu opcji *Otwórz linki w zewnętrznej przeglądarce* problem powinien zostać rozwiązany. Robiąc parę testów niestety nie zawsze to działa i serwis potrwafi się zbugować.
-
-Warto zaznaczyć, że problem nie będzie nigdy występował w przypadku uruchomienia projektu MAUI na platformie Windows, gdzie serwis toleruje używaną przeglądarkę, co oznacza, że logowanie poprzez Facebooka w projekcie MAUI działa.
 
 ## Zadania niewykonane
 
