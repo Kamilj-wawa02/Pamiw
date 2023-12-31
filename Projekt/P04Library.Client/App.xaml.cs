@@ -4,8 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using P04Library.Client.MessageBox;
 using P04Library.Client.Services.CustomAuthStateProvider;
-using P04Library.Client.Services.SpeechService;
-using P04Library.Client.Services.WeatherServices;
 using P04Library.Client.ViewModels;
 using P06Library.Shared.Configuration;
 using P06Library.Shared.Languages;
@@ -81,8 +79,8 @@ namespace P04Library.Client
         private void ConfigureAppServices(IServiceCollection services)
         {
             // konfiguracja serwisów 
-            services.AddSingleton<IAccuWeatherService, AccuWeatherService>();
-            services.AddSingleton<IFavoriteCityService, FavoriteCityService>();
+            //services.AddSingleton<IAccuWeatherService, AccuWeatherService>();
+            //services.AddSingleton<IFavoriteCityService, FavoriteCityService>();
             services.AddSingleton<ILibraryService, LibraryService>();
             services.AddSingleton<IMessageDialogService, WpfMesageDialogService>();
 
@@ -102,8 +100,8 @@ namespace P04Library.Client
             // konfiguracja viewModeli 
             services.AddSingleton<LibraryMainViewModel>();
             //services.AddSingleton<MainViewModelV4>();
-            services.AddSingleton<FavoriteCityViewModel>();
-            services.AddSingleton<BooksViewModel>();
+            //services.AddSingleton<FavoriteCityViewModel>();
+            //services.AddSingleton<BooksViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<LoginWithFacebookViewModel>();
             services.AddSingleton<BookFormViewModel>();
@@ -115,9 +113,9 @@ namespace P04Library.Client
             // konfiguracja okienek
             services.AddTransient<LibraryMainWindow>();
             //services.AddTransient<MainWindow>();
-            services.AddTransient<FavoriteCitiesView>();
-            services.AddTransient<LibraryBooksView>();
-            services.AddTransient<BookDetailsView>();
+            //services.AddTransient<FavoriteCitiesView>();
+            //services.AddTransient<LibraryBooksView>();
+            //services.AddTransient<BookDetailsView>();
 
             services.AddSingleton<LoginView>();
             services.AddSingleton<LoginWithFacebookView>();

@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using P04Library.Client.Models;
 using P06Library.Shared.MessageBox;
 using P06Library.Shared.Services.LibraryService;
 using P06Library.Shared.Library;

@@ -2,9 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using P04Library.Client.Commands;
-using P04Library.Client.DataSeeders;
-using P04Library.Client.Models;
-using P04Library.Client.Services.WeatherServices;
 using P06Library.Shared.Languages;
 using P06Library.Shared.Library;
 using P06Library.Shared.MessageBox;
