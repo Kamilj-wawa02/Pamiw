@@ -191,6 +191,7 @@ namespace P05Library.API.Services.LibraryService
                 _dataContext.Books.Attach(bookToEdit);
 
                 bookToEdit.Title = book.Title;
+                bookToEdit.Author = book.Author;
                 bookToEdit.Description = book.Description;
                 bookToEdit.Price = book.Price;
                 bookToEdit.Barcode = book.Barcode;
